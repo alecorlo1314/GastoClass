@@ -70,9 +70,6 @@
 	  <MauiXaml Update="Presentacion\View\ConfiguracionesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Presentacion\View\DashboardPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Presentacion\View\HistorialGastosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
