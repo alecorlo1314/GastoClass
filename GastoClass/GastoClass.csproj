@@ -59,24 +59,32 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+		<PackageReference Include="Microsoft.ML" Version="3.0.1" />
+		<PackageReference Include="Microsoft.ML.LightGbm" Version="3.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="View\AgregarGastoPage.xaml">
+	  <MauiXaml Update="Presentacion\View\AgregarGastoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\ConfiguracionesPage.xaml">
+	  <MauiXaml Update="Presentacion\View\ConfiguracionesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\DashboardPage.xaml">
+	  <MauiXaml Update="Presentacion\View\DashboardPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\HistorialGastosPage.xaml">
+	  <MauiXaml Update="Presentacion\View\HistorialGastosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\MLDetallesPage.xaml">
+	  <MauiXaml Update="Presentacion\View\MLDetallesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Aplicacion\CasosUso\" />
+	  <Folder Include="Dominio\Interfacez\" />
+	  <Folder Include="Infraestructura\Repositorios\" />
 	</ItemGroup>
 
 </Project>
