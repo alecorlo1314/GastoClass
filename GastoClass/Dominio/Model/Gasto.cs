@@ -14,7 +14,7 @@ namespace GastoClass.Model
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public decimal Mondo { get; set; }
+        public decimal Monto { get; set; }
         public DateTime Fecha { get; set; }
         public string? Descripcion { get; set; }
         public string? Categoria { get; set; }
