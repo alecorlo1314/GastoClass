@@ -62,10 +62,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModel\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="View\AgregarGastoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
