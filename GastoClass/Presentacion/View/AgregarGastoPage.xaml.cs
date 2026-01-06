@@ -1,4 +1,4 @@
-namespace GastoClass.View;
+namespace GastoClass.Presentacion.View;
 
 public partial class AgregarGastoPage : ContentPage
 {

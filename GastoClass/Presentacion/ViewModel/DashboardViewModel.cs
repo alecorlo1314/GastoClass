@@ -1,5 +1,5 @@
 ﻿
-namespace GastoClass.ViewModel
+namespace GastoClass.Presentacion.ViewModel
 {
     //Se conectara a los casos de uso del dominio para obtener datos
     //Obtendra datos del modelo y los preparara para la vista

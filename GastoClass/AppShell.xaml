@@ -3,12 +3,33 @@
     x:Class="GastoClass.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:GastoClass"
-    Title="GastoClass">
+    xmlns:views="clr-namespace:GastoClass.Presentacion.View"
+    Title="GastoClass"
+    Shell.BackgroundColor="{StaticResource Fondo}"
+    FlyoutBackgroundColor="{StaticResource Fondo}"
+    Shell.ForegroundColor="{StaticResource ColorTextoMenu}">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- Header del menú lateral -->
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="White" HeightRequest="100">
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
+                <!--<Image Source="gastoclass_icon.png" WidthRequest="24" HeightRequest="24" />-->
+                <Label Text="GastoClass" FontAttributes="Bold" FontSize="20" TextColor="Black" Margin="10,0,0,0"/>
+            </StackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+    <!-- Opciones del menú lateral -->
+    <FlyoutItem Title="Dashboard" Icon="dashboard_icon.svg">
+        <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" />
+    </FlyoutItem>
+    <!--<FlyoutItem Title="Historial" Icon="history.png">
+        <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="ML Detalles" Icon="ml.png">
+        <ShellContent ContentTemplate="{DataTemplate views:MLDetailsPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="Configuraciones" Icon="settings.png">
+        <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+    </FlyoutItem>-->
 
 </Shell>
