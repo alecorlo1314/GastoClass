@@ -6,4 +6,6 @@ public partial class DashboardPage : ContentPage
 	{
 		InitializeComponent();
 	}
+    //Esta clase se conectara al ViewModelDashboard
+    //Los datos se actualizaran automaticamente gracias al enlace de datos (data binding) asyncrono
 }
