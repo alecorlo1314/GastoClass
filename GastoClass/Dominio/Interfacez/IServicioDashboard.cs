@@ -1,0 +1,20 @@
+﻿using GastoClass.Model;
+
+namespace GastoClass.Dominio.Interfacez
+{
+    /// <summary>
+    /// Interfaz que define los servicios relacionados con el dashboard
+    /// </summary>
+    //Servicios necesarios:
+    // - Servicio para obtener gastos totales del mes
+    // - Servicio para obtener cantidad de transacciones en este mes
+    // - Servicio para obtener categoria con mayor gasto
+    // - Servicio para obtener los ultimos 5 gastos
+    public interface IServicioDashboard
+    {
+        Task<decimal> ObtenerGastosTotalesDelMesAsync(int mes, int anio);
+        Task<List<int>> ObtenerTransaccionesDelMesAsync(int mes, int anio);
+        Task<List<string>> ObtenerCategoriasMayorGastoDelMess(int mes, int anio);
+        Task<List<Gasto>> ObtenerUltimos5GastosAsync();
+    }
+}

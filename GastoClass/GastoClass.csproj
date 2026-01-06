@@ -82,8 +82,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Aplicacion\CasosUso\" />
-	  <Folder Include="Dominio\Interfacez\" />
 	  <Folder Include="Infraestructura\Repositorios\" />
 	</ItemGroup>
 
