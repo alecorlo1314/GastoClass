@@ -1,5 +1,5 @@
 ﻿
-namespace GastoClass.ViewModel
+namespace GastoClass.Presentacion.ViewModel
 {
     internal class ConfiguracionesViewModel
     {

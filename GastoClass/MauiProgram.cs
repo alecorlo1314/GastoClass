@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using GastoClass.Infraestructura.Repositorios;
-using GastoClass.View;
 using GastoClass.Presentacion.View;
-using GastoClass.ViewModel;
+using GastoClass.Presentacion.ViewModel;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Interfacez;
 

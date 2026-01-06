@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
+﻿
 namespace GastoClass
 {
     public partial class App : Application
