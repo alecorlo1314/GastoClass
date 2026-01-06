@@ -11,39 +11,39 @@ namespace GastoClass.Aplicacion.CasosUso
     // - Servicio para obtener cantidad de transacciones en este mes
     // - Servicio para obtener categoria con mayor gasto
     // - Servicio para obtener los ultimos 5 gastos
-    class ServicioDashboard
+    class ServicioGastos
     {
         #region Inyeccion de dependencias
-        private readonly IServicioDashboard _servicioDashboard;
+        private readonly IServicioGastos _servicioGastos;
         #endregion
-        public ServicioDashboard(IServicioDashboard servicioDashboard)
+        public ServicioGastos(IServicioGastos servicioDashboard)
         {
             //Inyeccion de dependencias
-            _servicioDashboard = servicioDashboard;
+            _servicioGastos = servicioDashboard;
         }
         //Metodo para obtener gastos totales del mes (parametros: mes y anio)
         public async Task<decimal> ObtenerGastosTotalesDelMesAsync(int mes, int anio)
         {
             ///retorna los gastos totales del mes
-            return await _servicioDashboard.ObtenerGastosTotalesDelMesAsync(mes, anio);
+            return await _servicioGastos.ObtenerGastosTotalesDelMesAsync(mes, anio);
         }
         //Metodo para obtener cantidad de transacciones en este mes (parametros: mes y anio)
         public async Task<List<int>> ObtenerCantidadGastosDelMesAsync(int mes, int anio)
         {
             ///retorna la cantidad de transacciones en este mes
-            return await _servicioDashboard.ObtenerTransaccionesDelMesAsync(mes, anio);
+            return await _servicioGastos.ObtenerTransaccionesDelMesAsync(mes, anio);
         }
         //Metodo para obtener categoria con mayor gasto (parametros: mes y anio)
         public async Task<List<string>> ObtenerCategoriaMayorGastoDelMesAsync(int mes, int anio)
         {
             ///retorna la categoria con mayor gasto
-            return await _servicioDashboard.ObtenerCategoriasMayorGastoDelMess(mes, anio);
+            return await _servicioGastos.ObtenerCategoriasMayorGastoDelMess(mes, anio);
         }
         //Metodo para obtener los ultimos 5 gastos
         public async Task<List<Gasto>> ObtenerUltimos5GastosAsync()
         {
             ///retorna los ultimos 5 gastos
-            return await _servicioDashboard.ObtenerUltimos5GastosAsync();
+            return await _servicioGastos.ObtenerUltimos5GastosAsync();
         }
     }
 }
