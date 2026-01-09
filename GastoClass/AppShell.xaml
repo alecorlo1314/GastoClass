@@ -5,31 +5,98 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:GastoClass.Presentacion.View"
     Title="GastoClass"
-    Shell.BackgroundColor="{StaticResource Fondo}"
-    FlyoutBackgroundColor="{StaticResource Fondo}"
-    Shell.ForegroundColor="{StaticResource ColorTextoMenu}">
-
-    <!-- Header del menú lateral -->
+    FlyoutBackgroundColor="{StaticResource Fondo}">
+    <!--  Encabezado del menú lateral  -->
     <Shell.FlyoutHeader>
-        <Grid BackgroundColor="White" HeightRequest="100">
-            <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center">
-                <!--<Image Source="gastoclass_icon.png" WidthRequest="24" HeightRequest="24" />-->
-                <Label Text="GastoClass" FontAttributes="Bold" FontSize="20" TextColor="Black" Margin="10,0,0,0"/>
-            </StackLayout>
+        <Grid
+            Margin="32,10"
+            HeightRequest="81"
+            HorizontalOptions="Start">
+            <Grid BackgroundColor="{StaticResource Fondo}" ColumnDefinitions="2*,8*">
+                <Image
+                    Grid.Column="0"
+                    HeightRequest="24"
+                    HorizontalOptions="End"
+                    Source="wallet_logo.png"
+                    VerticalOptions="Center"
+                    WidthRequest="24" />
+                <Label
+                    Grid.Column="1"
+                    FontFamily="InterSemiBold"
+                    FontSize="20"
+                    HorizontalOptions="Start"
+                    Text="GastoClass"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+            </Grid>
         </Grid>
     </Shell.FlyoutHeader>
-    <!-- Opciones del menú lateral -->
-    <FlyoutItem Title="Dashboard" Icon="dashboard_icon.svg">
+
+    <!--  PLANTILLA DE LOS ITEMS DEL MENU LATERAL  -->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Border
+                Margin="0,0,20,0"
+                HeightRequest="54"
+                StyleClass="FlyoutItemLayoutStyle"
+                WidthRequest="250">
+                <Border.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsChecked}"
+                        TargetType="Border"
+                        Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource Azul Principal}" />
+                    </DataTrigger>
+                </Border.Triggers>
+                <HorizontalStackLayout Padding="8" Spacing="16">
+                    <Image
+                        Aspect="AspectFill"
+                        HeightRequest="24"
+                        Source="{Binding FlyoutIcon}"
+                        StyleClass="FlyoutItemImageStyle"
+                        VerticalOptions="Center"
+                        WidthRequest="24">
+                        <Image.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsChecked}"
+                                TargetType="Image"
+                                Value="True">
+                                <Setter Property="Source" Value="dashboard_icon.png" />
+                            </DataTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Label
+                        FontFamily="InterMedium"
+                        FontSize="18"
+                        StyleClass="FlyoutItemLabelStyle"
+                        Text="{Binding Title}"
+                        VerticalOptions="Center"
+                        VerticalTextAlignment="Start">
+                        <Label.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsChecked}"
+                                TargetType="Label"
+                                Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource FondoContenedores}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </HorizontalStackLayout>
+            </Border>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <!--  ITEMS DEL MENU  -->
+    <FlyoutItem Title="Dashboard" Icon="dashboard_icon.png">
         <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" />
     </FlyoutItem>
-    <!--<FlyoutItem Title="Historial" Icon="history.png">
-        <ShellContent ContentTemplate="{DataTemplate views:HistoryPage}" />
+    <FlyoutItem Title="Historial" Icon="dashboard_icon_black.png">
+        <ShellContent ContentTemplate="{DataTemplate views:HistorialGastosPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="ML Detalles" Icon="ml.png">
-        <ShellContent ContentTemplate="{DataTemplate views:MLDetailsPage}" />
+    <FlyoutItem Title="ML Detalles" Icon="dashboard_icon_black.png">
+        <ShellContent ContentTemplate="{DataTemplate views:MLDetallesPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Configuraciones" Icon="settings.png">
-        <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
-    </FlyoutItem>-->
-
+    <FlyoutItem Title="Configuraciones" Icon="dashboard_icon_black.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ConfiguracionesPage}" />
+    </FlyoutItem>
 </Shell>
