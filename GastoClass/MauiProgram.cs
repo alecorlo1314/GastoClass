@@ -22,6 +22,7 @@ namespace GastoClass
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                     fonts.AddFont("Inter_18pt-Medium.ttf", "InterMedium");
                     fonts.AddFont("Inter_18pt-SemiBold.ttf", "InterSemiBold");
+                    fonts.AddFont("Inter_24pt-Regular.ttf", "InterRegular");
                 });
             //vistas
             builder.Services.AddTransient<AgregarGastoPage>();

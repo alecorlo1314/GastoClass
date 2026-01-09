@@ -3,12 +3,164 @@
     x:Class="GastoClass.Presentacion.View.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="DashboardPage"
-    BackgroundColor="{StaticResource Fondo}">
-    <VerticalStackLayout>
+    Padding="40"
+    BackgroundColor="{StaticResource FondoMenosBlanco}"
+    Shell.BackgroundColor="{StaticResource FondoBlanco}">
+    <!--  CONTENEDOR  -->
+    <Grid
+        ColumnDefinitions="5*,5*"
+        ColumnSpacing="28"
+        RowDefinitions="1*,3*,6*"
+        RowSpacing="28">
+        <!--  ZONA SUPERIOR  -->
         <Label
-            HorizontalOptions="Center"
-            Text="Este es el dashboard"
+            Grid.Row="0"
+            Grid.Column="0"
+            FontFamily="InterSemiBold"
+            FontSize="32"
+            HorizontalOptions="Start"
+            Text="Resumen de este mes"
+            TextColor="{StaticResource ColorNegroTextoMenu}"
             VerticalOptions="Center" />
-    </VerticalStackLayout>
+        <Button
+            Grid.Row="0"
+            Grid.Column="1"
+            BackgroundColor="{StaticResource Azul Principal}"
+            BorderColor="{StaticResource Azul Principal}"
+            CornerRadius="15"
+            FontFamily="InterSemiBold"
+            FontSize="18"
+            HeightRequest="48"
+            HorizontalOptions="End"
+            ImageSource="agregar_circulo.png"
+            Text="Añadir Gasto"
+            TextColor="{StaticResource FondoMenosBlanco}"
+            VerticalOptions="Center"
+            WidthRequest="209" />
+
+        <!--  CONTENEDOR GASTOS TOTALES  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 15">
+            <Grid RowDefinitions="Auto,*" RowSpacing="16">
+                <Grid Grid.Row="0" ColumnDefinitions="9*,1*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="InterRegular"
+                        FontSize="16"
+                        Text="Total Gastado (Este Mes)"
+                        TextColor="{StaticResource Black}" />
+                    <Image
+                        Grid.Column="1"
+                        Aspect="AspectFill"
+                        HeightRequest="24"
+                        Source="dollar_01.png"
+                        WidthRequest="24" />
+                </Grid>
+                <Grid Grid.Row="1" RowDefinitions="Auto,Auto">
+                    <Label
+                        Grid.Row="0"
+                        FontFamily="InterSemiBold"
+                        FontSize="28"
+                        Text="$110.50"
+                        TextColor="{StaticResource Black}" />
+                    <Label
+                        Grid.Row="1"
+                        FontFamily="InterRegular"
+                        FontSize="14"
+                        Text="Basado en 3 transacciones"
+                        TextColor="{StaticResource Gray600}" />
+                </Grid>
+            </Grid>
+        </Border>
+        <!--  CONTENEDOR CANTIDAD DE TRANSACCIONES TOTALES  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 15">
+            <Grid RowDefinitions="Auto,*" RowSpacing="16">
+                <Grid Grid.Row="0" ColumnDefinitions="9*,1*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="InterRegular"
+                        FontSize="16"
+                        Text="Transacciones (Este Mes)"
+                        TextColor="{StaticResource Black}" />
+                    <Image
+                        Grid.Column="1"
+                        Aspect="AspectFill"
+                        HeightRequest="24"
+                        Source="list_icon.png"
+                        WidthRequest="24" />
+                </Grid>
+                <Grid Grid.Row="1" RowDefinitions="Auto,Auto">
+                    <Label
+                        Grid.Row="0"
+                        FontFamily="InterSemiBold"
+                        FontSize="28"
+                        Text="3"
+                        TextColor="{StaticResource Black}" />
+                    <Label
+                        Grid.Row="1"
+                        FontFamily="InterRegular"
+                        FontSize="14"
+                        Text="En todas las categorías"
+                        TextColor="{StaticResource Gray600}" />
+                </Grid>
+            </Grid>
+        </Border>
+        <!--  GRAFICO DE CATEGORIAS  -->
+        <Border
+            Grid.Row="2"
+            Grid.Column="0"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 15">
+            <Grid RowDefinitions="3*,7*">
+                <VerticalStackLayout Grid.Row="0" Spacing="4">
+                    <Label
+                        FontFamily="InterSemiBold"
+                        FontSize="24"
+                        Text="Categorias"
+                        TextColor="{StaticResource Black}" />
+                    <Label
+                        FontFamily="InterRegular"
+                        FontSize="14"
+                        Text="Tu desglose de gastos de este mes."
+                        TextColor="{StaticResource Gray600}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+        <!--  ULTIMOS 5 MOVIMIENTOS  -->
+        <Border
+            Grid.Row="2"
+            Grid.Column="1"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 15">
+            <Grid RowDefinitions="3*,7*">
+                <VerticalStackLayout Grid.Row="0" Spacing="4">
+                    <Label
+                        FontFamily="InterSemiBold"
+                        FontSize="24"
+                        Text="Gastos recientes"
+                        TextColor="{StaticResource Black}" />
+                    <Label
+                        FontFamily="InterRegular"
+                        FontSize="14"
+                        Text="Tus 5 transacciones más recientes."
+                        TextColor="{StaticResource Gray600}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
 </ContentPage>
