@@ -4,6 +4,7 @@ using GastoClass.Presentacion.View;
 using GastoClass.Presentacion.ViewModel;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Interfacez;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace GastoClass
 {
@@ -13,11 +14,14 @@ namespace GastoClass
         {
             var builder = MauiApp.CreateBuilder();
             builder
+                .ConfigureSyncfusionCore()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("Inter_18pt-Medium.ttf", "InterMedium");
+                    fonts.AddFont("Inter_18pt-SemiBold.ttf", "InterSemiBold");
                 });
             //vistas
             builder.Services.AddTransient<AgregarGastoPage>();

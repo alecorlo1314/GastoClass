@@ -1,8 +1,9 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:GastoClass"
-             x:Class="GastoClass.App">
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application
+    x:Class="GastoClass.App"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:GastoClass">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -10,48 +11,22 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Estilo para los ítems del Flyout -->
-            <Style TargetType="Label" Class="FlyoutItemLabelStyle">
-                <Setter Property="FontSize" Value="16"/>
-                <Setter Property="HeightRequest" Value="55"/>
-                <Setter Property="WidthRequest" Value="300"/>
-                <Setter Property="TextColor" Value="Black"/>
+            <!--  ESTILO PARA EL BORDER DE LOS ITEMS DEL MENU LATERAL  -->
+            <Style
+                ApplyToDerivedTypes="True"
+                Class="FlyoutItemLayoutStyle"
+                TargetType="Border">
+                <Setter Property="Stroke" Value="Transparent" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
-            <Style TargetType="Image" Class="FlyoutItemImageStyle">
-                <Setter Property="WidthRequest" Value="24"/>
-                <Setter Property="HeightRequest" Value="24"/>
-                <Setter Property="Aspect" Value="AspectFit"/>
-                <Setter Property="VerticalOptions" Value="Center"/>
+            <!--  ESTILO PARA EL LABEL DE LOS ITEMS DEL MENU LATERAL  -->
+            <Style
+                ApplyToDerivedTypes="True"
+                Class="FlyoutItemLabelStyle"
+                TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource ColorNegroTextoMenu}" />
             </Style>
-            <!-- Estados visuales -->
-            <Style TargetType="Grid" Class="FlyoutItemLayoutStyle" ApplyToDerivedTypes="True">
-                <Setter Property="BackgroundColor" Value="White"/>
-                <Setter Property="HeightRequest" Value="55"/>
-                <Setter Property="WidthRequest" Value="300"/>
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="White"/>
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Selected">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#4880FF"/>
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-            <!-- Texto e ícono en estado seleccionado -->
-            <Style TargetType="Label" Class="FlyoutItemLabelStyleSelected">
-                <Setter Property="TextColor" Value="White"/>
-            </Style>
-            <!--<Style TargetType="Image" Class="FlyoutItemImageStyleSelected">
-                <Setter Property="T" Value="White"/>
-            </Style>-->
         </ResourceDictionary>
     </Application.Resources>
 </Application>

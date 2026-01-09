@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GastoClass.Presentacion.View.DashboardPage"
-             Title="DashboardPage"
-             BackgroundColor="{StaticResource Fondo}">
+<ContentPage
+    x:Class="GastoClass.Presentacion.View.DashboardPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="DashboardPage"
+    BackgroundColor="{StaticResource Fondo}">
     <VerticalStackLayout>
-        <Label 
+        <Label
+            HorizontalOptions="Center"
             Text="Este es el dashboard"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            VerticalOptions="Center" />
     </VerticalStackLayout>
 </ContentPage>
