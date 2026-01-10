@@ -3,8 +3,8 @@
     x:Class="GastoClass.Presentacion.View.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
     Padding="40"
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}">
@@ -45,9 +45,10 @@
         <syncfusion:SfPopup
             x:Name="mipopup"
             AnimationMode="None"
+            HeaderHeight="97"
             HeightRequest="600"
             OverlayMode="Blur"
-            ShowCloseButton="True" HeaderHeight="97"
+            ShowCloseButton="True"
             ShowFooter="True"
             WidthRequest="500">
             <syncfusion:SfPopup.PopupStyle>
@@ -163,25 +164,22 @@
                                     BackgroundColor="{StaticResource FondoMenosBlanco}"
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
-                                    
-                                    <Picker
-                                        x:Name="PickerCategoria"
-                                        Title="Selecciona una categoría"
-                                        Margin="8,0"
+                                    <editors:SfComboBox
+                                        x:Name="comboBox"
+                                        ClearButtonIconColor="{StaticResource Gray600}"
+                                        DisplayMemberPath="Nombre"
+                                        DropDownIconColor="{StaticResource Gray600}" 
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         HeightRequest="45"
+                                        IsEditable="true"
+                                        ItemsSource="{Binding Categorias}"
+                                        Placeholder="Selecciona un categoria"
+                                        PlaceholderColor="{StaticResource Gray500}" 
                                         SelectedItem="{Binding Categoria}"
+                                        Stroke="Transparent"
                                         TextColor="{x:StaticResource Gray950}"
-                                        TitleColor="{x:StaticResource Gray500}">
-                                        <Picker.Items>
-                                            <x:String>Alimentación</x:String>
-                                            <x:String>Transporte</x:String>
-                                            <x:String>Entretenimiento</x:String>
-                                            <x:String>Salud</x:String>
-                                            <x:String>Otros</x:String>
-                                        </Picker.Items>
-                                    </Picker>
+                                        TextMemberPath="Nombre" />
                                 </Border>
                             </VerticalStackLayout>
                         </VerticalStackLayout>

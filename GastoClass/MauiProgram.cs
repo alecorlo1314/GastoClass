@@ -6,6 +6,7 @@ using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Interfacez;
 using CommunityToolkit.Maui;
 using Syncfusion.Maui.Toolkit.Hosting;
+using Syncfusion.Maui.Core.Hosting;
 
 namespace GastoClass
 {
@@ -17,6 +18,7 @@ namespace GastoClass
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .ConfigureSyncfusionCore()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

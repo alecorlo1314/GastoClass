@@ -1,9 +1,8 @@
-﻿using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Interfacez;
-using GastoClass.Presentacion.View;
+using GastoClass.Dominio.Model;
+using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel;
 
@@ -20,10 +19,16 @@ public partial class DashboardViewModel : ObservableObject
     //Inyeccion de Dependencias
     private readonly IServicioNavegacionPopup _servicioNavegacionPopup;
 
+    //Listas
+    public ObservableCollection<Categorias> Categorias { get; set; }
     public DashboardViewModel(IServicioNavegacionPopup servicioNavegacionPopup)
     {
         //Inyeccion de dependencias
         _servicioNavegacionPopup = servicioNavegacionPopup;
+
+        Categorias = new ObservableCollection<Categorias>();
+        Categorias.Add(new Categorias() { Nombre = "Facebook", Id = 0 });
+        Categorias.Add(new Categorias() { Nombre = "Google Plus", Id = 1 });
     }
 
     //Metodo carga asincrona inicial

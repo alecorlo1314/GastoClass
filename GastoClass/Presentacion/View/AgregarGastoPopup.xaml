@@ -107,9 +107,10 @@
                                 x:Name="PickerCategoria"
                                 Title="Selecciona una categoría"
                                 Margin="8,0"
-                                FontFamily="PoppinsRegular" SelectedItem="{Binding Categoria}"
+                                FontFamily="PoppinsRegular"
                                 FontSize="16"
                                 HeightRequest="45"
+                                SelectedItem="{Binding Categoria}"
                                 TextColor="{x:StaticResource Gray950}"
                                 TitleColor="{x:StaticResource Gray500}">
                                 <Picker.Items>

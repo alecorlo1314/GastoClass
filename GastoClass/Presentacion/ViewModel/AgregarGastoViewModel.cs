@@ -1,9 +1,7 @@
-﻿using CommunityToolkit.Maui;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.Model;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GastoClass.Presentacion.ViewModel;
 
