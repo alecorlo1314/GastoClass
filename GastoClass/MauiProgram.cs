@@ -4,7 +4,8 @@ using GastoClass.Presentacion.View;
 using GastoClass.Presentacion.ViewModel;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Interfacez;
-using Syncfusion.Maui.Core.Hosting;
+using CommunityToolkit.Maui;
+using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace GastoClass
 {
@@ -14,8 +15,8 @@ namespace GastoClass
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .ConfigureSyncfusionCore()
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -23,13 +24,18 @@ namespace GastoClass
                     fonts.AddFont("Inter_18pt-Medium.ttf", "InterMedium");
                     fonts.AddFont("Inter_18pt-SemiBold.ttf", "InterSemiBold");
                     fonts.AddFont("Inter_24pt-Regular.ttf", "InterRegular");
+                    fonts.AddFont("Poppins-SemiBold.ttf", "PoppinsSemiBold");
+                    fonts.AddFont("Poppins-Bold.ttf", "PoppinsBold");
+                    fonts.AddFont("Poppins-Medium.ttf", "PoppinsMedium");
+                    fonts.AddFont("Poppins-Regular.ttf", "PoppinsRegular");
+
                 });
+            builder.ConfigureSyncfusionToolkit();
+
             //vistas
             builder.Services.AddTransient<AgregarGastoPage>();
-            builder.Services.AddTransient<ConfiguracionesPage>();
             builder.Services.AddTransient<DashboardPage>();
-            builder.Services.AddTransient<HistorialGastosPage>();
-            builder.Services.AddTransient<MLDetallesPage>();
+            builder.Services.AddTransient<AgregarGastoPopup>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ConfiguracionesViewModel>();
@@ -38,11 +44,10 @@ namespace GastoClass
             builder.Services.AddTransient<MLDetallesViewModel>();
 
             //Repositorios y servicios
-            builder.Services.AddSingleton<DatosGastos>();
-            builder.Services.AddSingleton<RepositorioBaseDatos>();
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
-            builder.Services.AddSingleton<ServicioGastos>();
-
+            builder.Services.AddTransient<ServicioGastos>();
+            builder.Services.AddSingleton<IServicioNavegacionPopup, ServicioNavegacionPopup>();
+            builder.Services.AddSingleton<RepositorioBaseDatos>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

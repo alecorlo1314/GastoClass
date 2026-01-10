@@ -1,11 +1,22 @@
+using GastoClass.Presentacion.ViewModel;
+
 namespace GastoClass.Presentacion.View;
 
 public partial class DashboardPage : ContentPage
 {
-	public DashboardPage()
+	public DashboardPage(DashboardViewModel dashboardViewModel)
 	{
 		InitializeComponent();
+        BindingContext = dashboardViewModel;
 	}
-    //Esta clase se conectara al ViewModelDashboard
-    //Los datos se actualizaran automaticamente gracias al enlace de datos (data binding) asyncrono
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+        mipopup.Show();
+    }
+
+    private void OnCancelarClicked(object sender, EventArgs e)
+    {
+        mipopup.IsOpen = false;
+    }
 }

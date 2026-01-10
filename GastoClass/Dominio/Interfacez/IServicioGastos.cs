@@ -16,5 +16,6 @@ namespace GastoClass.Dominio.Interfacez
         Task<List<int>> ObtenerTransaccionesDelMesAsync(int mes, int anio);
         Task<List<string>> ObtenerCategoriasMayorGastoDelMess(int mes, int anio);
         Task<List<Gasto>> ObtenerUltimos5GastosAsync();
+        Task<int> GuardarGastoAsync(Gasto gasto);
     }
 }
