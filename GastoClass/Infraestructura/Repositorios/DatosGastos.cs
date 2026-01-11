@@ -50,9 +50,31 @@ namespace GastoClass.Infraestructura.Repositorios
         {
             throw new NotImplementedException();
         }
-        public Task<List<GastoClass.Model.Gasto>> ObtenerUltimos5GastosAsync()
+        public Task<List<Gasto>> ObtenerUltimos5GastosAsync()
         {
             throw new NotImplementedException();
+        }
+        public async Task<int> GuardarGastoAsync(Gasto nuevoGasto)
+        {
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                if(nuevoGasto.Id != 0)
+                {
+                    return await conexion.UpdateAsync(nuevoGasto);
+                }
+                else
+                {
+                    return await conexion.InsertAsync(nuevoGasto);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception("Error al guardar el gasto.", ex);
+            }
         }
     }
 }

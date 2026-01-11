@@ -6,6 +6,7 @@
     <Color x:Key="ColorNegroTextoMenu">#202224</Color>
     <Color x:Key="FondoMenosBlanco">#F5F6FA</Color>
     <Color x:Key="FondoBlanco">White</Color>
+    <Color x:Key="ColorStrokeFomulariosEntrada">#D5D5D5</Color>
     <!--  Note: For Android please see also Platforms\Android\Resources\values\colors.xml  -->
 
     <Color x:Key="Primary">#512BD4</Color>

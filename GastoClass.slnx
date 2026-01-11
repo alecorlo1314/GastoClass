@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="GastoClass/GastoClass.csproj" />
+  <Project Path="MLCategorias_WebApi1/MLCategorias_WebApi.csproj" />
 </Solution>
