@@ -15,20 +15,37 @@ namespace GastoClass.Presentacion.ViewModel;
 // - Categoria con mayor gasto
 // - Grafica de gastos por categoria
 // - Gastos recientes (los ultimos 5 gastos)
+
+//Tareas para Agregar Gastos
+//Validacion de entradas:
+// - Monto debe ser un numero positivo 
+// - Desccripcion debe ser mayor a 3 caracteres
+// - Categoria debe actualizarce en tiempo real con un retardo de 500ms despues de dejar de escribir
+// - Categoria debe sugerirse automaticamente usando un modelo de ML basado en la descripcion del gasto
+// - Categoria debe mostrar una sugerencia basada en la descripcion del gasto
+// - Categoria debe mostrar una lista con la probabilidad de cada categoria basada en el modelo de ML
 public partial class DashboardViewModel : ObservableObject
 {
-    //Inyeccion de Dependencias
+    #region Inyeccion de Dependencias
     private readonly PredictionApiService _service;
-    private static timer.Timer _timer;
+    #endregion
 
-    //Listas Observables
-    public ObservableCollection<PredictionOption> PredictionOptions { get; }
-    public IDictionary<string, float> ListaConPuntos { get; set; }
+    //Timer para retardo en prediccion
+    private static timer.Timer? _timer;
+    private CancellationTokenSource? _cts;
+
+    #region Listas Observables
+    [ObservableProperty]
+    private ObservableCollection<PredictionOption>? predictionOptions = new();
+    [ObservableProperty]
+    private ObservableCollection<CategoriasRecomendadas> categoriasRecomendadas = new ();
+    public IDictionary<string, float>? ListaConPuntos { get; set; }
+    #endregion
 
     [ObservableProperty]
-    private string _descripcion;
+    private string? _descripcion;
     [ObservableProperty]
-    private string _categoriaRecomendada;
+    private string? _categoriaRecomendada;
 
     public DashboardViewModel(PredictionApiService predictionApiService)
     {
@@ -37,41 +54,83 @@ public partial class DashboardViewModel : ObservableObject
 
         PredictionOptions = new ObservableCollection<PredictionOption>();
 
-        _timer = new System.Timers.Timer(500); // 1 medio segundo de intervalo
+        _timer = new System.Timers.Timer(500); // medio segundo de intervalo
         _timer.AutoReset = false;
         _timer.Elapsed += async (_, _) =>
         {
-            await MainThread.InvokeOnMainThreadAsync(PredictRealtimeAsync);
+            await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
         };
     }
 
-    partial void OnDescripcionChanged(string? oldValue, string newValue)
+    partial void OnDescripcionChanged(string? oldValue, string? newValue)
     {
-        if(string.IsNullOrWhiteSpace(newValue) || newValue.Length < 3)
+        if (!EsDescripcionValida(newValue)) return;
+
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+
+        _ = Task.Run(async () =>
         {
-            return;
-        }
-        _timer.Stop();
-        _timer.Start();
+            try
+            {
+                await Task.Delay(500, _cts.Token);
+                //No se hara nada hasta que esta operacion termine
+                await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
+            }
+            catch (TaskCanceledException) { }
+        });
     }
 
-    private async Task PredictRealtimeAsync()
+    private async Task TiempoRealPrediccionAsync()
     {
-        if (string.IsNullOrWhiteSpace(Descripcion) || Descripcion.Length < 5)
+        if (!EsDescripcionValida(Descripcion)) return;
+
+        try
         {
-            return;
+            var prediction = await _service.PredictAsync(Descripcion);
+
+            PredictionOptions?.Clear();
+
+            if (prediction != null)
+                PredictionOptions?.Add(prediction);
+            CategoriaRecomendada = prediction.Display;
+            ListaConPuntos?.Clear();
+            ListaConPuntos = prediction.scoreDict;
+            await CargarCategoriasMLRecomendadas();
         }
-
-       var prediction = await _service.PredictAsync(Descripcion);
-
-        PredictionOptions.Clear();
-
-        if (prediction != null)
-            PredictionOptions.Add(prediction);
-        CategoriaRecomendada = prediction.Display;
-        ListaConPuntos = prediction.scoreDict;
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error en predicción", ex.Message, "OK");
+        }
     }
 
+    private async Task CargarCategoriasMLRecomendadas()
+    {
+        try
+        {
+            //Cargar categorias recomendadas al iniciar recorriende la ListaConPuntos
+            if (ListaConPuntos == null) return;
+            //Limpiar categorias recomendadas antes de agregar nuevas
+            CategoriasRecomendadas?.Clear();
+
+            //ordernar lista de puntos, desdendentemente por puntos
+            var listaPuntosOrdenadas = ListaConPuntos.
+                OrderByDescending(s => s.Value);
+            foreach (var (key, value) in ListaConPuntos)
+            {
+                CategoriasRecomendadas?.Add(new CategoriasRecomendadas
+                {
+                    DescripcionCategoriaRecomendada = key,
+                    ScoreCategoriaRecomendada = value
+                });
+            }
+        }catch(Exception ex)
+        {
+           await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
+    private bool EsDescripcionValida(string? texto) 
+        => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
     //Metodo carga asincrona inicial
     //Metodo para obtener gastos totales del mes
     //Metodo para obtener cantidad de transacciones en este mes

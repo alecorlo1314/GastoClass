@@ -2,10 +2,12 @@
 
 namespace GastoClass.Dominio.Model
 {
-    public class Categorias
+    public class CategoriasRecomendadas
     {
-        public int Id { get; set; }
-        public string? Nombre { get; set; }
-        public string? imagen { get; set; }
+        public string? DescripcionCategoriaRecomendada { get; set; }
+        public float ScoreCategoriaRecomendada { get; set; }
+        //mostrar en porcentaje
+        public string Display =>
+            $"{DescripcionCategoriaRecomendada} ({ScoreCategoriaRecomendada:P0})";
     }
 }
