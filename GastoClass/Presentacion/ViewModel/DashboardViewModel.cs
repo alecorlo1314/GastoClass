@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.Dominio.Interfacez;
+using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
 using System.Collections.ObjectModel;
+using timer = System.Timers;
 
 namespace GastoClass.Presentacion.ViewModel;
 
@@ -17,18 +18,58 @@ namespace GastoClass.Presentacion.ViewModel;
 public partial class DashboardViewModel : ObservableObject
 {
     //Inyeccion de Dependencias
-    private readonly IServicioNavegacionPopup _servicioNavegacionPopup;
+    private readonly PredictionApiService _service;
+    private static timer.Timer _timer;
 
-    //Listas
-    public ObservableCollection<Categorias> Categorias { get; set; }
-    public DashboardViewModel(IServicioNavegacionPopup servicioNavegacionPopup)
+    //Listas Observables
+    public ObservableCollection<PredictionOption> PredictionOptions { get; }
+    public IDictionary<string, float> ListaConPuntos { get; set; }
+
+    [ObservableProperty]
+    private string _descripcion;
+    [ObservableProperty]
+    private string _categoriaRecomendada;
+
+    public DashboardViewModel(PredictionApiService predictionApiService)
     {
         //Inyeccion de dependencias
-        _servicioNavegacionPopup = servicioNavegacionPopup;
+        _service = predictionApiService;
 
-        Categorias = new ObservableCollection<Categorias>();
-        Categorias.Add(new Categorias() { Nombre = "Facebook", Id = 0 });
-        Categorias.Add(new Categorias() { Nombre = "Google Plus", Id = 1 });
+        PredictionOptions = new ObservableCollection<PredictionOption>();
+
+        _timer = new System.Timers.Timer(500); // 1 medio segundo de intervalo
+        _timer.AutoReset = false;
+        _timer.Elapsed += async (_, _) =>
+        {
+            await MainThread.InvokeOnMainThreadAsync(PredictRealtimeAsync);
+        };
+    }
+
+    partial void OnDescripcionChanged(string? oldValue, string newValue)
+    {
+        if(string.IsNullOrWhiteSpace(newValue) || newValue.Length < 3)
+        {
+            return;
+        }
+        _timer.Stop();
+        _timer.Start();
+    }
+
+    private async Task PredictRealtimeAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Descripcion) || Descripcion.Length < 5)
+        {
+            return;
+        }
+
+       var prediction = await _service.PredictAsync(Descripcion);
+
+        PredictionOptions.Clear();
+
+        if (prediction != null)
+            PredictionOptions.Add(prediction);
+        CategoriaRecomendada = prediction.Display;
+        ListaConPuntos = prediction.scoreDict;
     }
 
     //Metodo carga asincrona inicial
@@ -42,6 +83,5 @@ public partial class DashboardViewModel : ObservableObject
     public async Task PaginaAgregarGasto()
     {
         //Resultado del formulario
-        await _servicioNavegacionPopup.MostrarPopupAgregarGasto();
     }
 }

@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
-
-namespace GastoClass
-{
     public partial class MLCategorias
     {
         public const string RetrainFilePath =  @"C:\Users\aleco\Downloads\DatosCategorias\gastos_dataset.csv";
@@ -98,4 +95,4 @@ namespace GastoClass
             return pipeline;
         }
     }
- }
+ 

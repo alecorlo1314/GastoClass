@@ -37,7 +37,6 @@ namespace GastoClass
             //vistas
             builder.Services.AddTransient<AgregarGastoPage>();
             builder.Services.AddTransient<DashboardPage>();
-            builder.Services.AddTransient<AgregarGastoPopup>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ConfiguracionesViewModel>();
@@ -48,8 +47,17 @@ namespace GastoClass
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
             builder.Services.AddTransient<ServicioGastos>();
-            builder.Services.AddSingleton<IServicioNavegacionPopup, ServicioNavegacionPopup>();
             builder.Services.AddSingleton<RepositorioBaseDatos>();
+
+            // HTTP Client para el servicio de predicción
+            builder.Services.AddSingleton(sp =>
+            {
+                return new HttpClient
+                {
+                    BaseAddress = new Uri("https://localhost:56288")
+                };
+            });
+            builder.Services.AddSingleton<PredictionApiService>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

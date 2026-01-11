@@ -126,6 +126,7 @@
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Placeholder="Ej: Almuerzo en restaurante"
+                                        ReturnCommand="{Binding Descripcion}"
                                         Text="{Binding Descripcion}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
@@ -167,19 +168,18 @@
                                     <editors:SfComboBox
                                         x:Name="comboBox"
                                         ClearButtonIconColor="{StaticResource Gray600}"
-                                        DisplayMemberPath="Nombre"
-                                        DropDownIconColor="{StaticResource Gray600}" 
+                                        DisplayMemberPath="Display"
+                                        DropDownIconColor="{StaticResource Gray600}"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
-                                        HeightRequest="45"
-                                        IsEditable="true"
-                                        ItemsSource="{Binding Categorias}"
-                                        Placeholder="Selecciona un categoria"
+                                        HeightRequest="45" 
+                                        IsEditable="False"
+                                        ItemsSource="{Binding PredictionOptions}"
+                                        Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}" 
-                                        SelectedItem="{Binding Categoria}"
-                                        Stroke="Transparent"
+                                        SelectedItem="{Binding CategoriaRecomendada}"
                                         TextColor="{x:StaticResource Gray950}"
-                                        TextMemberPath="Nombre" />
+                                        TextMemberPath="Display" />
                                 </Border>
                             </VerticalStackLayout>
                         </VerticalStackLayout>
