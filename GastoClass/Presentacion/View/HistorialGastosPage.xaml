@@ -9,7 +9,8 @@
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray950}">
 
-    <Grid RowDefinitions="2*,Auto" RowSpacing="28">
+    <Grid RowDefinitions="Auto,Auto" RowSpacing="32">
+        <!--  ENCABEZADO Y BARRA DE BUSQUEDA  -->
         <StackLayout Grid.Row="0" Spacing="16">
             <Label
                 FontFamily="PoppinsRegular"
@@ -39,10 +40,130 @@
                         Placeholder="Buscar gasto..."
                         PlaceholderColor="{StaticResource Gray500}"
                         TextColor="{StaticResource Gray900}"
-                        VerticalOptions="Center" WidthRequest="550"/>
+                        VerticalOptions="Center"
+                        WidthRequest="550" />
                 </HorizontalStackLayout>
-
             </Border>
         </StackLayout>
+        <!--  LISTA DE GASTOS  -->
+        <Border
+            Grid.Row="1"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 15">
+            <!--  TITULOS DEL ENCABEZADO DE MOVIMIENTOS  -->
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
+                <!--  TITULOS DEL ENCABEZADO DE MOVIMIENTOS  -->
+                <Grid ColumnDefinitions="2*,1*,2*,2*,2*,1*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Descripción"
+                        TextColor="{StaticResource Gray600}" />
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Transaccion ID"
+                        TextColor="{StaticResource Gray600}" />
+                    <Label
+                        Grid.Column="2"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Categoria"
+                        TextColor="{StaticResource Gray600}" />
+                    <Label
+                        Grid.Column="3"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Fecha"
+                        TextColor="{StaticResource Gray600}" />
+                    <Label
+                        Grid.Column="4"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Monto"
+                        TextColor="{StaticResource Gray600}" />
+                    <Label
+                        Grid.Column="5"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Accion"
+                        TextColor="{StaticResource Gray600}" />
+                </Grid>
+                <!--  LINEA SEPARADORA  -->
+                <Border Grid.Row="1" Stroke="{StaticResource Gray100}" />
+                <!--  LISTA DE MOVIMIENTOS  -->
+                <CollectionView ItemsSource="{Binding ListaGastos}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="2*,1*,2*,2*,2*,1*">
+                                <Label
+                                    Grid.Column="0"
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Descripcion}"
+                                    TextColor="{StaticResource Gray900}" />
+                                <Label
+                                    Grid.Column="1"
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Id, StringFormat='#{0:N0}'}"
+                                    TextColor="{StaticResource Gray900}" />
+                                <Label
+                                    Grid.Column="2"
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Categoria}"
+                                    TextColor="{StaticResource Gray900}" />
+                                <Label
+                                    Grid.Column="3"
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Fecha, StringFormat='{0:dd.MM.yy}'}"
+                                    TextColor="{StaticResource Gray900}" />
+                                <Label
+                                    Grid.Column="4"
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
+                                    TextColor="{StaticResource Gray900}" />
+                                <Border
+                                    Grid.Column="5"
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource Gray400}"
+                                    StrokeShape="RoundRectangle 20"
+                                    StrokeThickness="1">
+                                    <Grid ColumnDefinitions="*,*">
+                                        <ImageButton
+                                            BackgroundColor="Transparent"
+                                            HorizontalOptions="Center"
+                                            Source="pencil-edit-02.png" />
+                                        <ImageButton
+                                            Grid.Column="1"
+                                            BackgroundColor="Transparent"
+                                            HorizontalOptions="Center"
+                                            Source="delete-02.png" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
     </Grid>
 </ContentPage>
