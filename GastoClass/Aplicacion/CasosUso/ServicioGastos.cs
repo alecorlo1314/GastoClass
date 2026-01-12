@@ -28,7 +28,7 @@ namespace GastoClass.Aplicacion.CasosUso
             return await _servicioGastos.ObtenerGastosTotalesDelMesAsync(mes, anio);
         }
         //Metodo para obtener cantidad de transacciones en este mes (parametros: mes y anio)
-        public async Task<List<int>> ObtenerCantidadGastosDelMesAsync(int mes, int anio)
+        public async Task<int> ObtenerTransaccionesDelMesAsync(int mes, int anio)
         {
             ///retorna la cantidad de transacciones en este mes
             return await _servicioGastos.ObtenerTransaccionesDelMesAsync(mes, anio);

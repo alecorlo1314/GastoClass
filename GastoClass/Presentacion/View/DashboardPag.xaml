@@ -250,7 +250,7 @@
                         Grid.Row="1"
                         FontFamily="InterRegular"
                         FontSize="14"
-                        Text="Basado en 3 transacciones"
+                        Text="{Binding MensajeCantidadTransacciones}"
                         TextColor="{StaticResource Gray600}" />
                 </Grid>
             </Grid>
@@ -283,7 +283,7 @@
                         Grid.Row="0"
                         FontFamily="InterSemiBold"
                         FontSize="28"
-                        Text="3"
+                        Text="{Binding CantidadTransacciones}"
                         TextColor="{StaticResource Black}" />
                     <Label
                         Grid.Row="1"

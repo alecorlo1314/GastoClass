@@ -56,9 +56,29 @@ namespace GastoClass.Infraestructura.Repositorios
         /// <param name="anio"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task<List<int>> ObtenerTransaccionesDelMesAsync(int mes, int anio)
+        public async Task<int> ObtenerTransaccionesDelMesAsync(int mes, int anio)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                //Convertimos el mes y año en un rango de fechas
+                var inicioMes = new DateTime(anio, mes, 1);
+                var finMes = inicioMes.AddMonths(1);
+                //Consulta para obtener los gastos del mes y año especificados
+                var consulta = conexion.Table<Gasto>()
+                    .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes);
+                //contamos la cantidad de transacciones
+                var cantidadTransacciones = await consulta.CountAsync();
+
+                //retornamos la cantidad de transacciones
+                return cantidadTransacciones;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception("Error al obtener los gastos totales del mes.", ex);
+            }
         }
         /// <summary>
         /// Metodo para obtener las categorias con mayor gasto del mes

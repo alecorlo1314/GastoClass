@@ -13,7 +13,7 @@ namespace GastoClass.Dominio.Interfacez
     public interface IServicioGastos
     {
         Task<decimal> ObtenerGastosTotalesDelMesAsync(int mes, int anio);
-        Task<List<int>> ObtenerTransaccionesDelMesAsync(int mes, int anio);
+        Task<int> ObtenerTransaccionesDelMesAsync(int mes, int anio);
         Task<List<string>> ObtenerCategoriasMayorGastoDelMess(int mes, int anio);
         Task<List<Gasto>> ObtenerUltimos5GastosAsync();
         Task<int> GuardarGastoAsync(Gasto gasto);
