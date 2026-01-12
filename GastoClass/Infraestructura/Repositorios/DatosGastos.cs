@@ -114,7 +114,7 @@ namespace GastoClass.Infraestructura.Repositorios
             catch (Exception ex)
             {
                 // Manejo de errores
-                throw new Exception("Error al obtener los gastos totales del mes.", ex);
+                throw new Exception("Error al obtener los gastos totales por categoria del mes en la base de datos", ex);
             }
         }
         /// <summary>
