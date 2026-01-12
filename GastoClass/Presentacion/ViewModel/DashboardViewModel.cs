@@ -47,6 +47,8 @@ public partial class DashboardViewModel : ObservableObject
     // -Incluirlo en una clase GastoPorCategoria con propiedades Categoria y MontoTotal
     [ObservableProperty]
     private ObservableCollection<Gasto> gastoPorCategoriasMes = new();
+    [ObservableProperty]
+    private ObservableCollection<Gasto>? ultimosCincoMovimientos = new();
     public IDictionary<string, float>? ListaConPuntos { get; set; }
     #endregion
 
@@ -77,6 +79,7 @@ public partial class DashboardViewModel : ObservableObject
         _ = TotalGastadoEsteMes();
         _ = CantidadTransaccionesEsteMes();
         _ = CargarGastosPorCategoria();
+        _ = ObtenerUltimos5GastosAsync();
         _timer = new System.Timers.Timer(500); // medio segundo de intervalo
         _timer.AutoReset = false;
         _timer.Elapsed += async (_, _) =>
@@ -212,6 +215,7 @@ public partial class DashboardViewModel : ObservableObject
                 _ = TotalGastadoEsteMes();
                 _ = CantidadTransaccionesEsteMes();
                 _ = CargarGastosPorCategoria();
+                _ = ObtenerUltimos5GastosAsync();
             }
             else
             {
@@ -301,6 +305,22 @@ public partial class DashboardViewModel : ObservableObject
             await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
-    //Metodo para obtener categoria con mayor gasto
     //Metodo para obtener los ultimos 5 gastos
+    private async Task ObtenerUltimos5GastosAsync()
+    {
+        try
+        {
+            var ultimos5Gastos = await _gastoService.ObtenerUltimos5GastosAsync();
+            //Se agregan los ultimos 5 gastos a una lista observable 
+            ultimosCincoMovimientos?.Clear();
+            foreach (var gasto in ultimos5Gastos)
+            {
+                ultimosCincoMovimientos?.Add(gasto);
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
 }

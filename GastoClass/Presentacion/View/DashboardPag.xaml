@@ -352,7 +352,7 @@
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
             StrokeShape="RoundRectangle 15">
-            <Grid RowDefinitions="3*,7*">
+            <Grid RowDefinitions="1*,9*">
                 <VerticalStackLayout Grid.Row="0" Spacing="4">
                     <Label
                         FontFamily="InterSemiBold"
@@ -365,6 +365,48 @@
                         Text="Tus 5 transacciones más recientes."
                         TextColor="{StaticResource Gray600}" />
                 </VerticalStackLayout>
+                <CollectionView ItemsSource="{Binding UltimosCincoMovimientos}" Grid.Row="1" Margin="0,8">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Padding="8"
+                                ColumnDefinitions="Auto, Auto, Auto"
+                                ColumnSpacing="8">
+                                <Image
+                                    Grid.Column="0"
+                                    Aspect="AspectFill"
+                                    HeightRequest="32"
+                                    Source="{Binding NombreImagen}"
+                                    WidthRequest="32" />
+                                <StackLayout
+                                    Grid.Column="1"
+                                    Spacing="4"
+                                    VerticalOptions="Center"
+                                    WidthRequest="500">
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        LineBreakMode="WordWrap"
+                                        Text="{Binding Descripcion}"
+                                        TextColor="{StaticResource Gray900}" />
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="14"
+                                        Text="{Binding Categoria}"
+                                        TextColor="{StaticResource Gray500}" />
+                                </StackLayout>
+                                <Label
+                                    Grid.Column="2"
+                                    FontFamily="PoppinsSemiBold" WidthRequest="150"
+                                    FontSize="16"
+                                    HorizontalOptions="End"
+                                    Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
+                                    TextColor="{StaticResource Gray900}"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </Grid>
         </Border>
     </Grid>

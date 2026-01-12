@@ -122,9 +122,25 @@ namespace GastoClass.Infraestructura.Repositorios
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task<List<Gasto>> ObtenerUltimos5GastosAsync()
+        public async Task<List<Gasto>> ObtenerUltimos5GastosAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                //Consulta para obtener los ultimos 5 gastos ordenados por fecha descendente
+                var consulta = await conexion.Table<Gasto>()
+                    .OrderByDescending(g => g.Fecha)
+                    .Take(5)
+                    .ToListAsync();
+
+                return consulta;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception("Error al obtener los ultimos 5 gastos de la base de datos", ex);
+            }
         }
         /// <summary>
         /// Metodo para guardar un nuevo gasto
