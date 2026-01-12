@@ -87,9 +87,35 @@ namespace GastoClass.Infraestructura.Repositorios
         /// <param name="anio"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Task<List<string>> ObtenerCategoriasMayorGastoDelMess(int mes, int anio)
+        public async Task<List<Gasto>> ObtenerGastoTotalPorCategoriaMesAsync(int mes, int anio)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                //Convertimos el mes y año en un rango de fechas
+                var inicioMes = new DateTime(anio, mes, 1);
+                var finMes = inicioMes.AddMonths(1);
+                //Consulta para obtener los gastos del mes y ano por categoria especificados
+                var consulta = (await conexion.Table<Gasto>().ToListAsync())
+                    .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes)
+                    .GroupBy(g => g.Categoria)
+                    .Select(g => new Gasto
+                    {
+                        //Se pasa la categoria
+                        Categoria = g.Key,
+                        //Se suma el monto por categoria
+                        Monto = g.Sum(x => x.Monto)
+                        //Se ordena de mayor a menor
+                    }).OrderByDescending(g => g.Monto);
+                //Convertimos la consulta en lista y retornamos
+                return consulta.ToList();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception("Error al obtener los gastos totales del mes.", ex);
+            }
         }
         /// <summary>
         /// Metodo para obtener los ultimos 5 gastos realizados

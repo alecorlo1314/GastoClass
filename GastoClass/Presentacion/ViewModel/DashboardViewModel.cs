@@ -41,6 +41,12 @@ public partial class DashboardViewModel : ObservableObject
     //Esta lista contendra las categorias recomendadas basadas en la prediccion del modelo ML
     [ObservableProperty]
     private ObservableCollection<CategoriasRecomendadas> categoriasRecomendadas = new ();
+    //Lista Observable para el grafico cirular que se basara en la cantidad de dinero gastado por categoria
+    // -Se traera la categoria y el monto gastado en esa categoria
+    // -Se tiene que sumar los montos gastados por cada categoria
+    // -Incluirlo en una clase GastoPorCategoria con propiedades Categoria y MontoTotal
+    [ObservableProperty]
+    private ObservableCollection<Gasto> gastoPorCategoriasMes = new();
     public IDictionary<string, float>? ListaConPuntos { get; set; }
     #endregion
 
@@ -70,6 +76,7 @@ public partial class DashboardViewModel : ObservableObject
         listaResultadoPredicciones = new ObservableCollection<ResultadoPrediccion>();
         _ = TotalGastadoEsteMes();
         _ = CantidadTransaccionesEsteMes();
+        _ = CargarGastosPorCategoria();
         _timer = new System.Timers.Timer(500); // medio segundo de intervalo
         _timer.AutoReset = false;
         _timer.Elapsed += async (_, _) =>
@@ -174,7 +181,7 @@ public partial class DashboardViewModel : ObservableObject
             return;
         }
         if (CategoriaFinal == null) {
-            await Shell.Current.CurrentPage.DisplayAlert("Error", "Debe seleccionar una categoría", "OK"); 
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "Debe seleccionar una categoría", "OK"); 
             return; 
         }
         try
@@ -204,6 +211,7 @@ public partial class DashboardViewModel : ObservableObject
                 CategoriaFinal = null;
                 _ = TotalGastadoEsteMes();
                 _ = CantidadTransaccionesEsteMes();
+                _ = CargarGastosPorCategoria();
             }
             else
             {
@@ -274,6 +282,23 @@ public partial class DashboardViewModel : ObservableObject
         if (CantidadTransacciones > 1)
         {
             MensajeCantidadTransacciones = $"Basado en {CantidadTransacciones} transaccion de este mes.";
+        }
+    }
+    //Metodo para cargar gastos por categoria
+    private async Task CargarGastosPorCategoria()
+    {
+        try
+        {
+            var gastosPorCategoria = await _gastoService.ObtenerGastoTotalPorCategoriaMesAsync(DateTime.Now.Month, DateTime.Now.Year);
+            GastoPorCategoriasMes.Clear();
+            foreach (var gasto in gastosPorCategoria)
+            {
+                GastoPorCategoriasMes.Add(gasto);
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
     //Metodo para obtener categoria con mayor gasto

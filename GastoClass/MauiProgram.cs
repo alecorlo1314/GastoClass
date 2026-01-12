@@ -46,7 +46,7 @@ namespace GastoClass
 
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
-            builder.Services.AddTransient<ServicioGastos>();
+            builder.Services.AddSingleton<ServicioGastos>();
             builder.Services.AddSingleton<RepositorioBaseDatos>();
 
 

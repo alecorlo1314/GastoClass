@@ -34,10 +34,10 @@ namespace GastoClass.Aplicacion.CasosUso
             return await _servicioGastos.ObtenerTransaccionesDelMesAsync(mes, anio);
         }
         //Metodo para obtener categoria con mayor gasto (parametros: mes y anio)
-        public async Task<List<string>> ObtenerCategoriaMayorGastoDelMesAsync(int mes, int anio)
+        public async Task<List<Gasto>> ObtenerGastoTotalPorCategoriaMesAsync(int mes, int anio)
         {
             ///retorna la categoria con mayor gasto
-            return await _servicioGastos.ObtenerCategoriasMayorGastoDelMess(mes, anio);
+            return await _servicioGastos.ObtenerGastoTotalPorCategoriaMesAsync(mes, anio);
         }
         //Metodo para obtener los ultimos 5 gastos
         public async Task<List<Gasto>> ObtenerUltimos5GastosAsync()
