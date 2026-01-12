@@ -176,7 +176,7 @@
                                         ItemsSource="{Binding CategoriasRecomendadas}"
                                         Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaRecomendada}" 
+                                        SelectedItem="{Binding CategoriaRecomendada}"
                                         TextColor="{x:StaticResource Gray950}"
                                         TextMemberPath="Display" />
                                 </Border>
