@@ -25,6 +25,7 @@
             Text="Resumen de este mes"
             TextColor="{StaticResource ColorNegroTextoMenu}"
             VerticalOptions="Center" />
+        <!--  POPUP AGREGAR GASTO  -->
         <Button
             Grid.Row="0"
             Grid.Column="1"
@@ -41,7 +42,7 @@
             TextColor="{StaticResource FondoMenosBlanco}"
             VerticalOptions="Center"
             WidthRequest="209" />
-        <!--  POPUP AGREGAR GASTO  -->
+        <!--  BOTON CERRAR VENTANA  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
             AnimationMode="None"
@@ -243,7 +244,7 @@
                         Grid.Row="0"
                         FontFamily="InterSemiBold"
                         FontSize="28"
-                        Text="$110.50"
+                        Text="{Binding GastoTotalMes, StringFormat='₡{0:N2}'}"
                         TextColor="{StaticResource Black}" />
                     <Label
                         Grid.Row="1"

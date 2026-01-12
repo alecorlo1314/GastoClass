@@ -25,12 +25,12 @@ namespace GastoClass.Infraestructura.Repositorios
             {
                 //obtener la conexion a la base de datos
                 var conexion = await _repositorioBaseDatos.ObtenerConexion();
-
-                //var total = await conexion.ExecuteScalarAsync<float>("SELECT SUM(Monto) FROM Gasto");
-
+                //Convertimos el mes y año en un rango de fechas
+                var inicioMes = new DateTime(anio, mes, 1); 
+                var finMes = inicioMes.AddMonths(1);
                 //Consulta para obtener los gastos del mes y año especificados
                 var consulta = conexion.Table<Gasto>()
-                    .Where(g => g.Fecha.Month == mes && g.Fecha.Year == anio);
+                    .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes);
                 //lo convertimos en lista asyncrona
                 var gastosDelMes = await consulta.ToListAsync();
                 //inicializamos el total de gastos
