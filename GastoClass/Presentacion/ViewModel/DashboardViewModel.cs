@@ -56,6 +56,10 @@ public partial class DashboardViewModel : ObservableObject
     private DateTime _fecha = DateTime.Now;
     [ObservableProperty]
     private decimal _gastoTotalMes;
+    [ObservableProperty]
+    private int _cantidadTransacciones;
+    [ObservableProperty]
+    private string? _mensajeCantidadTransacciones;
 
     public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos)
     {
@@ -65,6 +69,7 @@ public partial class DashboardViewModel : ObservableObject
 
         listaResultadoPredicciones = new ObservableCollection<ResultadoPrediccion>();
         _ = TotalGastadoEsteMes();
+        _ = CantidadTransaccionesEsteMes();
         _timer = new System.Timers.Timer(500); // medio segundo de intervalo
         _timer.AutoReset = false;
         _timer.Elapsed += async (_, _) =>
@@ -106,12 +111,12 @@ public partial class DashboardViewModel : ObservableObject
             //Obtener la prediccion desde el servicio
             var prediction = await _serviceML.PredictAsync(Descripcion);
             //Limpiar opciones de prediccion antes de agregar nuevas
-            listaResultadoPredicciones?.Clear();
+            ListaResultadoPredicciones?.Clear();
             //Agregar la nueva prediccion a la lista
             if (prediction != null)
-                listaResultadoPredicciones?.Add(prediction);
+                ListaResultadoPredicciones?.Add(prediction);
             //Actualizar la categoria recomendada y se mostrara asi (Alimentos 80%)
-            categoriaRecomendadaML = new CategoriasRecomendadas
+            CategoriaRecomendadaML = new CategoriasRecomendadas
             {
                 DescripcionCategoriaRecomendada = prediction.Categoria,
                 ScoreCategoriaRecomendada = prediction.Confidencial
@@ -163,7 +168,7 @@ public partial class DashboardViewModel : ObservableObject
     private async Task AgregarGasto()
     {
         //Validar entradas antes de agregar gasto
-        if (categoriasRecomendadas == null || categoriasRecomendadas.Count == 0)
+        if (CategoriasRecomendadas == null || CategoriasRecomendadas.Count == 0)
         {
             await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No hay categorias recomendadas disponibles.", "OK");
             return;
@@ -191,13 +196,14 @@ public partial class DashboardViewModel : ObservableObject
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Éxito", "Gasto agregado correctamente.", "OK");
                 //Limpiar campos despues de agregar gasto
                 Descripcion = string.Empty;
-                categoriaRecomendadaML = new CategoriasRecomendadas();
+                CategoriaRecomendadaML = new CategoriasRecomendadas();
                 Monto = string.Empty;
                 ListaResultadoPredicciones?.Clear();
                 CategoriasRecomendadas?.Clear();
                 ListaConPuntos?.Clear();
-                categoriaFinal = null;
-                _ = TotalGastadoEsteMes(); 
+                CategoriaFinal = null;
+                _ = TotalGastadoEsteMes();
+                _ = CantidadTransaccionesEsteMes();
             }
             else
             {
@@ -242,6 +248,34 @@ public partial class DashboardViewModel : ObservableObject
         }
     }
     //Metodo para obtener cantidad de transacciones en este mes
+    private async Task CantidadTransaccionesEsteMes()
+    {
+        try
+        {
+            var total = await _gastoService.ObtenerTransaccionesDelMesAsync(DateTime.Now.Month, DateTime.Now.Year);
+            CantidadTransacciones = total;
+            _ = MostrarMensajeCantidadTransacciones();
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
+    private async Task MostrarMensajeCantidadTransacciones()
+    {
+        if (CantidadTransacciones == 0)
+        {
+            MensajeCantidadTransacciones = "No se han registrado transacciones este mes.";
+        }
+        if (CantidadTransacciones == 1)
+        {
+            MensajeCantidadTransacciones = "Basado en 1 transaccion de este mes.";
+        }
+        if (CantidadTransacciones > 1)
+        {
+            MensajeCantidadTransacciones = $"Basado en {CantidadTransacciones} transaccion de este mes.";
+        }
+    }
     //Metodo para obtener categoria con mayor gasto
     //Metodo para obtener los ultimos 5 gastos
 }
