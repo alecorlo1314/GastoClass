@@ -3,11 +3,46 @@
     x:Class="GastoClass.Presentacion.View.HistorialGastosPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="HistorialGastosPage">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    Title="Historial de Gastos"
+    Padding="48,24"
+    BackgroundColor="{StaticResource FondoMenosBlanco}"
+    Shell.BackgroundColor="{StaticResource FondoBlanco}"
+    Shell.TitleColor="{StaticResource Gray950}">
+
+    <Grid RowDefinitions="2*,Auto" RowSpacing="28">
+        <StackLayout Grid.Row="0" Spacing="16">
+            <Label
+                FontFamily="PoppinsRegular"
+                FontSize="18"
+                HorizontalOptions="Start"
+                Text="Aquí puedes ver, filtrar y gestionar todos tus gastos pasados."
+                TextColor="{StaticResource Gray500}" />
+            <Border
+                BackgroundColor="{StaticResource FondoBlanco}"
+                HeightRequest="48"
+                HorizontalOptions="Start"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 15"
+                WidthRequest="600">
+                <HorizontalStackLayout>
+                    <Image
+                        Margin="12,0"
+                        HeightRequest="24"
+                        Source="search.png"
+                        VerticalOptions="Center" />
+                    <Entry
+                        x:Name="BuscarEntry"
+                        BackgroundColor="Transparent"
+                        ClearButtonVisibility="WhileEditing"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        Placeholder="Buscar gasto..."
+                        PlaceholderColor="{StaticResource Gray500}"
+                        TextColor="{StaticResource Gray900}"
+                        VerticalOptions="Center" WidthRequest="550"/>
+                </HorizontalStackLayout>
+
+            </Border>
+        </StackLayout>
+    </Grid>
 </ContentPage>
