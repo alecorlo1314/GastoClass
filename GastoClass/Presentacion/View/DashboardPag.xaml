@@ -3,18 +3,21 @@
     x:Class="GastoClass.Presentacion.View.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-    xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
-    Padding="40"
+    xmlns:viewmodel="clr-namespace:GastoClass.Presentacion.ViewModel"
+    Title="Dashboard"
+    Padding="48,24"
     BackgroundColor="{StaticResource FondoMenosBlanco}"
-    Shell.BackgroundColor="{StaticResource FondoBlanco}">
+    Shell.BackgroundColor="{StaticResource FondoBlanco}"
+    Shell.TitleColor="{StaticResource Gray900}">
 
     <!--  CONTENEDOR  -->
     <Grid
         ColumnDefinitions="5*,5*"
         ColumnSpacing="28"
-        RowDefinitions="1*,3*,6*"
+        RowDefinitions="1*,2*,7*"
         RowSpacing="28">
         <!--  ZONA SUPERIOR  -->
         <Label
@@ -303,8 +306,11 @@
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
             StrokeShape="RoundRectangle 15">
-            <Grid RowDefinitions="3*,7*">
-                <VerticalStackLayout Grid.Row="0" Spacing="4">
+            <Grid RowDefinitions="1*,9*">
+                <VerticalStackLayout
+                    Grid.Row="0"
+                    HeightRequest="60"
+                    Spacing="4">
                     <Label
                         FontFamily="InterSemiBold"
                         FontSize="24"
@@ -316,6 +322,26 @@
                         Text="Tu desglose de gastos de este mes."
                         TextColor="{StaticResource Gray600}" />
                 </VerticalStackLayout>
+                <chart:SfCircularChart Grid.Row="1" Margin="0">
+                    <chart:SfCircularChart.Title>
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            Text="GASTO POR CATEGORIAS"
+                            TextColor="{StaticResource Gray600}" />
+                    </chart:SfCircularChart.Title>
+                    <chart:SfCircularChart.Legend>
+                        <chart:ChartLegend />
+                    </chart:SfCircularChart.Legend>
+                    <chart:DoughnutSeries
+                        EnableTooltip="True"
+                        ExplodeIndex="2"
+                        ExplodeOnTouch="True"
+                        ItemsSource="{Binding GastoPorCategoriasMes}"
+                        Radius="0.9"
+                        ShowDataLabels="True"
+                        XBindingPath="Categoria"
+                        YBindingPath="Monto" />
+                </chart:SfCircularChart>
             </Grid>
         </Border>
         <!--  ULTIMOS 5 MOVIMIENTOS  -->
