@@ -1,5 +1,5 @@
 ﻿using GastoClass.Dominio.Interfacez;
-using GastoClass.Model;
+using GastoClass.Dominio.Model;
 
 namespace GastoClass.Infraestructura.Repositorios
 {
@@ -12,6 +12,13 @@ namespace GastoClass.Infraestructura.Repositorios
             _repositorioBaseDatos = repositorioBaseDatos;
         }
 
+        /// <summary>
+        /// Metodo para obtener los gastos totales del mes
+        /// </summary>
+        /// <param name="mes"></param>
+        /// <param name="anio"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<decimal> ObtenerGastosTotalesDelMesAsync(int mes, int anio)
         {
             try
@@ -42,18 +49,43 @@ namespace GastoClass.Infraestructura.Repositorios
                 throw new Exception("Error al obtener los gastos totales del mes.", ex);
             }
         }
+        /// <summary>
+        /// Metodo para obtener la cantidad de transacciones del mes
+        /// </summary>
+        /// <param name="mes"></param>
+        /// <param name="anio"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<List<int>> ObtenerTransaccionesDelMesAsync(int mes, int anio)
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Metodo para obtener las categorias con mayor gasto del mes
+        /// </summary>
+        /// <param name="mes"></param>
+        /// <param name="anio"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<List<string>> ObtenerCategoriasMayorGastoDelMess(int mes, int anio)
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Metodo para obtener los ultimos 5 gastos realizados
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<List<Gasto>> ObtenerUltimos5GastosAsync()
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Metodo para guardar un nuevo gasto
+        /// </summary>
+        /// <param name="nuevoGasto"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<int> GuardarGastoAsync(Gasto nuevoGasto)
         {
             try

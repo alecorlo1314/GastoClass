@@ -27,7 +27,8 @@ namespace GastoClass.Presentacion.ViewModel;
 public partial class DashboardViewModel : ObservableObject
 {
     #region Inyeccion de Dependencias
-    private readonly PredictionApiService _service;
+    private readonly PredictionApiService _serviceML;
+    private readonly ServicioGastos _gastoService;
     #endregion
 
     //Timer para retardo en prediccion
@@ -36,7 +37,8 @@ public partial class DashboardViewModel : ObservableObject
 
     #region Listas Observables
     [ObservableProperty]
-    private ObservableCollection<PredictionOption>? predictionOptions = new();
+    private ObservableCollection<ResultadoPrediccion>? listaResultadoPredicciones = new();
+    //Esta lista contendra las categorias recomendadas basadas en la prediccion del modelo ML
     [ObservableProperty]
     private ObservableCollection<CategoriasRecomendadas> categoriasRecomendadas = new ();
     public IDictionary<string, float>? ListaConPuntos { get; set; }
@@ -45,14 +47,21 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private string? _descripcion;
     [ObservableProperty]
-    private string? _categoriaRecomendada;
+    private CategoriasRecomendadas categoriaRecomendadaML;
+    [ObservableProperty]
+    private CategoriasRecomendadas? categoriaFinal; // la que se guarda
+    [ObservableProperty]
+    private string? _monto;
+    [ObservableProperty]
+    private DateTime _fecha = DateTime.Now;
 
-    public DashboardViewModel(PredictionApiService predictionApiService)
+    public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos)
     {
         //Inyeccion de dependencias
-        _service = predictionApiService;
+        _serviceML = predictionApiService;
+        _gastoService = servicioGastos;
 
-        PredictionOptions = new ObservableCollection<PredictionOption>();
+        listaResultadoPredicciones = new ObservableCollection<ResultadoPrediccion>();
 
         _timer = new System.Timers.Timer(500); // medio segundo de intervalo
         _timer.AutoReset = false;
@@ -61,18 +70,21 @@ public partial class DashboardViewModel : ObservableObject
             await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
         };
     }
-
+    //Metodo para manejar el cambio en la descripcion al momento de escribir y actualizar la categoria recomendada y lista de categorias
     partial void OnDescripcionChanged(string? oldValue, string? newValue)
     {
+        //Validar que la descripcion sea valida
         if (!EsDescripcionValida(newValue)) return;
-
+        //Cancelar cualquier prediccion en curso
         _cts?.Cancel();
+        //Crear un nuevo token de cancelacion
         _cts = new CancellationTokenSource();
-
+        //Iniciar una nueva tarea para la prediccion con retardo
         _ = Task.Run(async () =>
         {
             try
             {
+                //Esperar el retardo antes de hacer la prediccion
                 await Task.Delay(500, _cts.Token);
                 //No se hara nada hasta que esta operacion termine
                 await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
@@ -81,21 +93,33 @@ public partial class DashboardViewModel : ObservableObject
         });
     }
 
+    //Metodo para obtener la prediccion en tiempo real, se usan en los Thread del timer y en el cambio de descripcion
     private async Task TiempoRealPrediccionAsync()
     {
+        //Validar que la descripcion sea valida
         if (!EsDescripcionValida(Descripcion)) return;
 
         try
         {
-            var prediction = await _service.PredictAsync(Descripcion);
-
-            PredictionOptions?.Clear();
-
+            //Obtener la prediccion desde el servicio
+            var prediction = await _serviceML.PredictAsync(Descripcion);
+            //Limpiar opciones de prediccion antes de agregar nuevas
+            listaResultadoPredicciones?.Clear();
+            //Agregar la nueva prediccion a la lista
             if (prediction != null)
-                PredictionOptions?.Add(prediction);
-            CategoriaRecomendada = prediction.Display;
+                listaResultadoPredicciones?.Add(prediction);
+            //Actualizar la categoria recomendada y se mostrara asi (Alimentos 80%)
+            categoriaRecomendadaML = new CategoriasRecomendadas
+            {
+                DescripcionCategoriaRecomendada = prediction.Categoria,
+                ScoreCategoriaRecomendada = prediction.Confidencial
+            };
+            CategoriaFinal = CategoriaRecomendadaML;
+            //Limpiar lista con puntos antes de agregar nuevas
             ListaConPuntos?.Clear();
+            //Asignar la nueva lista con puntos
             ListaConPuntos = prediction.scoreDict;
+            //Cargar categorias recomendadas basadas en la prediccion
             await CargarCategoriasMLRecomendadas();
         }
         catch (Exception ex)
@@ -104,6 +128,7 @@ public partial class DashboardViewModel : ObservableObject
         }
     }
 
+    //Metodo para cargar las categorias recomendadas basadas en la prediccion
     private async Task CargarCategoriasMLRecomendadas()
     {
         try
@@ -112,10 +137,7 @@ public partial class DashboardViewModel : ObservableObject
             if (ListaConPuntos == null) return;
             //Limpiar categorias recomendadas antes de agregar nuevas
             CategoriasRecomendadas?.Clear();
-
-            //ordernar lista de puntos, desdendentemente por puntos
-            var listaPuntosOrdenadas = ListaConPuntos.
-                OrderByDescending(s => s.Value);
+            //Asignar la lista ordenada a ListaConPuntos
             foreach (var (key, value) in ListaConPuntos)
             {
                 CategoriasRecomendadas?.Add(new CategoriasRecomendadas
@@ -124,23 +146,87 @@ public partial class DashboardViewModel : ObservableObject
                     ScoreCategoriaRecomendada = value
                 });
             }
-        }catch(Exception ex)
+            //ordernar lista de puntos, desdendentemente por puntos
+            var listaPuntosOrdenadas = ListaConPuntos.
+                OrderByDescending(s => s.Value);
+        }
+        catch(Exception ex)
         {
            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
         }
     }
-    private bool EsDescripcionValida(string? texto) 
-        => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
+
+ 
+    [RelayCommand]
+    private async Task AgregarGasto()
+    {
+        //Validar entradas antes de agregar gasto
+        if (categoriasRecomendadas == null || categoriasRecomendadas.Count == 0)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No hay categorias recomendadas disponibles.", "OK");
+            return;
+        }
+        if (CategoriaFinal == null) {
+            await Shell.Current.CurrentPage.DisplayAlert("Error", "Debe seleccionar una categoría", "OK"); 
+            return; 
+        }
+        try
+        {
+            //Crear un nuevo gasto basado en los datos ingresados
+            var gasto = new Gasto
+            {
+                Descripcion = Descripcion,
+                Categoria = CategoriaFinal.DescripcionCategoriaRecomendada,
+                Monto = decimal.Parse(Monto),
+                Fecha = Fecha
+            };
+
+            //Realizar la consulta al servicio de agregar gasto
+            var resultado = await _gastoService.GuardarGastoAsync(gasto);
+
+            if (resultado == 1)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Éxito", "Gasto agregado correctamente.", "OK");
+                //Limpiar campos despues de agregar gasto
+                Descripcion = string.Empty;
+                categoriaRecomendadaML = new CategoriasRecomendadas();
+                Monto = string.Empty;
+                ListaResultadoPredicciones?.Clear();
+                CategoriasRecomendadas?.Clear();
+                ListaConPuntos?.Clear();
+                categoriaFinal = null;
+            }
+            else
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No se pudo agregar el gasto.", "OK");
+            }
+        }catch (NullReferenceException)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "Por favor, complete todos los campos antes de agregar el gasto.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
+
+    #region Metodo de Validacion
+    private bool EsDescripcionValida(string? texto)
+    => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
+    private bool EsNumeroValido()
+    {
+        if (Monto == null) return false;
+        if (string.IsNullOrWhiteSpace(Monto)) return false;
+        if (decimal.TryParse(Monto, out decimal numero))
+        {
+            return numero > 0;
+        }
+        return false;
+    }
+    #endregion
     //Metodo carga asincrona inicial
     //Metodo para obtener gastos totales del mes
     //Metodo para obtener cantidad de transacciones en este mes
     //Metodo para obtener categoria con mayor gasto
     //Metodo para obtener los ultimos 5 gastos
-
-    //Comando Abrir ventana de formulario de gastos
-    [RelayCommand]
-    public async Task PaginaAgregarGasto()
-    {
-        //Resultado del formulario
-    }
 }

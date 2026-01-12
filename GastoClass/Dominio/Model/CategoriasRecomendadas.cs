@@ -1,6 +1,4 @@
-﻿
-
-namespace GastoClass.Dominio.Model
+﻿namespace GastoClass.Dominio.Model
 {
     public class CategoriasRecomendadas
     {

@@ -14,7 +14,7 @@ namespace GastoClass.Aplicacion.CasosUso
             _httpClient = httpClient;
         }
 
-        public async Task<PredictionOption?> PredictAsync(string descripcion)
+        public async Task<ResultadoPrediccion?> PredictAsync(string descripcion)
         {
             var request = new SolicitudPrediccion
             {
@@ -30,7 +30,7 @@ namespace GastoClass.Aplicacion.CasosUso
             var result = await response.Content
                 .ReadFromJsonAsync<RespuestaPrediccion>();
 
-            return new PredictionOption
+            return new ResultadoPrediccion
             {
                 Categoria = result.Categoria,
                 Confidencial = result.Confidencial,

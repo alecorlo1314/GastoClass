@@ -49,6 +49,7 @@ namespace GastoClass
             builder.Services.AddTransient<ServicioGastos>();
             builder.Services.AddSingleton<RepositorioBaseDatos>();
 
+
             // HTTP Client para el servicio de predicción
             builder.Services.AddSingleton(sp =>
             {

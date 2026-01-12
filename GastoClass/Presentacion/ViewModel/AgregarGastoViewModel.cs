@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Dominio.Interfacez;
-using GastoClass.Model;
+using GastoClass.Dominio.Model;
 
 namespace GastoClass.Presentacion.ViewModel;
 

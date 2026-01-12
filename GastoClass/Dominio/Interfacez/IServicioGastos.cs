@@ -1,4 +1,4 @@
-﻿using GastoClass.Model;
+﻿using GastoClass.Dominio.Model;
 
 namespace GastoClass.Dominio.Interfacez
 {
