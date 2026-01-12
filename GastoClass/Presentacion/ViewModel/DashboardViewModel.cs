@@ -54,6 +54,8 @@ public partial class DashboardViewModel : ObservableObject
     private string? _monto;
     [ObservableProperty]
     private DateTime _fecha = DateTime.Now;
+    [ObservableProperty]
+    private decimal _gastoTotalMes;
 
     public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos)
     {
@@ -62,7 +64,7 @@ public partial class DashboardViewModel : ObservableObject
         _gastoService = servicioGastos;
 
         listaResultadoPredicciones = new ObservableCollection<ResultadoPrediccion>();
-
+        _ = TotalGastadoEsteMes();
         _timer = new System.Timers.Timer(500); // medio segundo de intervalo
         _timer.AutoReset = false;
         _timer.Elapsed += async (_, _) =>
@@ -195,6 +197,7 @@ public partial class DashboardViewModel : ObservableObject
                 CategoriasRecomendadas?.Clear();
                 ListaConPuntos?.Clear();
                 categoriaFinal = null;
+                _ = TotalGastadoEsteMes(); 
             }
             else
             {
@@ -226,6 +229,18 @@ public partial class DashboardViewModel : ObservableObject
     #endregion
     //Metodo carga asincrona inicial
     //Metodo para obtener gastos totales del mes
+    private async Task TotalGastadoEsteMes()
+    {
+        try
+        {
+            var total = await _gastoService.ObtenerGastosTotalesDelMesAsync(DateTime.Now.Month, DateTime.Now.Year);
+            GastoTotalMes = total;
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
     //Metodo para obtener cantidad de transacciones en este mes
     //Metodo para obtener categoria con mayor gasto
     //Metodo para obtener los ultimos 5 gastos
