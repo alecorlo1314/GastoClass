@@ -1,7 +1,7 @@
 ﻿
 namespace GastoClass.Dominio.Model
 {
-    public class PredictionOption
+    public class ResultadoPrediccion
     {
         public string Categoria { get; set; }
         public float Confidencial { get; set; }

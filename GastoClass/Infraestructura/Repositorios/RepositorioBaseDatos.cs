@@ -1,5 +1,5 @@
 ﻿using SQLite;
-using GastoClass.Model;
+using GastoClass.Dominio.Model;
 
 namespace GastoClass.Infraestructura.Repositorios
 {

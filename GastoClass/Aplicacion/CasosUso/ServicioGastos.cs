@@ -1,4 +1,4 @@
-﻿using GastoClass.Model;
+﻿using GastoClass.Dominio.Model;
 using GastoClass.Dominio.Interfacez;
 
 namespace GastoClass.Aplicacion.CasosUso
@@ -11,7 +11,7 @@ namespace GastoClass.Aplicacion.CasosUso
     // - Servicio para obtener cantidad de transacciones en este mes
     // - Servicio para obtener categoria con mayor gasto
     // - Servicio para obtener los ultimos 5 gastos
-    class ServicioGastos
+    public class ServicioGastos
     {
         #region Inyeccion de dependencias
         private readonly IServicioGastos _servicioGastos;
@@ -44,6 +44,11 @@ namespace GastoClass.Aplicacion.CasosUso
         {
             ///retorna los ultimos 5 gastos
             return await _servicioGastos.ObtenerUltimos5GastosAsync();
+        }
+        public async Task<int> GuardarGastoAsync(Gasto gasto)
+        {
+            ///Guarda un nuevo gasto
+            return await _servicioGastos.GuardarGastoAsync(gasto);
         }
     }
 }

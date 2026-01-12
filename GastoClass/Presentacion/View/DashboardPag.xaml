@@ -176,7 +176,7 @@
                                         ItemsSource="{Binding CategoriasRecomendadas}"
                                         Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaRecomendada}"
+                                        SelectedItem="{Binding CategoriaFinal, Mode=TwoWay}"
                                         TextColor="{x:StaticResource Gray950}"
                                         TextMemberPath="Display" />
                                 </Border>
@@ -204,6 +204,7 @@
                             WidthRequest="140" />
                         <Button
                             BackgroundColor="{StaticResource Azul Principal}"
+                            Command="{Binding AgregarGastoCommand}"
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
@@ -214,7 +215,6 @@
                 </DataTemplate>
             </syncfusion:SfPopup.FooterTemplate>
         </syncfusion:SfPopup>
-
         <!--  CONTENEDOR GASTOS TOTALES  -->
         <Border
             Grid.Row="1"

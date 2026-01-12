@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace GastoClass.Model
+namespace GastoClass.Dominio.Model
 {
     /// <summary>
     /// Clase contendra el gasto ejemplo
@@ -18,6 +18,7 @@ namespace GastoClass.Model
         public DateTime Fecha { get; set; }
         public string? Descripcion { get; set; }
         public string? Categoria { get; set; }
+        [Ignore]
         public string? NombreImagen { get; set; }
     }
 }
