@@ -126,7 +126,6 @@
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Placeholder="Ej: Almuerzo en restaurante"
-                                        ReturnCommand="{Binding Descripcion}"
                                         Text="{Binding Descripcion}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
@@ -172,11 +171,11 @@
                                         DropDownIconColor="{StaticResource Gray600}"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
-                                        HeightRequest="45" 
+                                        HeightRequest="45"
                                         IsEditable="False"
-                                        ItemsSource="{Binding PredictionOptions}"
+                                        ItemsSource="{Binding CategoriasRecomendadas}"
                                         Placeholder="Categoria sugerida"
-                                        PlaceholderColor="{StaticResource Gray500}" 
+                                        PlaceholderColor="{StaticResource Gray500}"
                                         SelectedItem="{Binding CategoriaRecomendada}"
                                         TextColor="{x:StaticResource Gray950}"
                                         TextMemberPath="Display" />
