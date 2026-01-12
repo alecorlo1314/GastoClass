@@ -66,8 +66,8 @@
                         </Image.Triggers>
                     </Image>
                     <Label
-                        FontFamily="InterMedium"
-                        FontSize="18"
+                        FontFamily="PoppinsMedium"
+                        FontSize="16"
                         StyleClass="FlyoutItemLabelStyle"
                         Text="{Binding Title}"
                         VerticalOptions="Center"
@@ -77,7 +77,7 @@
                                 Binding="{Binding IsChecked}"
                                 TargetType="Label"
                                 Value="True">
-                                <Setter Property="TextColor" Value="{StaticResource FondoContenedores}" />
+                                <Setter Property="TextColor" Value="{StaticResource FondoBlanco}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
