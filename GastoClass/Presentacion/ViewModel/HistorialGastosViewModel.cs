@@ -6,98 +6,198 @@ using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
 {
+    /// <summary>
+    /// ViewModel encargado de:
+    /// - Mostrar el historial de gastos
+    /// - Filtrar gastos por texto
+    /// - Editar un gasto existente
+    /// - Solicitar sugerencias de categorías mediante ML
+    /// </summary>
     public partial class HistorialGastosViewModel : ObservableObject
     {
-        //Inyeccion de Dependencias
+        #region Dependencias
+
+        /// <summary>
+        /// Servicio encargado del acceso y gestión de gastos
+        /// </summary>
         private readonly ServicioGastos _gastoService;
+
+        /// <summary>
+        /// Servicio que consume la API de predicción de categorías (ML)
+        /// </summary>
         private readonly PredictionApiService _servicioPrediccionCategoriaML;
 
-        #region Listas Observables
+        #endregion
+
+        #region Colecciones observables
+
+        /// <summary>
+        /// Lista completa de gastos obtenidos desde la base de datos
+        /// </summary>
         [ObservableProperty]
-        private ObservableCollection<Gasto>? listaGastos = new(); //Para la lista de gastos
+        private ObservableCollection<Gasto>? listaGastos = new();
+
+        /// <summary>
+        /// Lista de gastos filtrados para la búsqueda
+        /// </summary>
         [ObservableProperty]
-        private ObservableCollection<Gasto>? listaGastosFiltrados = new(); //Para la busqueda
+        private ObservableCollection<Gasto>? listaGastosFiltrados = new();
+
+        /// <summary>
+        /// Lista final de categorías que se mostrarán al usuario
+        /// </summary>
         [ObservableProperty]
-        private ObservableCollection<CategoriasRecomendadas> listaCategoriaFinal = new(); //Lista de Categorias que se quedara
+        private ObservableCollection<CategoriasRecomendadas> listaCategoriaFinal = new();
+
+        /// <summary>
+        /// Categorías sugeridas por el modelo de Machine Learning
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<ResultadoPrediccion> listaCategoriasSugeridasML = new();
+
         #endregion
-        //Variables 
+
+        #region Propiedades de búsqueda
+
+        /// <summary>
+        /// Texto utilizado para filtrar el historial de gastos
+        /// </summary>
         [ObservableProperty]
         private string? textoBusqueda;
 
-        //Variables de edicion 
+        #endregion
+
+        #region Propiedades de edición
+
+        /// <summary>
+        /// Monto del gasto seleccionado para edición
+        /// </summary>
         [ObservableProperty]
         private decimal montoSeleccionado;
+
+        /// <summary>
+        /// Descripción del gasto seleccionado
+        /// </summary>
         [ObservableProperty]
         private string? descripcionSeleccionada;
+
+        /// <summary>
+        /// Categoría seleccionada (manual o sugerida por ML)
+        /// </summary>
         [ObservableProperty]
         private string? categoriaSeleccionada;
+
+        /// <summary>
+        /// Fecha del gasto seleccionado
+        /// </summary>
         [ObservableProperty]
         private DateTime fechaSeleccionada;
 
+        #endregion
+
+        #region Control de estado interno
+
+        /// <summary>
+        /// Descripción original del gasto antes de ser editado
+        /// </summary>
         private string? _descripcionOriginal;
+
+        /// <summary>
+        /// Indica si el ViewModel se encuentra en modo edición
+        /// </summary>
         private bool _modoEdicion;
+
+        /// <summary>
+        /// Indica si la descripción fue modificada por el usuario
+        /// </summary>
         private bool _descripcionCambiadaPorUsuario;
 
-        //Tiempo 
+        /// <summary>
+        /// Token de cancelación para controlar el debounce de predicción
+        /// </summary>
         private CancellationTokenSource? _cts;
-        //Clases 
+
+        /// <summary>
+        /// Categoría recomendada principal por el modelo ML
+        /// </summary>
         private CategoriasRecomendadas categoriaRecomendadaML;
-        public HistorialGastosViewModel(ServicioGastos gastoService, PredictionApiService servicioPrediccionCategoriaML)
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Inicializa el ViewModel e inyecta las dependencias necesarias
+        /// </summary>
+        public HistorialGastosViewModel(
+            ServicioGastos gastoService,
+            PredictionApiService servicioPrediccionCategoriaML)
         {
-            //Inyeccion de Dependencias
             _gastoService = gastoService;
             _servicioPrediccionCategoriaML = servicioPrediccionCategoriaML;
-            //Cargar lista de gastos
-            //Task.Run(async () => await CargarListaMovimientos());
+
+            // Carga inicial del historial de gastos
             _ = CargarListaMovimientos();
         }
-        //Cargar lista de gastos desde la base de datos
+
+        #endregion
+
+        #region Carga de datos
+
+        /// <summary>
+        /// Obtiene los gastos desde la base de datos y carga las listas observables
+        /// </summary>
         private async Task CargarListaMovimientos()
         {
             try
             {
                 var consulta = await _gastoService.ObtenerGastosAsync();
-                //Limpiamos la lista
+
                 ListaGastos?.Clear();
-                //cargar la lista de gastos con la consulta
+
                 foreach (var gasto in consulta)
-                {
                     ListaGastos?.Add(gasto);
-                }
+
                 ListaGastosFiltrados = new ObservableCollection<Gasto>(ListaGastos!);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
+                // Manejo de errores (logging o notificación)
             }
         }
 
+        #endregion
+
+        #region Búsqueda y filtrado
+
+        /// <summary>
+        /// Se ejecuta automáticamente cuando cambia el texto de búsqueda
+        /// </summary>
         partial void OnTextoBusquedaChanged(string? value)
         {
             _ = Filtrar(value);
         }
+
+        /// <summary>
+        /// Filtra la lista de gastos por descripción, categoría, id o monto
+        /// </summary>
         private async Task Filtrar(string? textoBusqueda)
-       {
+        {
             try
             {
-                //Paso
-                // - verificar el texto no este vacio
-                // - Si esta vacio, mostrar toda la lista
-                // - Si tiene texto, filtrar la lista por descripcion, categoria o monto
-                // - Actualizar la lista observable
                 if (string.IsNullOrWhiteSpace(textoBusqueda))
                 {
                     ListaGastosFiltrados = new ObservableCollection<Gasto>(ListaGastos!);
                     return;
                 }
+
                 textoBusqueda = textoBusqueda.ToLower();
+
                 var resultado = ListaGastos?.Where(g =>
-            g.Descripcion!.ToLower().Contains(textoBusqueda) ||
-            g.Id!.ToString().Contains(textoBusqueda) ||
-            g.Categoria!.ToLower().Contains(textoBusqueda) ||
-            g.Monto.ToString().Contains(textoBusqueda));
+                    g.Descripcion!.ToLower().Contains(textoBusqueda) ||
+                    g.Id!.ToString().Contains(textoBusqueda) ||
+                    g.Categoria!.ToLower().Contains(textoBusqueda) ||
+                    g.Monto.ToString().Contains(textoBusqueda));
 
                 ListaGastosFiltrados = new ObservableCollection<Gasto>(resultado!);
             }
@@ -106,11 +206,18 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
             }
         }
+
+        #endregion
+
+        #region Edición de gastos
+
+        /// <summary>
+        /// Prepara el ViewModel para editar un gasto seleccionado
+        /// </summary>
         [RelayCommand]
         private void EditarGasto(Gasto gasto)
         {
             _modoEdicion = true;
-
             _descripcionOriginal = gasto.Descripcion;
             _descripcionCambiadaPorUsuario = false;
 
@@ -123,6 +230,9 @@ namespace GastoClass.Presentacion.ViewModel
             ListaCategoriaFinal?.Clear();
         }
 
+        /// <summary>
+        /// Se ejecuta cuando cambia la descripción del gasto en edición
+        /// </summary>
         partial void OnDescripcionSeleccionadaChanged(string? value)
         {
             if (!_modoEdicion)
@@ -157,6 +267,13 @@ namespace GastoClass.Presentacion.ViewModel
             });
         }
 
+        #endregion
+
+        #region Predicción ML
+
+        /// <summary>
+        /// Obtiene categorías sugeridas por el modelo ML según la descripción
+        /// </summary>
         private async Task CargarCategoriasSugeridasMLAsync()
         {
             if (!_descripcionCambiadaPorUsuario)
@@ -179,13 +296,13 @@ namespace GastoClass.Presentacion.ViewModel
                 CategoriaSeleccionada = prediction.Categoria;
 
                 ListaCategoriaFinal = new ObservableCollection<CategoriasRecomendadas>
-        {
-            new()
-            {
-                DescripcionCategoriaRecomendada = prediction.Categoria,
-                ScoreCategoriaRecomendada = prediction.Confidencial
-            }
-        };
+                {
+                    new()
+                    {
+                        DescripcionCategoriaRecomendada = prediction.Categoria,
+                        ScoreCategoriaRecomendada = prediction.Confidencial
+                    }
+                };
             }
             catch (Exception ex)
             {
@@ -194,7 +311,16 @@ namespace GastoClass.Presentacion.ViewModel
             }
         }
 
+        #endregion
+
+        #region Validaciones
+
+        /// <summary>
+        /// Valida que la descripción tenga un formato mínimo válido
+        /// </summary>
         private bool EsDescripcionValida(string? texto)
-=> !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
+            => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
+
+        #endregion
     }
 }
