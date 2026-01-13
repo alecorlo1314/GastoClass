@@ -3,6 +3,8 @@
     x:Class="GastoClass.Presentacion.View.HistorialGastosPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+    xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="Historial de Gastos"
     Padding="48"
@@ -10,6 +12,181 @@
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray950}">
     <Grid RowDefinitions="Auto,*">
+        <!--  BOTON CERRAR VENTANA  -->
+        <syncfusion:SfPopup
+            x:Name="mipopup"
+            Grid.Row="1"
+            AnimationMode="None"
+            HeaderHeight="97"
+            HeightRequest="600"
+            OverlayMode="Blur"
+            ShowCloseButton="True"
+            ShowFooter="True"
+            WidthRequest="500">
+            <syncfusion:SfPopup.PopupStyle>
+                <syncfusion:PopupStyle
+                    BlurIntensity="Dark"
+                    BlurRadius="10"
+                    CloseButtonIcon="cancel_01.png"
+                    CornerRadius="0"
+                    FooterBackground="{StaticResource FondoBlanco}"
+                    HasShadow="True"
+                    HeaderFontFamily="PoppinsSemiBold"
+                    HeaderFontSize="24"
+                    PopupBackground="{StaticResource FondoBlanco}"
+                    Stroke="Transparent" />
+            </syncfusion:SfPopup.PopupStyle>
+            <!--  ENCABEZADO DEL POPUP  -->
+            <syncfusion:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="24">
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="24"
+                            Text="Agregar Gasto"
+                            TextColor="{StaticResource Gray950}" />
+                        <Label
+                            FontFamily="PoppinsRegular"
+                            FontSize="14"
+                            Text="Agrega un nuevo gasto a tus registros. La categoría se predirá automáticamente."
+                            TextColor="{StaticResource Gray500}" />
+                    </StackLayout>
+                </DataTemplate>
+            </syncfusion:SfPopup.HeaderTemplate>
+            <!--  CONTENIDO DEL POPUP  -->
+            <syncfusion:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <!--  FORMULARIO  -->
+                    <ScrollView Grid.Row="1" Padding="24">
+                        <VerticalStackLayout Spacing="16">
+
+                            <!--  MONTO  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Monto"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <Entry
+                                        x:Name="EntryMonto"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Keyboard="Numeric"
+                                        Placeholder="$0.00"
+                                        Text="{Binding Monto}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!--  DESCRIPCION  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Descripción"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <Entry
+                                        x:Name="EntryDescripcion"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Placeholder="Ej: Almuerzo en restaurante"
+                                        Text="{Binding Descripcion}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!--  Fecha  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Fecha"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <DatePicker
+                                        x:Name="DatePickerFecha"
+                                        Margin="8,0"
+                                        Date="{Binding Fecha}"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Format="dd/MM/yyyy"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!--  Categoría  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Categoría"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <editors:SfComboBox
+                                        x:Name="comboBox"
+                                        ClearButtonIconColor="{StaticResource Gray600}"
+                                        DisplayMemberPath="Display"
+                                        DropDownIconColor="{StaticResource Gray600}"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        HeightRequest="45"
+                                        IsEditable="False"
+                                        ItemsSource="{Binding CategoriasRecomendadas}"
+                                        Placeholder="Categoria sugerida"
+                                        PlaceholderColor="{StaticResource Gray500}"
+                                        SelectedItem="{Binding CategoriaFinal, Mode=TwoWay}"
+                                        TextColor="{x:StaticResource Gray950}"
+                                        TextMemberPath="Display" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </DataTemplate>
+            </syncfusion:SfPopup.ContentTemplate>
+            <!--  FOOTER DEL POPUP  -->
+            <syncfusion:SfPopup.FooterTemplate>
+                <DataTemplate>
+                    <StackLayout
+                        Padding="24,0"
+                        HorizontalOptions="End"
+                        Orientation="Horizontal"
+                        Spacing="16">
+                        <Button
+                            BackgroundColor="{StaticResource Gray100}"
+                            Clicked="OnCancelarClicked"
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            HeightRequest="48"
+                            Text="Cancelar"
+                            TextColor="{StaticResource Gray950}"
+                            WidthRequest="140" />
+                        <Button
+                            BackgroundColor="{StaticResource Azul Principal}"
+                            Command="{Binding AgregarGastoCommand}"
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            HeightRequest="48"
+                            Text="Agregar"
+                            TextColor="{StaticResource FondoBlanco}"
+                            WidthRequest="140" />
+                    </StackLayout>
+                </DataTemplate>
+            </syncfusion:SfPopup.FooterTemplate>
+        </syncfusion:SfPopup>
         <!--  ENCABEZADO Y BARRA DE BUSQUEDA  -->
         <StackLayout Grid.Row="0">
             <StackLayout Margin="0,0,0,32" Spacing="16">
@@ -43,8 +220,7 @@
                             Text="{Binding TextoBusqueda}"
                             TextColor="{StaticResource Gray900}"
                             VerticalOptions="Center"
-                            WidthRequest="550">
-                        </Entry>
+                            WidthRequest="550" />
                     </HorizontalStackLayout>
                 </Border>
             </StackLayout>
@@ -163,11 +339,13 @@
                                         <ImageButton
                                             Aspect="AspectFit"
                                             BackgroundColor="Transparent"
+                                            Clicked="Editar_Clicked"
                                             Source="pencil_edit_02.png" />
                                         <ImageButton
                                             Grid.Column="1"
                                             Aspect="AspectFit"
                                             BackgroundColor="Transparent"
+                                            Clicked="Eliminar_Clicked"
                                             Source="delete_02.png" />
                                     </Grid>
                                 </Border>

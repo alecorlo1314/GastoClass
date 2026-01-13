@@ -81,5 +81,6 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
             }
         }
+        
     }
 }

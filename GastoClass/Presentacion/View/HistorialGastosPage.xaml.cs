@@ -11,4 +11,14 @@ public partial class HistorialGastosPage : ContentPage
         BindingContext = historialGastosViewModel;
 
     }
+
+    private void Editar_Clicked(object sender, EventArgs e)
+    {
+        mipopup.IsOpen = true;
+    }
+
+    private void Eliminar_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }
