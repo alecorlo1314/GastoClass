@@ -3,6 +3,7 @@
     x:Class="GastoClass.Presentacion.View.HistorialGastosPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="Historial de Gastos"
     Padding="48"
     BackgroundColor="{StaticResource FondoMenosBlanco}"
@@ -39,9 +40,11 @@
                             FontSize="16"
                             Placeholder="Buscar gasto..."
                             PlaceholderColor="{StaticResource Gray500}"
+                            Text="{Binding TextoBusqueda}"
                             TextColor="{StaticResource Gray900}"
                             VerticalOptions="Center"
-                            WidthRequest="550" />
+                            WidthRequest="550">
+                        </Entry>
                     </HorizontalStackLayout>
                 </Border>
             </StackLayout>
@@ -102,7 +105,7 @@
                 <!--  LINEA SEPARADORA  -->
                 <Border Grid.Row="1" Stroke="{StaticResource Gray100}" />
                 <!--  LISTA DE MOVIMIENTOS  -->
-                <CollectionView Grid.Row="2" ItemsSource="{Binding ListaGastos}">
+                <CollectionView Grid.Row="2" ItemsSource="{Binding ListaGastosFiltrados}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="2*,1*,2*,2*,2*,1*" HeightRequest="48">
