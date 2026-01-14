@@ -150,7 +150,14 @@
                                         PlaceholderColor="{StaticResource Gray500}"
                                         SelectedItem="{Binding CategoriaSeleccionada}"
                                         TextColor="{x:StaticResource Gray950}"
-                                        TextMemberPath="Display" />
+                                        TextMemberPath="Display">
+                                        <editors:SfComboBox.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                Command="{Binding ItemSeleccionadoCommand}"
+                                                EventArgsConverter="{StaticResource SfComboBoxSelectionChangedConverter}"
+                                                EventName="SelectionChanged" />
+                                        </editors:SfComboBox.Behaviors>
+                                    </editors:SfComboBox>
                                 </Border>
                             </VerticalStackLayout>
                         </VerticalStackLayout>
@@ -176,7 +183,7 @@
                             WidthRequest="140" />
                         <Button
                             BackgroundColor="{StaticResource Azul Principal}"
-                            Command="{Binding AgregarGastoCommand}"
+                            Command="{Binding ActualizarGastoCommand}"
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"

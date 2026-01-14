@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
+using Microsoft.Maui.Graphics.Text;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -68,7 +69,11 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Propiedades de edición
-
+        /// <summary>
+        /// Id seleccionado para la edicion
+        /// </summary>
+        [ObservableProperty]
+        private int idSeleccionado;
         /// <summary>
         /// Monto del gasto seleccionado para edición
         /// </summary>
@@ -217,15 +222,21 @@ namespace GastoClass.Presentacion.ViewModel
         [RelayCommand]
         private void EditarGasto(Gasto gasto)
         {
+            //Se activa el modo edicion
             _modoEdicion = true;
+            //Guardamos la descipcion original
             _descripcionOriginal = gasto.Descripcion;
+            //Aun el usuario no ha editado la descripcion
             _descripcionCambiadaPorUsuario = false;
 
+            //Guardamos los datos del Objeto Gasto para que se muestren en el popup
+            IdSeleccionado = gasto.Id;
             MontoSeleccionado = gasto.Monto;
             DescripcionSeleccionada = gasto.Descripcion;
             FechaSeleccionada = gasto.Fecha;
             CategoriaSeleccionada = gasto.Categoria;
 
+            //Limpiamos las lista de sugerencias ML y la lista definitiva
             ListaCategoriasSugeridasML?.Clear();
             ListaCategoriaFinal?.Clear();
         }
@@ -235,12 +246,13 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         partial void OnDescripcionSeleccionadaChanged(string? value)
         {
+            //Si el modo edicion esta en false pasar
             if (!_modoEdicion)
                 return;
-
+            //Si la descripcion es invalida no se pasa
             if (!EsDescripcionValida(value))
                 return;
-
+            //Si el valor es igual al valor original, se limpia la lista de categorias sugeridas
             if (value == _descripcionOriginal)
             {
                 ListaCategoriasSugeridasML?.Clear();
@@ -295,14 +307,17 @@ namespace GastoClass.Presentacion.ViewModel
 
                 CategoriaSeleccionada = prediction.Categoria;
 
-                ListaCategoriaFinal = new ObservableCollection<CategoriasRecomendadas>
+                //Pasar los scores de la prediccion a la lista final
+                foreach(var (key,value) in prediction.scoreDict)
                 {
-                    new()
+                    ListaCategoriaFinal?.Add(new CategoriasRecomendadas
                     {
-                        DescripcionCategoriaRecomendada = prediction.Categoria,
-                        ScoreCategoriaRecomendada = prediction.Confidencial
-                    }
-                };
+                        DescripcionCategoriaRecomendada = key,
+                        ScoreCategoriaRecomendada = value
+                    });
+                }
+                // ordernar lista de puntos, desdendentemente por puntos
+            ListaCategoriaFinal?.OrderByDescending(s => s.ScoreCategoriaRecomendada);
             }
             catch (Exception ex)
             {
@@ -313,6 +328,40 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
+        #region Actualizar Gasto
+        [RelayCommand]
+        private async Task ActualizarGasto()
+        {
+            //inicializar objeto Gasto
+            Gasto gasto = new Gasto
+            {
+                Id = IdSeleccionado,
+                Descripcion = DescripcionSeleccionada,
+                Monto = MontoSeleccionado,
+                Fecha = FechaSeleccionada,
+                Categoria = CategoriaSeleccionada
+                // - categoria original funciona
+                //- categoria seleccionada por el modelo
+            };
+        }
+        #endregion
+        partial void OnCategoriaSeleccionadaChanged(string? value)
+        {
+            Shell.Current.CurrentPage.DisplayAlertAsync("Prueba", value + " Seleccionada", "Ok");
+            if (value == null) return;
+            MetodoCategoriaSeleccionadaCommand.Execute(value);
+        }
+        [RelayCommand]
+        private void MetodoCategoriaSeleccionada(string? value)
+        {
+            Shell.Current.CurrentPage.DisplayAlertAsync("Prueba", $"MetodoCategoriaSeleccionada({value}) escucha", "Ok");
+        }
+        [RelayCommand]
+        private void ItemSeleccionado(object selectedItem)
+        {
+            if (selectedItem == null) return;
+        }
+
         #region Validaciones
 
         /// <summary>
@@ -320,7 +369,9 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         private bool EsDescripcionValida(string? texto)
             => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
-
+        private bool EsMontoValido(string? texto)
+            => !string.IsNullOrWhiteSpace(texto) && texto.Length != 0 &&
+            decimal.TryParse(texto, out _);
         #endregion
     }
 }
