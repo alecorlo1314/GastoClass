@@ -28,7 +28,87 @@
             IsVisible="{Binding IsBusy}"
             VerticalOptions="Center"
             WidthRequest="40" />
-        <!--  BOTON CERRAR VENTANA  -->
+        <!--  POPUP DE ELIMINACION DE GASTOS  -->
+        <syncfusion:SfPopup
+            x:Name="mipopupEliminacion"
+            Grid.Row="1"
+            AnimationMode="None"
+            HeaderHeight="60"
+            IsOpen="{Binding EliminacionConExito}"
+            OverlayMode="Blur"
+            ShowCloseButton="True"
+            ShowFooter="True"
+            StaysOpen="True"
+            WidthRequest="700">
+            <syncfusion:SfPopup.PopupStyle>
+                <syncfusion:PopupStyle
+                    BlurIntensity="Dark"
+                    BlurRadius="10"
+                    CloseButtonIcon="cancel_01.png"
+                    CornerRadius="15"
+                    FooterBackground="{StaticResource FondoBlanco}"
+                    HasShadow="True"
+                    HeaderFontFamily="PoppinsSemiBold"
+                    HeaderFontSize="24"
+                    PopupBackground="{StaticResource FondoBlanco}"
+                    Stroke="Transparent" />
+            </syncfusion:SfPopup.PopupStyle>
+            <!--  ENCABEZADO DEL POPUP  -->
+            <syncfusion:SfPopup.HeaderTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="24">
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="24"
+                            Text="Estas seguro?"
+                            TextColor="{StaticResource Gray950}" />
+                    </StackLayout>
+                </DataTemplate>
+            </syncfusion:SfPopup.HeaderTemplate>
+            <!--  CONTENIDO DEL POPUP  -->
+            <syncfusion:SfPopup.ContentTemplate>
+                <DataTemplate>
+                    <Grid Padding="12">
+                        <!--  FORMULARIO  -->
+                        <Label
+                            FontFamily="PoppinsRegular"
+                            FontSize="14"
+                            HorizontalOptions="Start"
+                            Text="{Binding MensajeEliminacionGasto}"
+                            TextColor="{StaticResource Gray500}" />
+                    </Grid>
+                </DataTemplate>
+            </syncfusion:SfPopup.ContentTemplate>
+            <!--  FOOTER DEL POPUP  -->
+            <syncfusion:SfPopup.FooterTemplate>
+                <DataTemplate>
+                    <StackLayout
+                        Padding="24,0"
+                        HorizontalOptions="End"
+                        Orientation="Horizontal"
+                        Spacing="16">
+                        <Button
+                            BackgroundColor="{StaticResource Gray100}"
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            HeightRequest="48"
+                            Text="Cancelar"
+                            TextColor="{StaticResource Gray950}"
+                            WidthRequest="140" />
+                        <Button
+                            BackgroundColor="{StaticResource Azul Principal}"
+                            Command="{Binding EliminarGastoCommand}"
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            HeightRequest="48"
+                            Text="Eliminar"
+                            TextColor="{StaticResource FondoBlanco}"
+                            WidthRequest="140" />
+                    </StackLayout>
+                </DataTemplate>
+            </syncfusion:SfPopup.FooterTemplate>
+        </syncfusion:SfPopup>
+        <!--  POPUP DE EDICION DE GASTOS  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
             Grid.Row="1"
@@ -358,13 +438,16 @@
                                             Aspect="AspectFit"
                                             BackgroundColor="Transparent"
                                             Clicked="Editar_Clicked"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditarGastoCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AbrirPopupEdicionGastoCommand}"
                                             CommandParameter="{Binding .}"
                                             Source="pencil_edit_02.png" />
                                         <ImageButton
                                             Grid.Column="1"
                                             Aspect="AspectFit"
                                             BackgroundColor="Transparent"
+                                            Clicked="Eliminar_Clicked"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AbrirPopupEliminarGastoCommand}"
+                                            CommandParameter="{Binding .}"
                                             Source="delete_02.png" />
                                     </Grid>
                                 </Border>

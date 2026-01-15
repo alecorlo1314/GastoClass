@@ -193,5 +193,20 @@ namespace GastoClass.Infraestructura.Repositorios
                 throw new Exception("Error al obtener todos los gastos de la base de datos", ex);
             }
         }
+        public async Task<int> EliminarGastoAsync(Gasto eliminarGasto)
+        {
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                //Eliminar gastos
+                return await conexion.DeleteAsync(eliminarGasto);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception("Error al eliminar el gastos la base de datos", ex);
+            }
+        }
     }
 }
