@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
-using Microsoft.Maui.Graphics.Text;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -58,6 +57,20 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
+        #region Properidades de Estado UI
+        /// <summary>
+        /// Controla las acciones de procesos en curso
+        /// </summary>
+        [ObservableProperty]
+        private bool isBusy;
+
+        /// <summary>
+        /// Controla cuando se guarda la edicion
+        /// </summary>
+        [ObservableProperty]
+        private bool actualizadoConExito;
+        #endregion
+
         #region Propiedades de búsqueda
 
         /// <summary>
@@ -91,6 +104,12 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private string? categoriaSeleccionada;
+
+        /// <summary>
+        /// Objeto completo seleccionado del ComboBox
+        /// </summary>
+        [ObservableProperty]
+        private CategoriasRecomendadas? categoriaSeleccionadaObjeto;
 
         /// <summary>
         /// Fecha del gasto seleccionado
@@ -156,6 +175,7 @@ namespace GastoClass.Presentacion.ViewModel
         {
             try
             {
+                IsBusy = true;
                 var consulta = await _gastoService.ObtenerGastosAsync();
 
                 ListaGastos?.Clear();
@@ -168,6 +188,10 @@ namespace GastoClass.Presentacion.ViewModel
             catch (Exception)
             {
                 // Manejo de errores (logging o notificación)
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -237,6 +261,7 @@ namespace GastoClass.Presentacion.ViewModel
             CategoriaSeleccionada = gasto.Categoria;
 
             //Limpiamos las lista de sugerencias ML y la lista definitiva
+            CategoriaSeleccionadaObjeto = null;
             ListaCategoriasSugeridasML?.Clear();
             ListaCategoriaFinal?.Clear();
         }
@@ -305,10 +330,14 @@ namespace GastoClass.Presentacion.ViewModel
                 ListaCategoriasSugeridasML?.Clear();
                 ListaCategoriasSugeridasML?.Add(prediction);
 
+                // Actualiza el STRING (para la BD)
                 CategoriaSeleccionada = prediction.Categoria;
 
+                // Limpiar y llenar la lista
+                ListaCategoriaFinal?.Clear();
+
                 //Pasar los scores de la prediccion a la lista final
-                foreach(var (key,value) in prediction.scoreDict)
+                foreach (var (key,value) in prediction.scoreDict)
                 {
                     ListaCategoriaFinal?.Add(new CategoriasRecomendadas
                     {
@@ -317,7 +346,13 @@ namespace GastoClass.Presentacion.ViewModel
                     });
                 }
                 // ordernar lista de puntos, desdendentemente por puntos
-            ListaCategoriaFinal?.OrderByDescending(s => s.ScoreCategoriaRecomendada);
+                var ordenada = ListaCategoriaFinal
+                    ?.OrderByDescending(s => s.ScoreCategoriaRecomendada)
+                    .ToList();
+                //Actualizar la lista final con los datos ordenados por scores
+                ListaCategoriaFinal = new ObservableCollection<CategoriasRecomendadas>(ordenada!);
+
+                CategoriaSeleccionadaObjeto = ListaCategoriaFinal?.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -332,35 +367,58 @@ namespace GastoClass.Presentacion.ViewModel
         [RelayCommand]
         private async Task ActualizarGasto()
         {
-            //inicializar objeto Gasto
-            Gasto gasto = new Gasto
+            try
             {
-                Id = IdSeleccionado,
-                Descripcion = DescripcionSeleccionada,
-                Monto = MontoSeleccionado,
-                Fecha = FechaSeleccionada,
-                Categoria = CategoriaSeleccionada
-                // - categoria original funciona
-                //- categoria seleccionada por el modelo
-            };
+                //Validaciones
+                if (string.IsNullOrWhiteSpace(IdSeleccionado.ToString()) || !EsDescripcionValida(DescripcionSeleccionada)
+                    || EsMontoValido(MontoSeleccionado) || CategoriaSeleccionada == null) return;
+                //inicializar objeto Gasto
+                Gasto gasto = new Gasto
+                {
+                    Id = IdSeleccionado,
+                    Descripcion = DescripcionSeleccionada,
+                    Monto = MontoSeleccionado,
+                    Fecha = FechaSeleccionada,
+                    Categoria = CategoriaSeleccionada
+                };
+
+                IsBusy = true;
+                //Guardar en la BD
+                var resultado = await _gastoService.GuardarGastoAsync(gasto);
+
+                if (resultado == 1)
+                {
+                    Shell.Current.CurrentPage?.DisplayAlertAsync("Prueba", $"Se guardo {gasto.Descripcion} con categoria {gasto.Categoria}", "Ok");
+                    //Cerrar Popup
+                    ActualizadoConExito = false;
+                }    
+            }
+            catch (Exception ex)
+            {
+                Shell.Current.CurrentPage?.DisplayAlertAsync("Prueba", $"Se produjo un error al intentar actualizar el gastos: {ex.Message}", "Ok");
+
+                // Carga inicial del historial de gastos
+                _ = CargarListaMovimientos();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
         #endregion
-        partial void OnCategoriaSeleccionadaChanged(string? value)
+
+        #region Seleccion Usuario 
+        /// <summary>
+        /// Se ejecuta cuando el usuario selecciona del ComboBox manualmente
+        /// </summary>
+        partial void OnCategoriaSeleccionadaObjetoChanged(CategoriasRecomendadas? value)
         {
-            Shell.Current.CurrentPage.DisplayAlertAsync("Prueba", value + " Seleccionada", "Ok");
             if (value == null) return;
-            MetodoCategoriaSeleccionadaCommand.Execute(value);
+
+            // Actualiza el string que se guarda en la BD
+            CategoriaSeleccionada = value.DescripcionCategoriaRecomendada;
         }
-        [RelayCommand]
-        private void MetodoCategoriaSeleccionada(string? value)
-        {
-            Shell.Current.CurrentPage.DisplayAlertAsync("Prueba", $"MetodoCategoriaSeleccionada({value}) escucha", "Ok");
-        }
-        [RelayCommand]
-        private void ItemSeleccionado(object selectedItem)
-        {
-            if (selectedItem == null) return;
-        }
+        #endregion
 
         #region Validaciones
 
@@ -369,9 +427,9 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         private bool EsDescripcionValida(string? texto)
             => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
-        private bool EsMontoValido(string? texto)
-            => !string.IsNullOrWhiteSpace(texto) && texto.Length != 0 &&
-            decimal.TryParse(texto, out _);
+        private bool EsMontoValido(decimal monto)
+            => !string.IsNullOrWhiteSpace(monto.ToString()) && monto < 0 &&
+            decimal.TryParse(monto.ToString(), out _);
         #endregion
     }
 }

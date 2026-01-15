@@ -6,12 +6,28 @@
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:GastoClass.Presentacion.ViewModel"
     Title="Historial de Gastos"
     Padding="48"
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray950}">
+
+    <!--  PARA PODER VER LOS COMPONENTES DEL VIEWMODELDETALLES  -->
+    <ContentPage.BindingContext>
+        <vm:MLDetallesViewModel />
+    </ContentPage.BindingContext>
     <Grid RowDefinitions="Auto,*">
+        <!--  OVERLAY DE CARGA  -->
+        <ActivityIndicator
+            Grid.RowSpan="2"
+            BackgroundColor="Red"
+            HeightRequest="40"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center"
+            WidthRequest="40" />
         <!--  BOTON CERRAR VENTANA  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
@@ -19,9 +35,11 @@
             AnimationMode="None"
             HeaderHeight="97"
             HeightRequest="600"
+            IsOpen="{Binding ActualizadoConExito}"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
+            StaysOpen="True"
             WidthRequest="500">
             <syncfusion:SfPopup.PopupStyle>
                 <syncfusion:PopupStyle
@@ -148,16 +166,9 @@
                                         ItemsSource="{Binding ListaCategoriaFinal}"
                                         Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaSeleccionadaObjeto.DescripcionCategoriaRecomendada}"
+                                        SelectedItem="{Binding CategoriaSeleccionadaObjeto}"
                                         TextColor="{x:StaticResource Gray950}"
-                                        TextMemberPath="Display">
-                                        <editors:SfComboBox.Behaviors>
-                                            <toolkit:EventToCommandBehavior
-                                                Command="{Binding ItemSeleccionadoCommand}"
-                                                EventArgsConverter="{StaticResource SfComboBoxSelectionChangedConverter}"
-                                                EventName="SelectionChanged" />
-                                        </editors:SfComboBox.Behaviors>
-                                    </editors:SfComboBox>
+                                        TextMemberPath="Display" />
                                 </Border>
                             </VerticalStackLayout>
                         </VerticalStackLayout>
