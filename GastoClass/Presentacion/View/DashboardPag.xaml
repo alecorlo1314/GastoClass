@@ -365,7 +365,10 @@
                         Text="Tus 5 transacciones más recientes."
                         TextColor="{StaticResource Gray600}" />
                 </VerticalStackLayout>
-                <CollectionView ItemsSource="{Binding UltimosCincoMovimientos}" Grid.Row="1" Margin="0,8">
+                <CollectionView
+                    Grid.Row="1"
+                    Margin="0,8"
+                    ItemsSource="{Binding UltimosCincoMovimientos}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid
@@ -397,12 +400,13 @@
                                 </StackLayout>
                                 <Label
                                     Grid.Column="2"
-                                    FontFamily="PoppinsSemiBold" WidthRequest="150"
+                                    FontFamily="PoppinsSemiBold"
                                     FontSize="16"
                                     HorizontalOptions="End"
                                     Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
                                     TextColor="{StaticResource Gray900}"
-                                    VerticalOptions="Center" />
+                                    VerticalOptions="Center"
+                                    WidthRequest="150" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

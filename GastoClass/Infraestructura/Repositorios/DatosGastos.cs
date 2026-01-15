@@ -170,5 +170,28 @@ namespace GastoClass.Infraestructura.Repositorios
                 throw new Exception("Error al guardar el gasto.", ex);
             }
         }
+        /// <summary>
+        /// Metodo para obtener todos los gastos
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<List<Gasto>> ObtenerGastosAsync()
+        {
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                //Consulta para obtener todos los gastos
+                var consulta = await conexion.Table<Gasto>()
+                    .OrderByDescending(g => g.Fecha)
+                    .ToListAsync();
+                return consulta;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new Exception("Error al obtener todos los gastos de la base de datos", ex);
+            }
+        }
     }
 }

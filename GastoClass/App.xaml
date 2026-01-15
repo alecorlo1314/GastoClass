@@ -25,7 +25,7 @@
                 ApplyToDerivedTypes="True"
                 Class="FlyoutItemLabelStyle"
                 TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource ColorNegroTextoMenu}" />
+                <Setter Property="TextColor" Value="{StaticResource Gray600}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

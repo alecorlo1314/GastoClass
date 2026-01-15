@@ -37,7 +37,7 @@ public partial class DashboardViewModel : ObservableObject
 
     #region Listas Observables
     [ObservableProperty]
-    private ObservableCollection<ResultadoPrediccion>? listaResultadoPredicciones = new();
+    private ObservableCollection<ResultadoPrediccion> listaResultadoPredicciones = new();
     //Esta lista contendra las categorias recomendadas basadas en la prediccion del modelo ML
     [ObservableProperty]
     private ObservableCollection<CategoriasRecomendadas> categoriasRecomendadas = new ();
@@ -119,7 +119,7 @@ public partial class DashboardViewModel : ObservableObject
         try
         {
             //Obtener la prediccion desde el servicio
-            var prediction = await _serviceML.PredictAsync(Descripcion);
+            var prediction = await _serviceML.PredictAsync(Descripcion!);
             //Limpiar opciones de prediccion antes de agregar nuevas
             ListaResultadoPredicciones?.Clear();
             //Agregar la nueva prediccion a la lista
@@ -128,7 +128,7 @@ public partial class DashboardViewModel : ObservableObject
             //Actualizar la categoria recomendada y se mostrara asi (Alimentos 80%)
             CategoriaRecomendadaML = new CategoriasRecomendadas
             {
-                DescripcionCategoriaRecomendada = prediction.Categoria,
+                DescripcionCategoriaRecomendada = prediction!.Categoria,
                 ScoreCategoriaRecomendada = prediction.Confidencial
             };
             CategoriaFinal = CategoriaRecomendadaML;

@@ -50,5 +50,11 @@ namespace GastoClass.Aplicacion.CasosUso
             ///Guarda un nuevo gasto
             return await _servicioGastos.GuardarGastoAsync(gasto);
         }
+        //Metodo para obtener todos los gastos
+        public async Task<List<Gasto>> ObtenerGastosAsync()
+        {
+            ///Obtiene todos los gastos
+            return await _servicioGastos.ObtenerGastosAsync();
+        }
     }
 }
