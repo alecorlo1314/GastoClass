@@ -148,7 +148,7 @@
                                         ItemsSource="{Binding ListaCategoriaFinal}"
                                         Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaSeleccionada}"
+                                        SelectedItem="{Binding CategoriaSeleccionadaObjeto.DescripcionCategoriaRecomendada}"
                                         TextColor="{x:StaticResource Gray950}"
                                         TextMemberPath="Display">
                                         <editors:SfComboBox.Behaviors>
