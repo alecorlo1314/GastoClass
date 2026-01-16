@@ -89,7 +89,8 @@
                         Spacing="16">
                         <Button
                             BackgroundColor="{StaticResource Gray100}"
-                            FontFamily="PoppinsSemiBold" Command="{Binding CancelarEliminarGastoCommand}"
+                            Command="{Binding CancelarEliminarGastoCommand}"
+                            FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
                             Text="Cancelar"
@@ -454,6 +455,27 @@
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
+                    <!--  MOSTRAR VISTA VACIA  -->
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                <Label
+                                    FontFamily="PoppinsSemiBold"
+                                    FontSize="32"
+                                    HorizontalOptions="Fill"
+                                    HorizontalTextAlignment="Center"
+                                    Text="No hay gastos"
+                                    TextColor="{StaticResource Gray950}" />
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Fill"
+                                    HorizontalTextAlignment="Center"
+                                    Text="Trata Agregar datos o busca uno diferente!"
+                                    TextColor="{StaticResource Gray500}" />
+                            </StackLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
                 </CollectionView>
             </Grid>
         </Border>
