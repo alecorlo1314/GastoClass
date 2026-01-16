@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
 using System.Collections.ObjectModel;
@@ -20,7 +21,8 @@ namespace GastoClass.Presentacion.ViewModel
         {
             //Inyeccion de dependencias
             _predictionApiService = predictionApiService;
-        }
+            //inicializar datos
+            ResultadosVisibles = false;        }
         #endregion
 
         #region Propiedades de UI
@@ -29,6 +31,24 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private string? _descripcion;
+
+        /// <summary>
+        /// Permite mostrar los resultados de las predicciones en la UI
+        /// </summary>
+        [ObservableProperty]
+        private bool? _resultadosVisibles = false;
+
+        /// <summary>
+        /// Oculata o muestra el boton de predecir
+        /// </summary>
+        [ObservableProperty]
+        private bool? _botonPredecirOculto;
+
+        /// <summary>
+        /// Oculata o muestra el boton de predecir
+        /// </summary>
+        [ObservableProperty]
+        private bool? _botonCargandoOculto = false;
         #endregion
 
         #region Propiedades Tiempo
@@ -90,41 +110,79 @@ namespace GastoClass.Presentacion.ViewModel
                     CategoriasRecomendadas?.Add(new CategoriasRecomendadas
                     {
                         DescripcionCategoriaRecomendada = key,
-                        ScoreCategoriaRecomendada = value
+                        ScoreCategoriaRecomendada = value * 100
                     });
                 }
+                // ordernar lista de puntos, desdendentemente por puntos
+                var ordenada = CategoriasRecomendadas
+                    ?.OrderBy(s => s.ScoreCategoriaRecomendada)
+                    .ToList();
+                //Actualizar la lista final con los datos ordenados por scores
+                CategoriasRecomendadas = new ObservableCollection<CategoriasRecomendadas>(ordenada!);
+
                 //Actualizar la categoria recomendada y se mostrara asi (Alimentos 80%)
                 CategoriaRecomendadaML = new CategoriasRecomendadas
                 {
                     DescripcionCategoriaRecomendada = prediccion!.Categoria,
                     ScoreCategoriaRecomendada = prediccion.Confidencial
                 };
+                ResultadosVisibles = true;
+                BotonPredecirOculto = true;
+                BotonCargandoOculto = false;
             }
             catch (Exception ex)
             {
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Error en TiempoRealPrediccionAsync: ", ex.Message, "OK");
             }
         }
-        partial void OnDescripcionChanged(string? value)
+        #endregion
+
+        #region Realizar Prediccion
+        [RelayCommand]
+        private async Task RealizarPrediccion()
         {
-            //Validar que la descripcion sea valida
-            if (!EsDescripcionValida(value)) return;
-            //Cancelar cualquier prediccion en curso
-            _cts?.Cancel();
-            //Crear un nuevo token de cancelacion
-            _cts = new CancellationTokenSource();
-            //Iniciar una nueva tarea para la prediccion con retardo
-            _ = Task.Run(async () =>
+            try
             {
-                try
+                //Validar que la descripcion sea valida
+                if (!EsDescripcionValida(Descripcion)) return;
+
+                //SE OCULTA EL BOTON DE PREDECIR
+                BotonPredecirOculto = true;
+                //Se muestra el boton de carga
+                BotonCargandoOculto = !BotonPredecirOculto;
+                //Cancelar cualquier prediccion en curso
+                _cts?.Cancel();
+                //Crear un nuevo token de cancelacion
+                _cts = new CancellationTokenSource();
+                //Iniciar una nueva tarea para la prediccion con retardo
+                _ = Task.Run(async () =>
                 {
-                    //Esperar el retardo antes de hacer la prediccion
-                    await Task.Delay(500, _cts.Token);
-                    //No se hara nada hasta que esta operacion termine
-                    await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
-                }
-                catch (TaskCanceledException) { }
-            });
+                    try
+                    {
+                        //Esperar el retardo antes de hacer la prediccion
+                        await Task.Delay(500, _cts.Token);
+                        //No se hara nada hasta que esta operacion termine
+                        await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
+                    }
+                    catch (TaskCanceledException) { }
+                });
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error en RealizarPrediccion: ", ex.Message, "OK");
+            }
+            finally
+            {
+                BotonPredecirOculto = false;
+                BotonCargandoOculto = !BotonPredecirOculto;
+            }
+        }
+        #endregion
+
+        #region Cargar Graficos
+        private async Task CargarGraficosBarra()
+        {
+
         }
         #endregion
 
