@@ -1,12 +1,218 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GastoClass.Presentacion.View.MLDetallesPage"
-             Title="MLDetallesPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="GastoClass.Presentacion.View.MLDetallesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="ML Detalles"
+    Padding="48"
+    BackgroundColor="{StaticResource FondoMenosBlanco}"
+    Shell.BackgroundColor="{StaticResource FondoBlanco}"
+    Shell.TitleColor="{StaticResource Gray950}">
+    <!--  CONTENIDO  -->
+    <Grid
+        ColumnDefinitions="*,*"
+        ColumnSpacing="28"
+        RowDefinitions="Auto,Auto"
+        RowSpacing="28">
+        <!--  INFORMACION DEL MODELO  -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 20">
+            <VerticalStackLayout Spacing="32">
+                <!--  TITULO INFORMACION DEL MODELO  -->
+                <VerticalStackLayout Spacing="4">
+                    <Label
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="24"
+                        HorizontalTextAlignment="Start"
+                        Text="Informacion del Modelo"
+                        TextColor="{StaticResource Gray950}"
+                        VerticalOptions="Start" />
+                    <Label
+                        FontFamily="PoppinsRegular"
+                        FontSize="14"
+                        HorizontalTextAlignment="Start"
+                        Text="Detalles sobre el modelo de categorizacion de gasto."
+                        TextColor="{StaticResource Gray600}"
+                        VerticalOptions="Start" />
+                </VerticalStackLayout>
+                <!--  NOMBRE MODELO  -->
+                <Grid ColumnDefinitions="*,*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="Start"
+                        Text="Modelo:"
+                        TextColor="{StaticResource Gray900}" />
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="End"
+                        Text="Clasificador de categorias"
+                        TextColor="{StaticResource Gray900}" />
+                </Grid>
+                <!--  ALGORITMO  -->
+                <Grid ColumnDefinitions="*,*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="Start"
+                        Text="Algoritmo:"
+                        TextColor="{StaticResource Gray900}" />
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="End"
+                        Text="SDCA Maximum Entropy"
+                        TextColor="{StaticResource Gray900}" />
+                </Grid>
+                <!--  ULTIMO ENTRENAMIENTO  -->
+                <Grid ColumnDefinitions="*,*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="Start"
+                        Text="Ultimo entrenamiento:"
+                        TextColor="{StaticResource Gray900}" />
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="End"
+                        Text="5/1/2026"
+                        TextColor="{StaticResource Gray900}" />
+                </Grid>
+                <!--  PRECISION ESTIMADA  -->
+                <Grid ColumnDefinitions="*,*">
+                    <Label
+                        Grid.Column="0"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="Start"
+                        Text="Precision estimada:"
+                        TextColor="{StaticResource Gray900}" />
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="PoppinsRegular"
+                        FontSize="16"
+                        HorizontalOptions="End"
+                        Text="82%"
+                        TextColor="{StaticResource Gray900}" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+        <!--  PRUEBA DEL MODELO  -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="1"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 20">
+            <VerticalStackLayout Spacing="32">
+                <!--  TITULO PRUEBA DEL MODELO  -->
+                <VerticalStackLayout Spacing="4">
+                    <Label
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="24"
+                        HorizontalTextAlignment="Start"
+                        Text="Prueba del modelo"
+                        TextColor="{StaticResource Gray950}"
+                        VerticalOptions="Start" />
+                    <Label
+                        FontFamily="PoppinsRegular"
+                        FontSize="14"
+                        HorizontalTextAlignment="Start"
+                        Text="Introduce una descripcion del gasto para ver una prediccion en tiempo real."
+                        TextColor="{StaticResource Gray600}"
+                        VerticalOptions="Start" />
+                </VerticalStackLayout>
+                <!--  NOMBRE MODELO  -->
+                <VerticalStackLayout>
+                    <Label
+                        FontFamily="PoppinsRegular"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Descripcion del gasto"
+                        TextColor="{StaticResource Gray900}" />
+                    <Border Stroke="Transparent" StrokeShape="RoundRectangle 20">
+                        <Entry
+                            BackgroundColor="{StaticResource FondoMenosBlanco}"
+                            FontFamily="PoppinsRegular"
+                            FontSize="16"
+                            Placeholder="e.g., Jugo de naranja"
+                            PlaceholderColor="{StaticResource Gray500}"
+                            Text="{Binding Descripcion}"
+                            TextColor="{StaticResource Gray900}" />
+                    </Border>
+                </VerticalStackLayout>
+                <!--  BOTON PREDECIR CATEGORIA  -->
+                <Button
+                    Margin="0,50,0,0"
+                    BackgroundColor="{StaticResource Azul Principal}"
+                    BorderColor="Transparent"
+                    CornerRadius="15"
+                    FontFamily="PoppinsSemiBold"
+                    FontSize="16"
+                    HorizontalOptions="Start"
+                    ImageSource="artificial_intelligence_06.png"
+                    Text="Predecir Categoria"
+                    TextColor="{StaticResource FondoBlanco}"
+                    VerticalOptions="End" />
+            </VerticalStackLayout>
+        </Border>
+        <!--  RESULTADOS DE LA PREDICCION  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Padding="16"
+            BackgroundColor="{StaticResource FondoBlanco}"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 20">
+            <Grid RowDefinitions="Auto,Auto" RowSpacing="32">
+                <!--  TITULO RESULTADO DE LA PREDICCION  -->
+                <VerticalStackLayout Grid.Row="0" Spacing="4">
+                    <Label
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="24"
+                        HorizontalTextAlignment="Start"
+                        Text="Resultado de la prediccion"
+                        TextColor="{StaticResource Gray950}"
+                        VerticalOptions="Start" />
+                    <Label
+                        FontFamily="PoppinsRegular"
+                        FontSize="14"
+                        HorizontalTextAlignment="Start"
+                        Text="El modelo predijo las categorias con los siguientes resultados:"
+                        TextColor="{StaticResource Gray600}"
+                        VerticalOptions="Start" />
+                </VerticalStackLayout>
+                <!--  CATEGORIA PREDICHA Y LISTA DE LAS CATEGORIAS PREDICHAS  -->
+                <VerticalStackLayout Grid.Row="1">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            Text="Categoria Predicha: "
+                            TextColor="{StaticResource Azul Principal}" />
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            Text="{Binding CategoriaRecomendadaML.Display, Mode=TwoWay}"
+                            TextColor="{StaticResource Azul Principal}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
 </ContentPage>
