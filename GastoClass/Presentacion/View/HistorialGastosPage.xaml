@@ -12,11 +12,6 @@
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray950}">
-
-    <!--  PARA PODER VER LOS COMPONENTES DEL VIEWMODELDETALLES  -->
-    <ContentPage.BindingContext>
-        <vm:MLDetallesViewModel />
-    </ContentPage.BindingContext>
     <Grid RowDefinitions="Auto,*">
         <!--  OVERLAY DE CARGA  -->
         <ActivityIndicator
