@@ -72,7 +72,7 @@
                         FontFamily="PoppinsRegular"
                         FontSize="16"
                         HorizontalOptions="End"
-                        Text="SDCA Maximum Entropy"
+                        Text="LbfgsLogisticRegressionOva"
                         TextColor="{StaticResource Gray900}" />
                 </Grid>
                 <!--  ULTIMO ENTRENAMIENTO  -->
@@ -89,7 +89,7 @@
                         FontFamily="PoppinsRegular"
                         FontSize="16"
                         HorizontalOptions="End"
-                        Text="5/1/2026"
+                        Text="11/1/2026"
                         TextColor="{StaticResource Gray900}" />
                 </Grid>
                 <!--  PRECISION ESTIMADA  -->
@@ -106,7 +106,7 @@
                         FontFamily="PoppinsRegular"
                         FontSize="16"
                         HorizontalOptions="End"
-                        Text="82%"
+                        Text="96%"
                         TextColor="{StaticResource Gray900}" />
                 </Grid>
             </VerticalStackLayout>
