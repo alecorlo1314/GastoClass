@@ -34,7 +34,7 @@
             Grid.Row="1"
             AnimationMode="None"
             HeaderHeight="60"
-            IsOpen="{Binding EliminacionConExito}"
+            IsOpen="{Binding MostarPopupEliminacion}"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
@@ -89,7 +89,7 @@
                         Spacing="16">
                         <Button
                             BackgroundColor="{StaticResource Gray100}"
-                            FontFamily="PoppinsSemiBold"
+                            FontFamily="PoppinsSemiBold" Command="{Binding CancelarEliminarGastoCommand}"
                             FontSize="18"
                             HeightRequest="48"
                             Text="Cancelar"

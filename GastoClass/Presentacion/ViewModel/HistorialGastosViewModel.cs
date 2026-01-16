@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -74,7 +75,7 @@ namespace GastoClass.Presentacion.ViewModel
         /// Controla cuando se elimina el gastos
         /// </summary>
         [ObservableProperty]
-        private bool eliminacionConExito;
+        private bool mostarPopupEliminacion;
 
         /// <summary>
         /// Muestra el mensaje que estara en el encabezado del popup de eliminacion
@@ -335,7 +336,7 @@ namespace GastoClass.Presentacion.ViewModel
                 //mostrar popup para la eliminacion del gasto
                  MensajeEliminacionGasto = MetodoMensajeEliminacionGasto(eliminarGasto.Descripcion);
                 //cancelar o borra
-                EliminacionConExito = true;
+                MostarPopupEliminacion = true;
                 //Guardar temporalmente el gasto a eliminar
                 EliminarGastoObjeto = eliminarGasto;
             }
@@ -357,7 +358,7 @@ namespace GastoClass.Presentacion.ViewModel
                 if (resultado == 1)
                 {
                     Shell.Current?.CurrentPage.DisplayAlertAsync("Informacion", "Gasto eliminado correctamente!", "OK");
-                    EliminacionConExito = false;
+                    MostarPopupEliminacion = false;
                     IsBusy = true;
                     _ = CargarListaMovimientos();
                     EliminarGastoObjeto = null;
@@ -376,7 +377,22 @@ namespace GastoClass.Presentacion.ViewModel
             finally
             {
                 IsBusy = false;
-                EliminacionConExito = false;
+                MostarPopupEliminacion = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task CancelarEliminarGasto()
+        {
+            try
+            {
+                //cerra popup
+                MostarPopupEliminacion = false;
+                //inicializar el objeto gasto a eliminar
+                EliminarGastoObjeto = null;
+            }catch(Exception ex)
+            {
+                Shell.Current?.CurrentPage.DisplayAlertAsync("Error", $"Se produjo un error al intentar cancelar el gasto: {ex.Message}", "Ok");
             }
         }
         #endregion
