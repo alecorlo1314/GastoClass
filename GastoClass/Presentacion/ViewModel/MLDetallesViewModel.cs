@@ -21,7 +21,8 @@ namespace GastoClass.Presentacion.ViewModel
         {
             //Inyeccion de dependencias
             _predictionApiService = predictionApiService;
-        }
+            //inicializar datos
+            ResultadosVisibles = false;        }
         #endregion
 
         #region Propiedades de UI
@@ -134,31 +135,6 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Error en TiempoRealPrediccionAsync: ", ex.Message, "OK");
             }
         }
-        ///// <summary>
-        ///// Se activa cada ves que cambiamos la descripcion
-        ///// </summary>
-        ///// <param name="value"></param>
-        //partial void OnDescripcionChanged(string? value)
-        //{
-        //    //Validar que la descripcion sea valida
-        //    if (!EsDescripcionValida(value)) return;
-        //    //Cancelar cualquier prediccion en curso
-        //    _cts?.Cancel();
-        //    //Crear un nuevo token de cancelacion
-        //    _cts = new CancellationTokenSource();
-        //    //Iniciar una nueva tarea para la prediccion con retardo
-        //    _ = Task.Run(async () =>
-        //    {
-        //        try
-        //        {
-        //            //Esperar el retardo antes de hacer la prediccion
-        //            await Task.Delay(500, _cts.Token);
-        //            //No se hara nada hasta que esta operacion termine
-        //            await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
-        //        }
-        //        catch (TaskCanceledException) { }
-        //    });
-        //}
         #endregion
 
         #region Realizar Prediccion
