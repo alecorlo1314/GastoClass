@@ -196,19 +196,19 @@
                         TextColor="{StaticResource Gray600}"
                         VerticalOptions="Start" />
                 </VerticalStackLayout>
-                <!-- CATEGORIA PREDICHA Y LISTA DE LAS CATEGORIAS PREDICHAS -->
+                <!--  CATEGORIA PREDICHA Y LISTA DE LAS CATEGORIAS PREDICHAS  -->
                 <VerticalStackLayout Grid.Row="1">
                     <HorizontalStackLayout Spacing="8">
                         <Label
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="18"
-                        Text="Categoria Predicha: "
-                        TextColor="{StaticResource Azul Principal}" />
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            Text="Categoria Predicha: "
+                            TextColor="{StaticResource Azul Principal}" />
                         <Label
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="18"
-                        Text="Alimentos"
-                        TextColor="{StaticResource Azul Principal}" />
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="18"
+                            Text="Alimentos"
+                            TextColor="{StaticResource Azul Principal}" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Grid>
