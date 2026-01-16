@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -69,6 +70,26 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private bool actualizadoConExito;
+
+        /// <summary>
+        /// Controla cuando se elimina el gastos
+        /// </summary>
+        [ObservableProperty]
+        private bool mostarPopupEliminacion;
+
+        /// <summary>
+        /// Muestra el mensaje que estara en el encabezado del popup de eliminacion
+        /// </summary>
+        [ObservableProperty]
+        private string? mensajeEliminacionGasto;
+        #endregion
+
+        #region Propiedades auxiliares
+        /// <summary>
+        /// Gastos para eliminar
+        /// </summary>
+        [ObservableProperty]
+        private Gasto? eliminarGastoObjeto;
         #endregion
 
         #region Propiedades de búsqueda
@@ -244,7 +265,7 @@ namespace GastoClass.Presentacion.ViewModel
         /// Prepara el ViewModel para editar un gasto seleccionado
         /// </summary>
         [RelayCommand]
-        private void EditarGasto(Gasto gasto)
+        private void AbrirPopupEdicionGasto(Gasto gasto)
         {
             //Se activa el modo edicion
             _modoEdicion = true;
@@ -304,6 +325,76 @@ namespace GastoClass.Presentacion.ViewModel
             });
         }
 
+        #endregion
+
+        #region Eliminacion de gasto
+        [RelayCommand]
+        private async Task AbrirPopupEliminarGasto(Gasto eliminarGasto)
+        {
+            try
+            {
+                //mostrar popup para la eliminacion del gasto
+                 MensajeEliminacionGasto = MetodoMensajeEliminacionGasto(eliminarGasto.Descripcion);
+                //cancelar o borra
+                MostarPopupEliminacion = true;
+                //Guardar temporalmente el gasto a eliminar
+                EliminarGastoObjeto = eliminarGasto;
+            }
+            catch (Exception ex)
+            {
+                Shell.Current?.CurrentPage.DisplayAlertAsync("Error",$"Se produjo un error al intentar eliminar el gasto: {ex.Message}","Ok");
+            }
+        }
+
+        [RelayCommand]
+        private async Task EliminarGasto()
+        {
+            try
+            {
+                if (EliminarGastoObjeto == null) return;
+                //si es borrar se manda el gastos al servicio de gastos
+                var resultado = await _gastoService.EliminarGastoAsync(EliminarGastoObjeto);
+                //si se guardo correctamente devolvera 1 y mostrar "El gastos de elimino correctamente y se cierra el popup de eliminacion al darle ok"
+                if (resultado == 1)
+                {
+                    Shell.Current?.CurrentPage.DisplayAlertAsync("Informacion", "Gasto eliminado correctamente!", "OK");
+                    MostarPopupEliminacion = false;
+                    IsBusy = true;
+                    _ = CargarListaMovimientos();
+                    EliminarGastoObjeto = null;
+                }
+                else
+                {
+                    //si no se guardo devolvera un 0 y mostrar un popup segun sea el caso
+                    Shell.Current?.CurrentPage.DisplayAlertAsync("Informacion", "No se pudo eliminar el gasto", "OK");
+                }
+
+                //si se guardo, al finalizar se cargara la nueva lista sin el gasto que se elimino
+            }catch (Exception ex)
+            {
+                Shell.Current?.CurrentPage.DisplayAlertAsync("Error", $"Se produjo un error al intentar eliminar el gasto: {ex.Message}", "Ok");
+            }
+            finally
+            {
+                IsBusy = false;
+                MostarPopupEliminacion = false;
+            }
+        }
+
+        [RelayCommand]
+        private async Task CancelarEliminarGasto()
+        {
+            try
+            {
+                //cerra popup
+                MostarPopupEliminacion = false;
+                //inicializar el objeto gasto a eliminar
+                EliminarGastoObjeto = null;
+            }catch(Exception ex)
+            {
+                Shell.Current?.CurrentPage.DisplayAlertAsync("Error", $"Se produjo un error al intentar cancelar el gasto: {ex.Message}", "Ok");
+            }
+        }
         #endregion
 
         #region Predicción ML
@@ -431,5 +522,12 @@ namespace GastoClass.Presentacion.ViewModel
             => !string.IsNullOrWhiteSpace(monto.ToString()) && monto < 0 &&
             decimal.TryParse(monto.ToString(), out _);
         #endregion
+
+        #region Mostrar Mensajes
+        private string MetodoMensajeEliminacionGasto(string? descripcion)
+        {
+            return $"Esta accion no se puede deshacer. Eliminara permanentemente el registro de gasto de '{descripcion}'";
+        }
+        #endregion 
     }
 }

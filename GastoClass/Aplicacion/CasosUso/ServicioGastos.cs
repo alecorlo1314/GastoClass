@@ -56,5 +56,10 @@ namespace GastoClass.Aplicacion.CasosUso
             ///Obtiene todos los gastos
             return await _servicioGastos.ObtenerGastosAsync();
         }
+        //Metodo para eliminar Gasto
+        public async Task<int> EliminarGastoAsync(Gasto eliminarGasto)
+        {
+            return await _servicioGastos.EliminarGastoAsync(eliminarGasto);
+        }
     }
 }

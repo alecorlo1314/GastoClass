@@ -18,5 +18,6 @@ namespace GastoClass.Dominio.Interfacez
         Task<List<Gasto>> ObtenerUltimos5GastosAsync();
         Task<int> GuardarGastoAsync(Gasto gasto);
         Task<List<Gasto>> ObtenerGastosAsync();
+        Task<int> EliminarGastoAsync(Gasto eliminarGasto);
     }
 }
