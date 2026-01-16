@@ -151,6 +151,7 @@
                             FontSize="16"
                             Placeholder="e.g., Jugo de naranja"
                             PlaceholderColor="{StaticResource Gray500}"
+                            Text="{Binding Descripcion}"
                             TextColor="{StaticResource Gray900}" />
                     </Border>
                 </VerticalStackLayout>
@@ -207,7 +208,7 @@
                         <Label
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
-                            Text="Alimentos"
+                            Text="{Binding CategoriaRecomendadaML.Display, Mode=TwoWay}"
                             TextColor="{StaticResource Azul Principal}" />
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
