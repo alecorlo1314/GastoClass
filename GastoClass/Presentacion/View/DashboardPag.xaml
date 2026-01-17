@@ -35,7 +35,7 @@
             Text="Resumen de este mes"
             TextColor="{StaticResource ColorNegroTextoMenu}"
             VerticalOptions="Center" />
-        <!--  POPUP AGREGAR GASTO  -->
+        <!--  POPUP EDITAR GASTO  -->
         <Button
             Grid.Row="0"
             Grid.Column="1"
@@ -52,7 +52,7 @@
             TextColor="{StaticResource FondoMenosBlanco}"
             VerticalOptions="Center"
             WidthRequest="209" />
-        <!--  BOTON CERRAR VENTANA  -->
+        <!--  POPUP AGREGAR GASTO  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
             AnimationMode="None"
@@ -242,12 +242,12 @@
                         FontSize="16"
                         Text="Total Gastado (Este Mes)"
                         TextColor="{StaticResource Black}" />
-                    <Image
+                    <Label
                         Grid.Column="1"
-                        Aspect="AspectFill"
-                        HeightRequest="24"
-                        Source="dollar_01.png"
-                        WidthRequest="24" />
+                        FontFamily="InterSemiBold"
+                        FontSize="28"
+                        Text="₡"
+                        TextColor="{StaticResource Black}" />
                 </Grid>
                 <Grid Grid.Row="1" RowDefinitions="Auto,Auto">
                     <Label
@@ -320,7 +320,7 @@
                     <Label
                         FontFamily="InterSemiBold"
                         FontSize="24"
-                        Text="Categorias"
+                        Text="Gasto por categoria"
                         TextColor="{StaticResource Black}" />
                     <Label
                         FontFamily="InterRegular"
@@ -329,12 +329,12 @@
                         TextColor="{StaticResource Gray600}" />
                 </VerticalStackLayout>
                 <chart:SfCircularChart Grid.Row="1" Margin="0">
-                    <chart:SfCircularChart.Title>
+                    <!--<chart:SfCircularChart.Title>
                         <Label
                             FontFamily="PoppinsSemiBold"
                             Text="GASTO POR CATEGORIAS"
                             TextColor="{StaticResource Gray600}" />
-                    </chart:SfCircularChart.Title>
+                    </chart:SfCircularChart.Title>-->
                     <chart:SfCircularChart.Legend>
                         <chart:ChartLegend />
                     </chart:SfCircularChart.Legend>
@@ -381,12 +381,18 @@
                                 Padding="8"
                                 ColumnDefinitions="Auto, Auto, Auto"
                                 ColumnSpacing="8">
-                                <Border Grid.Column="0" Stroke="Transparent" StrokeShape="RoundRectangle 20" BackgroundColor="{StaticResource}">
+                                <Border
+                                    Grid.Column="0"
+                                    BackgroundColor="{StaticResource AzulFondoSuave}"
+                                    HeightRequest="32"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 20"
+                                    WidthRequest="32">
                                     <Image
                                         Aspect="AspectFill"
-                                        HeightRequest="32"
+                                        HeightRequest="24"
                                         Source="{Binding NombreImagen}"
-                                        WidthRequest="32" />
+                                        WidthRequest="24" />
                                 </Border>
                                 <StackLayout
                                     Grid.Column="1"
