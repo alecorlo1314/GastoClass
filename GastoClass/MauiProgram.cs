@@ -36,7 +36,6 @@ namespace GastoClass
             builder.ConfigureSyncfusionToolkit();
 
             //vistas
-            builder.Services.AddTransient<AgregarGastoPage>();
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<HistorialGastosPage>();
             //ViewModels

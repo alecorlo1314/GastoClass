@@ -381,12 +381,13 @@
                                 Padding="8"
                                 ColumnDefinitions="Auto, Auto, Auto"
                                 ColumnSpacing="8">
-                                <Image
-                                    Grid.Column="0"
-                                    Aspect="AspectFill"
-                                    HeightRequest="32"
-                                    Source="{Binding NombreImagen}"
-                                    WidthRequest="32" />
+                                <Border Grid.Column="0" Stroke="Transparent" StrokeShape="RoundRectangle 20" BackgroundColor="{StaticResource}">
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="32"
+                                        Source="{Binding NombreImagen}"
+                                        WidthRequest="32" />
+                                </Border>
                                 <StackLayout
                                     Grid.Column="1"
                                     Spacing="4"
