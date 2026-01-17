@@ -12,7 +12,12 @@ namespace GastoClass
             InitializeComponent();
         }
 
-        //Indicar el tamano inicial para pantallas windows
+        /// <summary>
+        /// Indicar el tamano inicial para pantallas windows
+        /// https://learn.microsoft.com/es-es/dotnet/maui/user-interface/controls/window?view=net-maui-10.0
+        /// </summary>
+        /// <param name="activationState"></param>
+        /// <returns></returns>
         protected override Window CreateWindow(IActivationState? activationState) =>
             new Window(new AppShell())
             {
