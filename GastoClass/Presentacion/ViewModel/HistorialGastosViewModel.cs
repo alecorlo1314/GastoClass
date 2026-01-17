@@ -482,14 +482,13 @@ namespace GastoClass.Presentacion.ViewModel
                     Shell.Current.CurrentPage?.DisplayAlertAsync("Prueba", $"Se guardo {gasto.Descripcion} con categoria {gasto.Categoria}", "Ok");
                     //Cerrar Popup
                     ActualizadoConExito = false;
+                    // Carga inicial del historial de gastos
+                    _ = CargarListaMovimientos();
                 }    
             }
             catch (Exception ex)
             {
                 Shell.Current.CurrentPage?.DisplayAlertAsync("Prueba", $"Se produjo un error al intentar actualizar el gastos: {ex.Message}", "Ok");
-
-                // Carga inicial del historial de gastos
-                _ = CargarListaMovimientos();
             }
             finally
             {
