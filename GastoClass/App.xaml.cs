@@ -1,4 +1,5 @@
 ﻿
+
 namespace GastoClass
 {
     public partial class App : Application
@@ -11,9 +12,14 @@ namespace GastoClass
             InitializeComponent();
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
-        {
-            return new Window(new AppShell());
-        }
+        //Indicar el tamano inicial para pantallas windows
+        protected override Window CreateWindow(IActivationState? activationState) =>
+            new Window(new AppShell())
+            {
+                Width = 1200,
+                Height = 800,
+                X = 100,
+                Y = 100, 
+            };
     }
 }
