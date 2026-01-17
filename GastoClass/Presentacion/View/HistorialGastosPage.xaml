@@ -15,7 +15,7 @@
 
     <!--  ESTATUS BAR  -->
     <ContentPage.Behaviors>
-        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource FondoBlanco}" StatusBarStyle="LightContent"/>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource FondoBlanco}" StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
     <Grid RowDefinitions="Auto,*">
