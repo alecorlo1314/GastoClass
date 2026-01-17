@@ -12,6 +12,12 @@
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray950}">
+
+    <!--  ESTATUS BAR  -->
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{StaticResource FondoBlanco}" StatusBarStyle="LightContent"/>
+    </ContentPage.Behaviors>
+
     <Grid RowDefinitions="Auto,*">
         <!--  OVERLAY DE CARGA  -->
         <ActivityIndicator
