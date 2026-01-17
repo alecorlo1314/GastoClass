@@ -161,12 +161,6 @@ namespace GastoClass.Presentacion.ViewModel
         /// Token de cancelación para controlar el debounce de predicción
         /// </summary>
         private CancellationTokenSource? _cts;
-
-        /// <summary>
-        /// Categoría recomendada principal por el modelo ML
-        /// </summary>
-        private CategoriasRecomendadas categoriaRecomendadaML;
-
         #endregion
 
         #region Constructor

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
 using System.Collections.ObjectModel;
-using timer = System.Timers;
+using System.Timers;
 
 namespace GastoClass.Presentacion.ViewModel;
 
@@ -23,7 +23,7 @@ public partial class DashboardViewModel : ObservableObject
     #region Propiedades para Control de Predicción ML
 
     // Timer para retardo de 500ms en predicciones
-    private static timer.Timer? _timer;
+    private static System.Timers.Timer? _timer;
     // Token de cancelación para predicciones en curso
     private CancellationTokenSource? _cts;
 
@@ -54,7 +54,7 @@ public partial class DashboardViewModel : ObservableObject
     /// Categoría recomendada por el modelo ML
     /// </summary>
     [ObservableProperty]
-    private CategoriasRecomendadas categoriaRecomendadaML;
+    private CategoriasRecomendadas? categoriaRecomendadaML;
 
     /// <summary>
     /// Categoría final seleccionada que se guardará en BD
@@ -134,9 +134,6 @@ public partial class DashboardViewModel : ObservableObject
         // Inyección de dependencias
         _serviceML = predictionApiService;
         _gastoService = servicioGastos;
-
-        // Inicializar colecciones
-        listaResultadoPredicciones = new ObservableCollection<ResultadoPrediccion>();
 
         // Cargar datos iniciales del dashboard
         _ = TotalGastadoEsteMes();
@@ -282,6 +279,12 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand]
     private async Task AgregarGasto()
     {
+        // Validar monto
+        if (!EsNumeroValido())
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "Ingrese un monto válido mayor a 0", "OK");
+            return;
+        }
         // Validar que existan categorías recomendadas
         if (CategoriasRecomendadas == null || CategoriasRecomendadas.Count == 0)
         {
@@ -303,7 +306,7 @@ public partial class DashboardViewModel : ObservableObject
             {
                 Descripcion = Descripcion,
                 Categoria = CategoriaFinal.DescripcionCategoriaRecomendada,
-                Monto = decimal.Parse(Monto),
+                Monto = decimal.Parse(Monto!),
                 Fecha = Fecha
             };
 
@@ -403,7 +406,8 @@ public partial class DashboardViewModel : ObservableObject
         {
             var total = await _gastoService.ObtenerTransaccionesDelMesAsync(DateTime.Now.Month, DateTime.Now.Year);
             CantidadTransacciones = total;
-            _ = MostrarMensajeCantidadTransacciones();
+           
+            MostrarMensajeCantidadTransacciones();
         }
         catch (Exception ex)
         {
@@ -414,7 +418,7 @@ public partial class DashboardViewModel : ObservableObject
     /// <summary>
     /// Genera mensaje descriptivo basado en la cantidad de transacciones
     /// </summary>
-    private async Task MostrarMensajeCantidadTransacciones()
+    private void MostrarMensajeCantidadTransacciones()
     {
         if (CantidadTransacciones == 0)
         {
@@ -426,7 +430,7 @@ public partial class DashboardViewModel : ObservableObject
         }
         if (CantidadTransacciones > 1)
         {
-            MensajeCantidadTransacciones = $"Basado en {CantidadTransacciones} transaccion de este mes.";
+            MensajeCantidadTransacciones = $"Basado en {CantidadTransacciones} transacciones de este mes.";
         }
     }
 
@@ -483,5 +487,18 @@ public partial class DashboardViewModel : ObservableObject
         }
     }
 
+    #endregion
+
+    #region Metodo de limpieza de suprocesos
+    /// <summary>
+    /// Para detener el timer y evitar problemas de rendimiento
+    /// </summary>
+    public void Dispose()
+    {
+        _timer?.Stop();
+        _timer?.Dispose();
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
     #endregion
 }

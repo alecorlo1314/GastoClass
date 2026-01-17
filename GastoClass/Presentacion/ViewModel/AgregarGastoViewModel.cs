@@ -37,18 +37,18 @@ public partial class AgregarGastoViewModel : ObservableObject
     public async Task GuardarGasto()
     {
         // Validaciones
-        if (string.IsNullOrWhiteSpace(_monto.ToString()))
+        if (string.IsNullOrWhiteSpace(Monto.ToString()))
         {
-            await Application.Current.Windows[0].Page.DisplayAlertAsync(
+            await Shell.Current.CurrentPage.DisplayAlertAsync(
                 "Error",
                 "Ingresa un monto válido",
                 "OK");
             return;
         }
 
-        if (_categoria == null)
+        if (Categoria == null)
         {
-            await Application.Current.Windows[0].Page.DisplayAlertAsync(
+            await Shell.Current.CurrentPage.DisplayAlertAsync(
                 "Error",
                 "Selecciona una categoría",
                 "OK");
@@ -57,10 +57,10 @@ public partial class AgregarGastoViewModel : ObservableObject
         // Crear objeto de gasto
         var gasto = new Gasto
         {
-            Monto = _monto,
-            Categoria = _categoria,
-            Descripcion = _descripcion,
-            Fecha = _fecha
+            Monto = Monto,
+            Categoria = Categoria,
+            Descripcion = Descripcion,
+            Fecha = Fecha
         };
         
         //Guardar Movimiento

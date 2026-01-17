@@ -17,11 +17,11 @@ namespace GastoClass
         {
             [LoadColumn(0)]
             [ColumnName(@"Descripcion")]
-            public string Descripcion { get; set; }
+            public string? Descripcion { get; set; }
 
             [LoadColumn(1)]
             [ColumnName(@"Categoria")]
-            public string Categoria { get; set; }
+            public string? Categoria { get; set; }
 
         }
 
@@ -34,19 +34,19 @@ namespace GastoClass
         public class ModelOutput
         {
             [ColumnName(@"Descripcion")]
-            public float[] Descripcion { get; set; }
+            public float[]? Descripcion { get; set; }
 
             [ColumnName(@"Categoria")]
             public uint Categoria { get; set; }
 
             [ColumnName(@"Features")]
-            public float[] Features { get; set; }
+            public float[]? Features { get; set; }
 
             [ColumnName(@"PredictedLabel")]
-            public string PredictedLabel { get; set; }
+            public string? PredictedLabel { get; set; }
 
             [ColumnName(@"Score")]
-            public float[] Score { get; set; }
+            public float[]? Score { get; set; }
 
         }
 
