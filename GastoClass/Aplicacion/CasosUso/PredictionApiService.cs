@@ -14,7 +14,7 @@ namespace GastoClass.Aplicacion.CasosUso
             _httpClient = httpClient;
         }
 
-        public async Task<ResultadoPrediccion> PredictAsync(string descripcion)
+        public async Task<ResultadoPrediccion?> PredictAsync(string descripcion)
         {
             var request = new SolicitudPrediccion
             {

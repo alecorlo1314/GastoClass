@@ -24,36 +24,36 @@ namespace GastoClass.Aplicacion.CasosUso
         //Metodo para obtener gastos totales del mes (parametros: mes y anio)
         public async Task<decimal> ObtenerGastosTotalesDelMesAsync(int mes, int anio)
         {
-            ///retorna los gastos totales del mes
+            //retorna los gastos totales del mes
             return await _servicioGastos.ObtenerGastosTotalesDelMesAsync(mes, anio);
         }
         //Metodo para obtener cantidad de transacciones en este mes (parametros: mes y anio)
         public async Task<int> ObtenerTransaccionesDelMesAsync(int mes, int anio)
         {
-            ///retorna la cantidad de transacciones en este mes
+            //retorna la cantidad de transacciones en este mes
             return await _servicioGastos.ObtenerTransaccionesDelMesAsync(mes, anio);
         }
         //Metodo para obtener categoria con mayor gasto (parametros: mes y anio)
         public async Task<List<Gasto>> ObtenerGastoTotalPorCategoriaMesAsync(int mes, int anio)
         {
-            ///retorna la categoria con mayor gasto
+            //retorna la categoria con mayor gasto
             return await _servicioGastos.ObtenerGastoTotalPorCategoriaMesAsync(mes, anio);
         }
         //Metodo para obtener los ultimos 5 gastos
         public async Task<List<Gasto>> ObtenerUltimos5GastosAsync()
         {
-            ///retorna los ultimos 5 gastos
+            //retorna los ultimos 5 gastos
             return await _servicioGastos.ObtenerUltimos5GastosAsync();
         }
         public async Task<int> GuardarGastoAsync(Gasto gasto)
         {
-            ///Guarda un nuevo gasto
+            //Guarda un nuevo gasto
             return await _servicioGastos.GuardarGastoAsync(gasto);
         }
         //Metodo para obtener todos los gastos
         public async Task<List<Gasto>> ObtenerGastosAsync()
         {
-            ///Obtiene todos los gastos
+            //Obtiene todos los gastos
             return await _servicioGastos.ObtenerGastosAsync();
         }
         //Metodo para eliminar Gasto

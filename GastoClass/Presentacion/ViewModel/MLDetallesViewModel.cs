@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
 using System.Collections.ObjectModel;
-using Tiempo = System.Timers;
 
 namespace GastoClass.Presentacion.ViewModel
 {
@@ -22,7 +21,8 @@ namespace GastoClass.Presentacion.ViewModel
             //Inyeccion de dependencias
             _predictionApiService = predictionApiService;
             //inicializar datos
-            ResultadosVisibles = false;        }
+            ResultadosVisibles = false;        
+        }
         #endregion
 
         #region Propiedades de UI
@@ -52,10 +52,6 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Propiedades Tiempo
-        /// <summary>
-        /// Timer para retardo en prediccion
-        /// </summary>
-        private Tiempo.Timer _timer;
         /// <summary>
         /// Cancelacion de cualquier token en curso
         /// </summary>
@@ -105,7 +101,7 @@ namespace GastoClass.Presentacion.ViewModel
                 //Limpiar la lista de categorias recomendadas
                 CategoriasRecomendadas?.Clear();
                 //Agregar la nueva prediccion a la lista
-                foreach (var (key, value) in prediccion.scoreDict)
+                foreach (var (key, value) in prediccion!.scoreDict!)
                 {
                     CategoriasRecomendadas?.Add(new CategoriasRecomendadas
                     {
@@ -176,13 +172,6 @@ namespace GastoClass.Presentacion.ViewModel
                 BotonPredecirOculto = false;
                 BotonCargandoOculto = !BotonPredecirOculto;
             }
-        }
-        #endregion
-
-        #region Cargar Graficos
-        private async Task CargarGraficosBarra()
-        {
-
         }
         #endregion
 
