@@ -7,7 +7,6 @@ using GastoClass.Dominio.Interfacez;
 using CommunityToolkit.Maui;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Syncfusion.Maui.Core.Hosting;
-using Microsoft.Maui.LifecycleEvents;
 
 namespace GastoClass
 {

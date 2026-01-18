@@ -1,12 +1,132 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GastoClass.Presentacion.View.TargetaCreditoPage"
-             Title="TargetaCreditoPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="GastoClass.Presentacion.View.TargetaCreditoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Targetas de Credito">
+    <!--  CONTENIDO  -->
+    <Grid RowDefinitions="*,*,*">
+        <!--  LISTA DE TARJETAS  -->
+        <StackLayout Spacing="28">
+            <!--  TITULO  -->
+            <Label
+                FontFamily="PoppinsSemiBold"
+                FontSize="22"
+                HorizontalOptions="Start"
+                Text="Mis Tarjetas"
+                TextColor="{StaticResource Gray900}"
+                VerticalOptions="Center" />
+            <!--  LISTA DE TARJETAS HORIZONTAL  -->
+            <CollectionView ItemsSource="{Binding ListaTarjetasCredito}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <!--  ESTILO DE LA TARJETA DE CREDITO  -->
+                        <Border Stroke="{Binding ColorBorde}" StrokeShape="RoundRectangle 25">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0,1">
+                                    <GradientStop Offset="0.1" Color="{Binding ColorHex1}" />
+                                    <GradientStop Offset="1.0" Color="{Binding ColorHex2}" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid RowDefinitions="*,*,*">
+                                <!--  ZONA SUPERIOR  -->
+                                <Grid Grid.Row="0" ColumnDefinitions="*,*">
+                                    <!--  BALANCE  -->
+                                    <StackLayout
+                                        Grid.Column="0"
+                                        HorizontalOptions="Start"
+                                        Spacing="4"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="12"
+                                            Text="Balance"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="20"
+                                            Text="Balance"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                    </StackLayout>
+                                    <!--  ICONO CHIP  -->
+                                    <Image
+                                        Grid.Column="1"
+                                        Aspect="AspectFill"
+                                        HeightRequest="34"
+                                        HorizontalOptions="End"
+                                        Source="{Binding Chip}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="34" />
+                                </Grid>
+                                <!--  ZONA MEDIO  -->
+                                <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                    <!--  NOMBRE DE LA TARJETA  -->
+                                    <StackLayout
+                                        Grid.Column="0"
+                                        HorizontalOptions="Start"
+                                        Spacing="4"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="12"
+                                            Text="NOMBRE TARJETA"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                        <Label
+                                            FontFamily="PoppinsMedium"
+                                            FontSize="14"
+                                            Text="{Binding NombreTarjeta}"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                    </StackLayout>
+                                    <!--  FECHA DE VENCIMIENTO  -->
+                                    <StackLayout
+                                        Grid.Column="1"
+                                        HorizontalOptions="Start"
+                                        Spacing="4"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="12"
+                                            Text="NOMBRE TARJETA"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="14"
+                                            Text="{Binding NombreTarjeta}"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                    </StackLayout>
+                                </Grid>
+                                <!--  ZONA INFERIOR  -->
+                                <Grid ColumnDefinitions="7*,3*">
+                                    <!--  NUMERO DE TARJETA  -->
+                                    <HorizontalStackLayout Grid.Column="0">
+                                        <Border HeightRequest="1" Stroke="{Binding ColorBorde}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="22"
+                                            Text="**** **** **** "
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="22"
+                                            Text="{Binding NumeroTarjeta}"
+                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                    </HorizontalStackLayout>
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="30"
+                                        HorizontalOptions="End"
+                                        Source="{Binding IconoTipoTarjeta}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="44" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </Grid>
 </ContentPage>
