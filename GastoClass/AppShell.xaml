@@ -89,19 +89,19 @@
     </Shell.ItemTemplate>
 
     <!--  ITEMS DEL MENU  -->
-    <FlyoutItem Title="Dashboard" Icon="dashboard_icon.png">
+    <FlyoutItem Title="Dashboard" Icon="dashboard_icon_black.png">
         <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Historial" Icon="dashboard_icon_black.png">
-        <ShellContent ContentTemplate="{DataTemplate views:HistorialGastosPage}" />
+    <FlyoutItem Title="Historial" Icon="hitorial_menu_negro.png">
+        <ShellContent ContentTemplate="{DataTemplate views:HistorialGastosPage}" Icon="hitorial_menu_blanco.png" />
     </FlyoutItem>
-    <FlyoutItem Title="ML Detalles" Icon="dashboard_icon_black.png">
+    <FlyoutItem Title="ML Detalles" Icon="ia_menu_negro.png">
         <ShellContent ContentTemplate="{DataTemplate views:MLDetallesPage}" />
     </FlyoutItem>
     <FlyoutItem Title="Tarjeta Credito" Icon="credit_card_menu_negro.png">
         <ShellContent ContentTemplate="{DataTemplate views:TargetaCreditoPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Configuraciones" Icon="dashboard_icon_black.png">
+    <FlyoutItem Title="Configuraciones" Icon="configuracion_menu_negro.png">
         <ShellContent ContentTemplate="{DataTemplate views:ConfiguracionesPage}" />
     </FlyoutItem>
 </Shell>
