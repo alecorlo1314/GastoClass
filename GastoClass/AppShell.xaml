@@ -101,4 +101,7 @@
     <FlyoutItem Title="Configuraciones" Icon="dashboard_icon_black.png">
         <ShellContent ContentTemplate="{DataTemplate views:ConfiguracionesPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Configuraciones" Icon="dashboard_icon_black.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ConfiguracionesPage}" />
+    </FlyoutItem>
 </Shell>
