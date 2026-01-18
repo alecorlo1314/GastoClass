@@ -28,6 +28,63 @@
                 TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource Gray600}" />
             </Style>
+
+            <!--  ESTA DOCUMENTACION FUE ENCONTRADA EN https://dev.to/davidortinau/flyout-and-tab-icon-states-in-net-maui-4k0k  -->
+            <!--  CAMBIO DE ESTADOS PARA EL DASHBOARD  -->
+            <Style x:Key="DashboardFlyout" TargetType="FlyoutItem">
+                <Style.Triggers>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
+                        <Setter Property="FlyoutIcon" Value="dashboard_icon_black.png" />
+                    </Trigger>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
+                        <Setter Property="FlyoutIcon" Value="dashboard_icon.png" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--  CAMBIO DE ESTADOS PARA EL DASHBOAR  -->
+            <Style x:Key="HistorialFlyout" TargetType="FlyoutItem">
+                <Style.Triggers>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
+                        <Setter Property="FlyoutIcon" Value="hitorial_menu_negro.png" />
+                    </Trigger>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
+                        <Setter Property="FlyoutIcon" Value="hitorial_menu_blanco.png" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--  CAMBIO DE ESTADOS PARA EL DETALLES ML  -->
+            <Style x:Key="MlDetallesFlyout" TargetType="FlyoutItem">
+                <Style.Triggers>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
+                        <Setter Property="FlyoutIcon" Value="ia_menu_negro.png" />
+                    </Trigger>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
+                        <Setter Property="FlyoutIcon" Value="ia_menu_blanco.png" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--  CAMBIO DE ESTADOS PARA EL TARJETA DE CREDITO  -->
+            <Style x:Key="TarjetaCreditoFlyout" TargetType="FlyoutItem">
+                <Style.Triggers>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
+                        <Setter Property="FlyoutIcon" Value="credit_card_menu_negro.png" />
+                    </Trigger>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
+                        <Setter Property="FlyoutIcon" Value="credit_card_menu_blanco.png" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <!--  CAMBIO DE ESTADOS PARA EL CONFIGURACION  -->
+            <Style x:Key="ConfiguracionFlyout" TargetType="FlyoutItem">
+                <Style.Triggers>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
+                        <Setter Property="FlyoutIcon" Value="configuracion_menu_negro.png" />
+                    </Trigger>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
+                        <Setter Property="FlyoutIcon" Value="configuracion_menu_blanco.png" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
