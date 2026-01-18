@@ -38,6 +38,9 @@ namespace GastoClass
             //vistas
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<HistorialGastosPage>();
+            builder.Services.AddTransient<MLDetallesPage>();
+            builder.Services.AddTransient<ConfiguracionesPage>();
+            builder.Services.AddTransient<TargetaCreditoPage>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ConfiguracionesViewModel>();
