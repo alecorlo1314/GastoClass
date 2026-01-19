@@ -6,4 +6,14 @@ public partial class TargetaCreditoPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+		mipopup.IsOpen = true;
+    }
+
+    private void BotonCancelar(object sender, EventArgs e)
+    {
+
+    }
 }
