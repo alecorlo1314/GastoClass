@@ -445,13 +445,13 @@
                 Text="Agregar Tarjeta"
                 TextColor="{StaticResource Gray900}" />
             <Border
-                Padding="42"
+                Padding="28"
                 BackgroundColor="{StaticResource FondoBlanco}"
                 HorizontalOptions="Start"
                 Stroke="Transparent"
                 StrokeShape="RoundRectangle 20"
                 WidthRequest="1000">
-                <Grid RowDefinitions="2*,3*,3*,2*" RowSpacing="12">
+                <Grid RowDefinitions="2*,3*,3*,2*" RowSpacing="8">
                     <Label
                         Grid.Row="0"
                         FontFamily="PoppinsRegular"
@@ -478,7 +478,7 @@
                                     Margin="4"
                                     BackgroundColor="Transparent"
                                     ClearButtonIconColor="{StaticResource Gray600}"
-                                    DisplayMemberPath="Descripcion"
+                                    DisplayMemberPath="Tipo"
                                     DropDownBackground="{StaticResource FondoBlanco}"
                                     DropDownIconColor="{StaticResource Gray400}"
                                     FontFamily="PoppinsRegular"
@@ -490,8 +490,13 @@
                                     SelectedItem="{Binding TipoTarjeta}"
                                     Stroke="Transparent"
                                     TextColor="{x:StaticResource Gray950}"
-                                    TextMemberPath="Descripcion" />
+                                    TextMemberPath="Tipo" />
                             </Border>
+                            <Label
+                                FontFamily="PoppinsRegular"
+                                FontSize="12"
+                                Text="{Binding MensajeRequerimientoTipoTarjeta, Mode=TwoWay}"
+                                TextColor="Red" />
                         </StackLayout>
                         <!--  NOMBRE DE LA TARJETA  -->
                         <StackLayout Grid.Column="1" Spacing="4">
@@ -509,8 +514,14 @@
                                     FontSize="16"
                                     Placeholder="Ej.Economia, Walmart"
                                     PlaceholderColor="{StaticResource Gray400}"
+                                    Text="{Binding NombreTarjeta}"
                                     TextColor="{StaticResource Gray950}" />
                             </Border>
+                            <Label
+                                FontFamily="PoppinsRegular"
+                                FontSize="12"
+                                Text="{Binding MensajeRequerimientoNombreTarjeta, Mode=TwoWay}"
+                                TextColor="Red" />
                         </StackLayout>
                     </Grid>
                     <Grid
@@ -522,7 +533,7 @@
                             <Label
                                 FontFamily="PoppinsRegular"
                                 FontSize="16"
-                                Text="Numero de Tarjeta"
+                                Text="Ultimos Cuatro Digitos"
                                 TextColor="{StaticResource Gray600}" />
                             <Border
                                 BackgroundColor="{StaticResource FondoMenosBlanco}"
@@ -533,11 +544,17 @@
                                     FontSize="16"
                                     Keyboard="Numeric"
                                     MaxLength="16"
-                                    Placeholder="**** **** **** ****"
+                                    Placeholder="****"
                                     PlaceholderColor="{StaticResource Gray400}"
+                                    Text="{Binding UltimosCuatroDigitos}"
                                     TextColor="{StaticResource Gray950}"
                                     VerticalOptions="Center" />
                             </Border>
+                            <Label
+                                FontFamily="PoppinsRegular"
+                                FontSize="12"
+                                Text="{Binding MensajeRequerimientoUltimosCuatroDigitos, Mode=TwoWay}"
+                                TextColor="Red" />
                         </StackLayout>
                         <!--  FECHA EXPIRACION  -->
                         <StackLayout Grid.Column="1" Spacing="4">
@@ -551,7 +568,7 @@
                                 Stroke="{StaticResource Gray200}"
                                 StrokeShape="RoundRectangle 15">
                                 <DatePicker
-                                    x:Name="fechaPicker"
+                                    Date="{Binding FechaVencimiento}"
                                     FontSize="16"
                                     Format="dd/MM/yyyy"
                                     HorizontalOptions="Start"
@@ -560,6 +577,11 @@
                                     TextColor="{StaticResource Gray600}"
                                     WidthRequest="430" />
                             </Border>
+                            <Label
+                                FontFamily="PoppinsRegular"
+                                FontSize="12"
+                                Text="{Binding MensajeRequerimientoFechaVencimiento, Mode=TwoWay}"
+                                TextColor="Red" />
                         </StackLayout>
                     </Grid>
                     <Button
@@ -569,6 +591,7 @@
                         FontFamily="PoppinsSemiBold"
                         FontSize="16"
                         HorizontalOptions="Start"
+                        IsEnabled="{Binding MasDetallesEsAccesible}"
                         Text="Mas Detalles"
                         TextColor="{StaticResource FondoBlanco}"
                         WidthRequest="150" />
