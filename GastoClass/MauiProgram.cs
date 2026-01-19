@@ -7,7 +7,6 @@ using GastoClass.Dominio.Interfacez;
 using CommunityToolkit.Maui;
 using Syncfusion.Maui.Toolkit.Hosting;
 using Syncfusion.Maui.Core.Hosting;
-using Microsoft.Maui.LifecycleEvents;
 
 namespace GastoClass
 {
@@ -38,12 +37,16 @@ namespace GastoClass
             //vistas
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<HistorialGastosPage>();
+            builder.Services.AddTransient<MLDetallesPage>();
+            builder.Services.AddTransient<ConfiguracionesPage>();
+            builder.Services.AddTransient<TargetaCreditoPage>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ConfiguracionesViewModel>();
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<HistorialGastosViewModel>();
             builder.Services.AddTransient<MLDetallesViewModel>();
+            builder.Services.AddTransient<TarjetaCreditoViewModel>();
 
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();

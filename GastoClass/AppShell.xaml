@@ -6,9 +6,10 @@
     xmlns:views="clr-namespace:GastoClass.Presentacion.View"
     Title="GastoClass"
     FlyoutBackgroundColor="{StaticResource FondoBlanco}"
+    Shell.FlyoutBehavior="Flyout"
     Shell.NavBarHasShadow="False"
     Shell.TitleColor="{StaticResource FondoBlanco}">
-    <!--  Encabezado del menú lateral  -->
+    <!--  ENCABEZADO DEL MENU LATERAL  -->
     <Shell.FlyoutHeader>
         <Grid
             Margin="32,10"
@@ -57,16 +58,7 @@
                         Source="{Binding FlyoutIcon}"
                         StyleClass="FlyoutItemImageStyle"
                         VerticalOptions="Center"
-                        WidthRequest="24">
-                        <Image.Triggers>
-                            <DataTrigger
-                                Binding="{Binding IsChecked}"
-                                TargetType="Image"
-                                Value="True">
-                                <Setter Property="Source" Value="dashboard_icon.png" />
-                            </DataTrigger>
-                        </Image.Triggers>
-                    </Image>
+                        WidthRequest="24" />
                     <Label
                         FontFamily="PoppinsMedium"
                         FontSize="16"
@@ -89,16 +81,34 @@
     </Shell.ItemTemplate>
 
     <!--  ITEMS DEL MENU  -->
-    <FlyoutItem Title="Dashboard" Icon="dashboard_icon.png">
+    <FlyoutItem
+        Title="Dashboard"
+        Icon="dashboard_icon_black.png"
+        Style="{StaticResource DashboardFlyout}">
         <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Historial" Icon="dashboard_icon_black.png">
+    <FlyoutItem
+        Title="Historial"
+        Icon="hitorial_menu_negro.png"
+        Style="{StaticResource HistorialFlyout}">
         <ShellContent ContentTemplate="{DataTemplate views:HistorialGastosPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="ML Detalles" Icon="dashboard_icon_black.png">
+    <FlyoutItem
+        Title="ML Detalles"
+        Icon="ia_menu_negro.png"
+        Style="{StaticResource MlDetallesFlyout}">
         <ShellContent ContentTemplate="{DataTemplate views:MLDetallesPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Configuraciones" Icon="dashboard_icon_black.png">
+    <FlyoutItem
+        Title="Tarjeta Credito"
+        Icon="credit_card_menu_negro.png"
+        Style="{StaticResource TarjetaCreditoFlyout}">
+        <ShellContent ContentTemplate="{DataTemplate views:TargetaCreditoPage}" />
+    </FlyoutItem>
+    <FlyoutItem
+        Title="Configuraciones"
+        Icon="configuracion_menu_negro.png"
+        Style="{StaticResource ConfiguracionFlyout}">
         <ShellContent ContentTemplate="{DataTemplate views:ConfiguracionesPage}" />
     </FlyoutItem>
 </Shell>
