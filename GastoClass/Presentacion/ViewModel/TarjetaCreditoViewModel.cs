@@ -1,12 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.Utilidades;
+using GastoClass.Dominio.Model;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
 {
     public partial class TarjetaCreditoViewModel : ObservableObject
     {
+        #region Inyeccion de Dependencias
+        private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
+        #endregion
+
         #region Propiedades UI
         /// <summary>
         /// Color Hexadecimal 1, para el lineargradient
@@ -19,6 +25,12 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private string? colorHexa2;
+
+        /// <summary>
+        /// Contiene el color del borde
+        /// </summary>
+        [ObservableProperty]
+        private string? colorBorde;
 
         /// <summary>
         /// Contiene el tipo de tarjeta en el sfcombobox
@@ -98,6 +110,9 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private bool? finalizarRegistroAccesible = false;
+
+        [ObservableProperty]
+        private bool? popupAgregaTarjetaEstaAbiero;
         #endregion
 
         #region Mensajes
@@ -157,8 +172,10 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Constructor
-        public TarjetaCreditoViewModel()
+        public TarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito)
         {
+            //Inyeccion de dependencias
+            _servicioTarjetaCredito = servicioTarjetaCredito;
             //Inicializamos la lista de tipos de tarjetas
             ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
             {
@@ -193,13 +210,62 @@ namespace GastoClass.Presentacion.ViewModel
             }
             if (borderSeleccionado.Stroke is SolidColorBrush solid)
             {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Color", $"Color Border: {solid.Color.ToHex()}, ColorHex1={ColorHexa1}, ColorHex2={ColorHexa2}", "OK");
+                ColorBorde = solid.Color.ToHex();
             }
         }
+        /// <summary>
+        /// Se ejecuta al tocar el boton de finalizar el registro
+        /// </summary>
+        /// <returns></returns>
         [RelayCommand]
         private async Task FinalizarRegistroTarjetaCredito()
         {
+            //Inicializamos un objeto PreferenciaTarjeta
+            PreferenciaTarjeta preferenciaTarjeta = new()
+            {
+                ColorHex1 = ColorHexa1,
+                ColorHex2 = ColorHexa2,
+                ColorBorde = ColorBorde
+            };
             //Inicializamos un objeto TarjetaCredito
+            TarjetaCredito tarjetaCredito = new ()
+            {
+                TipoTarjeta = this.TipoTarjeta?.Tipo,
+                NombreTarjeta = this.NombreTarjeta,
+                UltimosCuatroDigitos = this.UltimosCuatroDigitos,
+                MesVencimiento = this.FechaVencimiento!.Value.Month,
+                AnioVencimiento = this.FechaVencimiento!.Value.Year,
+                LimiteCredito = this.LimiteCredito,
+                Balance = 0,
+                CreditoDisponible = this.LimiteCredito,
+                Moneda = this.TipoMoneda?.Moneda,
+                DiaCorte = this.DiaCorte,
+                DiaPago = this.DiaPago, 
+                NombreBanco = this.NombreBanco,
+                IdPreferenciaTarjeta = preferenciaTarjeta.Id,
+                PreferenciaTarjeta = preferenciaTarjeta
+            };
+
+            //Realizamos la llamada al servicio de agregar tarjeta
+            var resultado = await _servicioTarjetaCredito.AgregarTarjetaCreditoAsync(tarjetaCredito);
+
+            if(resultado == 1)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync
+                    ("Informacion", 
+                    "La tarjeta se ingreso con exito", 
+                    "Ok");
+                LimpiarCampos();
+                PopupAgregaTarjetaEstaAbiero = false;
+            }
+            else
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync
+                    ("Error", 
+                    "No se pudo guardar la tarjeta", 
+                    "Ok");
+                return;
+            }
         }
         #endregion
 
@@ -368,6 +434,25 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoNombreBanco = string.Empty;
             finalizarRegistroAccesible = true;
         }
+        #endregion
+
+        #region Metodo Limpieza
+        /// <summary>
+        /// Se encarga de limpiar las entradas despues de guardar la tarjeta de credito con exito
+        /// </summary>
+        private async void LimpiarCampos()
+        {
+            TipoTarjeta = null;
+            NombreTarjeta = null;
+            UltimosCuatroDigitos = null;
+            FechaVencimiento = DateTime.Now;
+            LimiteCredito = null;
+            TipoTarjeta = new(){Tipo= "MasterCard" };
+            TipoMoneda = new(){Moneda = "CRC"};
+            DiaCorte = null;
+            DiaPago = null;
+            NombreBanco = null;
+        }
+        #endregion
     }
-    #endregion
 }

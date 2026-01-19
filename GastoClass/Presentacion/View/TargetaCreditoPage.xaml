@@ -19,7 +19,7 @@
             AnimationMode="None"
             HeaderHeight="97"
             HeightRequest="670"
-            IsOpen="{Binding ActualizadoConExito}"
+            IsOpen="{Binding PopupAgregaTarjetaEstaAbiero}"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
@@ -306,9 +306,10 @@
                         <Button
                             BackgroundColor="{StaticResource Azul Principal}"
                             Command="{Binding FinalizarRegistroTarjetaCreditoCommand}"
-                            FontFamily="PoppinsSemiBold" isEnabled="{Binding FinalizarRegistroAccesible}"
+                            FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
+                            IsEnabled="{Binding FinalizarRegistroAccesible}"
                             Text="Finalizar Registros "
                             TextColor="{StaticResource FondoBlanco}" />
                     </StackLayout>

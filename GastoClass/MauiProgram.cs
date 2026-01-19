@@ -50,7 +50,9 @@ namespace GastoClass
 
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
+            builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
             builder.Services.AddSingleton<ServicioGastos>();
+            builder.Services.AddSingleton<ServicioTarjetaCredito>();
             builder.Services.AddSingleton<RepositorioBaseDatos>();
 
 
