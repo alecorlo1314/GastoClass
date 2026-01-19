@@ -18,13 +18,13 @@
             Grid.Row="2"
             AnimationMode="None"
             HeaderHeight="97"
-            HeightRequest="667"
+            HeightRequest="670"
             IsOpen="{Binding ActualizadoConExito}"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
             StaysOpen="True"
-            WidthRequest="500">
+            WidthRequest="550">
             <!--  ESTILOS POPUP  -->
             <syncfusion:SfPopup.PopupStyle>
                 <syncfusion:PopupStyle
@@ -63,7 +63,8 @@
                     <Grid
                         Padding="24"
                         RowDefinitions="*,*,*,*"
-                        RowSpacing="20">
+                        RowSpacing="16">
+                        <!--  LIMITE DE CREDITO Y TIPO DE MONEDA  -->
                         <Grid
                             Grid.Row="0"
                             ColumnDefinitions="*,*"
@@ -73,7 +74,7 @@
                                 <Label
                                     FontFamily="PoppinsMedium"
                                     FontSize="14"
-                                    Text="Monto"
+                                    Text="Limite de Credito"
                                     TextColor="#333" />
                                 <Border
                                     BackgroundColor="{StaticResource FondoMenosBlanco}"
@@ -83,10 +84,15 @@
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Keyboard="Numeric"
-                                        Placeholder="$0.00"
+                                        Placeholder="₡0.00"
                                         Text="{Binding LimiteCredito}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoLimiteCredito, Mode=TwoWay}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
                             <!--  TIPO DE MONEDA  -->
                             <VerticalStackLayout Grid.Column="1" Spacing="8">
@@ -100,27 +106,35 @@
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
                                     <editors:SfComboBox
+                                        BackgroundColor="Transparent"
                                         ClearButtonIconColor="{StaticResource Gray600}"
-                                        DisplayMemberPath="Tipo"
-                                        DropDownIconColor="{StaticResource Gray600}"
+                                        DisplayMemberPath="Moneda"
+                                        DropDownBackground="{StaticResource FondoBlanco}"
+                                        DropDownIconColor="{StaticResource Gray400}"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         HeightRequest="45"
                                         IsEditable="False"
-                                        ItemsSource="{Binding ListaCategoriaFinal}"
+                                        ItemsSource="{Binding ListaTipoMoneda}"
                                         Placeholder="Selecciona una moneda"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaSeleccionadaObjeto}"
+                                        SelectedItem="{Binding TipoMoneda}"
                                         TextColor="{StaticResource Gray950}"
-                                        TextMemberPath="Tipo" />
+                                        TextMemberPath="Moneda" />
                                 </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoTipoMoneda, Mode=TwoWay}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
                         </Grid>
+                        <!--  DIA DE CORTE Y DIA DE PAGO  -->
                         <Grid
                             Grid.Row="1"
                             ColumnDefinitions="*,*"
                             ColumnSpacing="32">
-                            <!--  DESCRIPCION  -->
+                            <!--  DIA DE CORTE  -->
                             <VerticalStackLayout Grid.Column="0" Spacing="8">
                                 <Label
                                     FontFamily="PoppinsMedium"
@@ -134,12 +148,18 @@
                                     <Entry
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
+                                        Keyboard="Numeric"
                                         Placeholder="Dia del mes del (1-31)"
-                                        Text="{Binding DescripcionSeleccionada}"
+                                        Text="{Binding DiaCorte}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoDiaCorte, Mode=TwoWay}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
-                            <!--  DESCRIPCION  -->
+                            <!--  DIA DE PAGO  -->
                             <VerticalStackLayout Grid.Column="1" Spacing="8">
                                 <Label
                                     FontFamily="PoppinsMedium"
@@ -153,13 +173,19 @@
                                     <Entry
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
+                                        Keyboard="Numeric"
                                         Placeholder="Dia del mes del (1-31)"
-                                        Text="{Binding DescripcionSeleccionada}"
+                                        Text="{Binding DiaPago}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoDiaPago, Mode=TwoWay}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
                         </Grid>
-                        <!--  DESCRIPCION  -->
+                        <!--  NOMBRE DEL BANCO  -->
                         <VerticalStackLayout Grid.Row="2" Spacing="8">
                             <Label
                                 FontFamily="PoppinsMedium"
@@ -174,9 +200,14 @@
                                     FontFamily="PoppinsRegular"
                                     FontSize="16"
                                     Placeholder="Eje. Banco de Costa Rica, BAC"
-                                    Text="{Binding DescripcionSeleccionada}"
+                                    Text="{Binding NombreBanco}"
                                     TextColor="{StaticResource Gray950}" />
                             </Border>
+                            <Label
+                                FontFamily="PoppinsRegular"
+                                FontSize="12"
+                                Text="{Binding MensajeRequerimientoNombreBanco, Mode=TwoWay}"
+                                TextColor="Red" />
                         </VerticalStackLayout>
                         <!--  SELECCION DE BOTONES  -->
                         <StackLayout Grid.Row="3" Spacing="12">
@@ -274,8 +305,8 @@
                             WidthRequest="140" />
                         <Button
                             BackgroundColor="{StaticResource Azul Principal}"
-                            Command="{Binding ActualizarGastoCommand}"
-                            FontFamily="PoppinsSemiBold"
+                            Command="{Binding FinalizarRegistroTarjetaCreditoCommand}"
+                            FontFamily="PoppinsSemiBold" isEnabled="{Binding FinalizarRegistroAccesible}"
                             FontSize="18"
                             HeightRequest="48"
                             Text="Finalizar Registros "
