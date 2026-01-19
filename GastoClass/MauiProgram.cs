@@ -46,6 +46,7 @@ namespace GastoClass
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<HistorialGastosViewModel>();
             builder.Services.AddTransient<MLDetallesViewModel>();
+            builder.Services.AddTransient<TarjetaCreditoViewModel>();
 
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();

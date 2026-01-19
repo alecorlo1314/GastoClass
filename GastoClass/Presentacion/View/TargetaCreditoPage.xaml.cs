@@ -1,10 +1,13 @@
+using GastoClass.Presentacion.ViewModel;
 namespace GastoClass.Presentacion.View;
 
 public partial class TargetaCreditoPage : ContentPage
 {
-	public TargetaCreditoPage()
+	public TargetaCreditoPage(TarjetaCreditoViewModel targetaCreditoViewModel)
 	{
 		InitializeComponent();
+        //Inyeccion de Dependencias
+        BindingContext = targetaCreditoViewModel;
 	}
 
     private void Button_Clicked(object sender, EventArgs e)
@@ -14,6 +17,6 @@ public partial class TargetaCreditoPage : ContentPage
 
     private void BotonCancelar(object sender, EventArgs e)
     {
-
+        mipopup.IsOpen = false;
     }
 }

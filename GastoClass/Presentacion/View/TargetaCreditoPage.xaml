@@ -187,9 +187,10 @@
                                 TextColor="#333" />
                             <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="20">
                                 <Border
+                                    x:Name="ColorBorder1"
                                     Grid.Column="0"
                                     HeightRequest="54"
-                                    Stroke="Transparent"
+                                    Stroke="#488AFF"
                                     StrokeShape="RoundRectangle 8">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -197,42 +198,57 @@
                                             <GradientStop Offset="1.0" Color="#4E93FF" />
                                         </LinearGradientBrush>
                                     </Border.Background>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder1}" />
+                                    </Border.GestureRecognizers>
                                 </Border>
                                 <Border
+                                    x:Name="ColorBorder2"
                                     Grid.Column="1"
                                     HeightRequest="54"
-                                    Stroke="Transparent"
+                                    Stroke="#4844EA"
                                     StrokeShape="RoundRectangle 8">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#2E62FF" />
-                                            <GradientStop Offset="1.0" Color="#4E93FF" />
+                                            <GradientStop Offset="0.0" Color="#130FF4" />
+                                            <GradientStop Offset="1.0" Color="#4B48ED" />
                                         </LinearGradientBrush>
                                     </Border.Background>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder2}" />
+                                    </Border.GestureRecognizers>
                                 </Border>
                                 <Border
+                                    x:Name="ColorBorder3"
                                     Grid.Column="2"
                                     HeightRequest="54"
-                                    Stroke="Transparent"
+                                    Stroke="#DFEAF2"
                                     StrokeShape="RoundRectangle 8">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#2E62FF" />
-                                            <GradientStop Offset="1.0" Color="#4E93FF" />
+                                            <GradientStop Offset="0.0" Color="#FFFFFF" />
+                                            <GradientStop Offset="1.0" Color="#FFFFFF" />
                                         </LinearGradientBrush>
                                     </Border.Background>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder3}" />
+                                    </Border.GestureRecognizers>
                                 </Border>
                                 <Border
+                                    x:Name="ColorBorder4"
                                     Grid.Column="3"
                                     HeightRequest="54"
-                                    Stroke="Transparent"
+                                    Stroke="#303030"
                                     StrokeShape="RoundRectangle 8">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#2E62FF" />
-                                            <GradientStop Offset="1.0" Color="#4E93FF" />
+                                            <GradientStop Offset="0.0" Color="#000000" />
+                                            <GradientStop Offset="1.0" Color="#353535" />
                                         </LinearGradientBrush>
                                     </Border.Background>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder4}" />
+                                    </Border.GestureRecognizers>
                                 </Border>
                             </Grid>
                         </StackLayout>
