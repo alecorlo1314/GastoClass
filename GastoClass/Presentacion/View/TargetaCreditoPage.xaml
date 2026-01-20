@@ -3,6 +3,7 @@
     x:Class="GastoClass.Presentacion.View.TargetaCreditoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
     Title="Targetas de Credito"
@@ -489,8 +490,40 @@
                 </CollectionView.EmptyView>
             </CollectionView>
         </StackLayout>
+        <!--  ESTADISTICAS Y LISTA DE TARJETAS 3  -->
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="4*,6*"
+            RowDefinitions="Auto,Auto">
+            <Label Grid.Row="0" Grid.Column="0" />
+            <Border
+                Grid.Row="1"
+                Grid.Column="0"
+                BackgroundColor="{StaticResource FondoBlanco}"
+                HeightRequest="310"
+                HorizontalOptions="Start"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 20"
+                WidthRequest="350">
+                <chart:SfCircularChart>
+                    <chart:SfCircularChart.Legend>
+                        <chart:ChartLegend />
+                    </chart:SfCircularChart.Legend>
+
+                    <chart:PieSeries
+                        EnableTooltip="True"
+                        ItemsSource="{Binding ListaTotalGastosPorTarjeta}"
+                        ShowDataLabels="True"
+                        XBindingPath="NombreTarjeta"
+                        YBindingPath="Balance" />
+                </chart:SfCircularChart>
+            </Border>
+        </Grid>
         <!--  AGREGAR TARJETA NUEVA  -->
-        <VerticalStackLayout Grid.Row="2" Spacing="28">
+        <VerticalStackLayout
+            Grid.Row="2"
+            HorizontalOptions="Center"
+            Spacing="28">
             <!--  FONDO BLANCO  -->
             <Label
                 FontFamily="PoppinsSemiBold"

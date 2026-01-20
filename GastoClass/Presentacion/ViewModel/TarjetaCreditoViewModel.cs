@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Utilidades;
 using GastoClass.Dominio.Model;
 using System.Collections.ObjectModel;
@@ -132,6 +133,12 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private ObservableCollection<TarjetaCredito>? listaTarjetasCredito = new();
+
+        /// <summary>
+        /// Contiene la lista de total de gastos por tarjeta
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<TotalGastoPorTarjeta>? listaTotalGastosPorTarjeta = new();
         #endregion
 
         #region Propiedades Logicas
@@ -253,6 +260,7 @@ namespace GastoClass.Presentacion.ViewModel
             _servicioTarjetaCredito = servicioTarjetaCredito;
 
             _ = CargarTarjetasCredito();
+            _ = CargarGastosPorTarjetaCreditoAsync();
             //Inicializamos la lista de tipos de tarjetas
             ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
             {
@@ -270,12 +278,32 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Carga Inicial
+        /// <summary>
+        /// Carga las tarjetas de credito
+        /// </summary>
+        /// <returns></returns>
         private async Task CargarTarjetasCredito()
         {
             try
             {
                 var tarjetas = await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
                 ListaTarjetasCredito = new ObservableCollection<TarjetaCredito>(tarjetas!);
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private async Task CargarGastosPorTarjetaCreditoAsync()
+        {
+            try
+            {
+                var gastoPorTarjeta = await _servicioTarjetaCredito.ObtenerGastosPorTarjetasCreditoAsync();
+                ListaTotalGastosPorTarjeta = new ObservableCollection<TotalGastoPorTarjeta>(gastoPorTarjeta!);
             }
             catch (Exception ex)
             {

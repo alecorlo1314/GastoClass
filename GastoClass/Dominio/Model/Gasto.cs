@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GastoClass.Dominio.Model
 {
@@ -14,11 +15,17 @@ namespace GastoClass.Dominio.Model
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public decimal Monto { get; set; }
-        public DateTime Fecha { get; set; }
         public string? Descripcion { get; set; }
+        public decimal Monto { get; set; }
         public string? Categoria { get; set; }
+        public string? Comercio { get; set; }
+        public DateTime Fecha { get; set; }
         [Ignore]
         public string? NombreImagen { get; set; }
+
+        //Foreign key
+        public int TarjetaId { get; set; }
+        [Ignore]
+        public TarjetaCredito? Tarjeta { get; set; }
     }
 }
