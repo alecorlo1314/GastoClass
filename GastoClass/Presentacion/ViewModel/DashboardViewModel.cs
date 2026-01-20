@@ -17,6 +17,7 @@ public partial class DashboardViewModel : ObservableObject
 
     private readonly PredictionApiService _serviceML;
     private readonly ServicioGastos _gastoService;
+    private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
 
     #endregion
 
@@ -43,6 +44,9 @@ public partial class DashboardViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private string? _monto;
+
+    [ObservableProperty]
+    private TarjetaCredito tarjetaSeleccionada;
 
     /// <summary>
     /// Fecha del gasto, por defecto es hoy
@@ -121,6 +125,9 @@ public partial class DashboardViewModel : ObservableObject
     /// </summary>
     public IDictionary<string, float>? ListaConPuntos { get; set; }
 
+    [ObservableProperty]
+    private ObservableCollection<TarjetaCredito> listaTarjetasCredito = new();
+
     #endregion
 
     #region Constructor
@@ -129,17 +136,19 @@ public partial class DashboardViewModel : ObservableObject
     /// Constructor del ViewModel
     /// Inicializa servicios, timer y carga datos iniciales del dashboard
     /// </summary>
-    public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos)
+    public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos, ServicioTarjetaCredito servicioTarjetaCredito)
     {
         // Inyección de dependencias
         _serviceML = predictionApiService;
         _gastoService = servicioGastos;
+        _servicioTarjetaCredito = servicioTarjetaCredito;
 
         // Cargar datos iniciales del dashboard
         _ = TotalGastadoEsteMes();
         _ = CantidadTransaccionesEsteMes();
         _ = CargarGastosPorCategoria();
         _ = ObtenerUltimos5GastosAsync();
+        _ = CargarTarjetasAsync();
 
         // Configurar timer para predicciones ML con retardo de 500ms
         _timer = new System.Timers.Timer(500);
@@ -148,6 +157,7 @@ public partial class DashboardViewModel : ObservableObject
         {
             await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
         };
+        _servicioTarjetaCredito = servicioTarjetaCredito;
     }
 
     #endregion
@@ -307,7 +317,8 @@ public partial class DashboardViewModel : ObservableObject
                 Descripcion = Descripcion,
                 Categoria = CategoriaFinal.DescripcionCategoriaRecomendada,
                 Monto = decimal.Parse(Monto!),
-                Fecha = Fecha
+                Fecha = Fecha,
+                TarjetaId = TarjetaSeleccionada.Id
             };
 
             // Guardar gasto en la base de datos
@@ -483,6 +494,23 @@ public partial class DashboardViewModel : ObservableObject
             }
         }
         catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
+
+    private async Task CargarTarjetasAsync()
+    {
+        try
+        {
+            //realizamos la consulta al servicios de tarjetas
+            var tarjetas = await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
+            //limpiamos la coleccion
+            ListaTarjetasCredito.Clear();
+            //asignamos la nueva coleccion
+            ListaTarjetasCredito = new ObservableCollection<TarjetaCredito>(tarjetas!);
+        }
+        catch(Exception ex)
         {
             await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
         }

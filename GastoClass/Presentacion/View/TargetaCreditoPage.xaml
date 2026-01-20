@@ -510,12 +510,16 @@
                         <chart:ChartLegend />
                     </chart:SfCircularChart.Legend>
 
-                    <chart:PieSeries
+                    <chart:DoughnutSeries
                         EnableTooltip="True"
+                        ExplodeIndex="1"
+                        ExplodeOnTouch="True"
+                        InnerRadius="0.5"
                         ItemsSource="{Binding ListaTotalGastosPorTarjeta}"
+                        Radius="0.8"
                         ShowDataLabels="True"
                         XBindingPath="NombreTarjeta"
-                        YBindingPath="Balance" />
+                        YBindingPath="Total" />
                 </chart:SfCircularChart>
             </Border>
         </Grid>
