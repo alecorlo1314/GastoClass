@@ -1,4 +1,5 @@
-﻿using GastoClass.Dominio.Interfacez;
+﻿using GastoClass.Aplicacion.DTOs;
+using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
 
 namespace GastoClass.Aplicacion.CasosUso;
@@ -36,6 +37,11 @@ public class ServicioTarjetaCredito
     public async Task<int> EliminarTarjetasCreditoAsync()
     {
         return await _servicioTarjetaCredito.EliminarTarjetasCreditoAsync();
+    }
+
+    public async Task<List<TotalGastoPorTarjeta>?> ObtenerGastosPorTarjetasCreditoAsync()
+    {
+        return await _servicioTarjetaCredito.ObtenerGastosPorTarjetasCreditoAsync();
     }
     #endregion
 }

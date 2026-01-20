@@ -1,4 +1,5 @@
-﻿using GastoClass.Dominio.Interfacez;
+﻿using GastoClass.Aplicacion.DTOs;
+using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
 
 namespace GastoClass.Infraestructura.Repositorios;
@@ -64,7 +65,6 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
         }
     }
 
-
     /// <summary>
     /// Metodo para obtener todas las tarjetas de credito
     /// </summary>
@@ -96,6 +96,12 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
             throw new Exception("Error al obtener todas las tarjetas de credito de la base de datos", ex);
         }
     }
+
+    /// <summary>
+    /// Metodo para eliminar todas las tarjetas de credito
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<int> EliminarTarjetasCreditoAsync()
     {
         try
@@ -112,6 +118,35 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
         {
             // Manejo de errores
             throw new Exception("Error al eliminar todas las tarjetas de credito de la base de datos", ex);
+        }
+    }
+
+    public async Task<List<TotalGastoPorTarjeta>?> ObtenerGastosPorTarjetasCreditoAsync()
+    {
+        try
+        {
+            //obtener la conexion a la base de datos
+            var conexion = await _conexionBaseDatos.ObtenerConexion();
+            // Obtener todas las tarjetas
+            var tarjetas = await conexion.Table<TarjetaCredito>().ToListAsync();
+            var gastos = await conexion.Table<Gasto>().ToListAsync();
+
+            //Agruparlos con join
+            var resultado = (from g in gastos
+                             join t in tarjetas
+                             on g.TarjetaId equals t.Id
+                             select new TotalGastoPorTarjeta
+                             {
+                                 NombreTarjeta = t.NombreTarjeta,
+                                 Total = g.Monto
+                             }).ToList();
+
+            return resultado;
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores
+            throw new Exception("Error al obtener todas las tarjetas de credito de la base de datos", ex);
         }
     }
 }
