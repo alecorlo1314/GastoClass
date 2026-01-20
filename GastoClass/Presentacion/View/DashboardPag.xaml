@@ -99,28 +99,6 @@
                     <ScrollView Grid.Row="1" Padding="24">
                         <VerticalStackLayout Spacing="16">
 
-                            <!--  MONTO  -->
-                            <VerticalStackLayout Spacing="8">
-                                <Label
-                                    FontFamily="PoppinsMedium"
-                                    FontSize="14"
-                                    Text="Monto"
-                                    TextColor="#333" />
-                                <Border
-                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
-                                    StrokeShape="RoundRectangle 4">
-                                    <Entry
-                                        x:Name="EntryMonto"
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="16"
-                                        Keyboard="Numeric"
-                                        Placeholder="$0.00"
-                                        Text="{Binding Monto}"
-                                        TextColor="{StaticResource Gray950}" />
-                                </Border>
-                            </VerticalStackLayout>
-
                             <!--  DESCRIPCION  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label
@@ -142,7 +120,89 @@
                                 </Border>
                             </VerticalStackLayout>
 
-                            <!--  Fecha  -->
+                            <Grid ColumnDefinitions="4*,6*" ColumnSpacing="12">
+                                <!--  MONTO  -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="14"
+                                        Text="Monto"
+                                        TextColor="#333" />
+                                    <Border
+                                        BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                        Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                        StrokeShape="RoundRectangle 4">
+                                        <Entry
+                                            x:Name="EntryMonto"
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            Keyboard="Numeric"
+                                            Placeholder="$0.00"
+                                            Text="{Binding Monto}"
+                                            TextColor="{StaticResource Gray950}" />
+                                    </Border>
+                                </VerticalStackLayout>
+                                <!--  TARJETA  -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="14"
+                                        Text="Tarjeta"
+                                        TextColor="#333" />
+                                    <Border
+                                        BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                        Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                        StrokeShape="RoundRectangle 4">
+                                        <editors:SfComboBox
+                                            BackgroundColor="{StaticResource FondoBlanco}"
+                                            ClearButtonIconColor="{StaticResource Gray500}"
+                                            DisplayMemberPath="NombreTarjeta"
+                                            DropDownBackground="{StaticResource FondoBlanco}"
+                                            DropDownIconColor="{StaticResource Gray500}"
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            HeightRequest="45"
+                                            ItemsSource="{Binding ListaTarjetasCredito}"
+                                            Placeholder="Selecciona una tarjeta"
+                                            PlaceholderColor="{StaticResource Gray500}"
+                                            SelectedItem="{Binding TarjetaSeleccionada, Mode=TwoWay}"
+                                            TextColor="{x:StaticResource Gray950}">
+                                            <editors:SfComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid
+                                                        Padding="16,0"
+                                                        ColumnDefinitions="Auto,Auto"
+                                                        ColumnSpacing="16">
+                                                        <!--<Image
+                                                            Grid.Column="0"
+                                                            Aspect="AspectFill"
+                                                            HorizontalOptions="Center"
+                                                            Source="{Binding PreferenciaTarjeta.IconoTipoTarjeta}"
+                                                            VerticalOptions="Center" />-->
+                                                        <Label
+                                                            Grid.Column="0"
+                                                            FontFamily="PoppinsMedium"
+                                                            FontSize="16"
+                                                            Text="{Binding NombreTarjeta}"
+                                                            TextColor="{StaticResource Gray900}"
+                                                            VerticalOptions="Center" />
+                                                        <Label
+                                                            Grid.Column="1"
+                                                            FontFamily="PoppinsMedium"
+                                                            FontSize="16"
+                                                            Text="{Binding UltimosCuatroDigitos}"
+                                                            TextColor="{StaticResource Gray900}"
+                                                            VerticalOptions="Center" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </editors:SfComboBox.ItemTemplate>
+                                        </editors:SfComboBox>
+                                    </Border>
+                                </VerticalStackLayout>
+
+                            </Grid>
+
+                            <!--  FECHA  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label
                                     FontFamily="PoppinsMedium"
@@ -164,7 +224,7 @@
                                 </Border>
                             </VerticalStackLayout>
 
-                            <!--  Categoría  -->
+                            <!--  CATEGORIA  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label
                                     FontFamily="PoppinsMedium"

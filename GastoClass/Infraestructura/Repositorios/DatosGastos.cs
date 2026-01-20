@@ -158,11 +158,12 @@ namespace GastoClass.Infraestructura.Repositorios
                 {
                     return await conexion.UpdateAsync(nuevoGasto);
                 }
-                else
-                {
-                    return await conexion.InsertAsync(nuevoGasto);
-                }
-
+                    await conexion.InsertAsync(nuevoGasto);
+                    //restarle lo que se gasto a la tarjeta
+                    var tarjeta = await conexion.FindAsync<TarjetaCredito>(nuevoGasto.TarjetaId);
+                    tarjeta.Balance += nuevoGasto.Monto;
+                    var resultado = await conexion.UpdateAsync(tarjeta);
+                    return resultado;
             }
             catch (Exception ex)
             {
