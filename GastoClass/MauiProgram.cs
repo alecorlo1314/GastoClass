@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Dominio.Interfacez;
 using GastoClass.Infraestructura.Repositorios;
 using GastoClass.Presentacion.View;
 using GastoClass.Presentacion.ViewModel;
-using GastoClass.Aplicacion.CasosUso;
-using GastoClass.Dominio.Interfacez;
-using CommunityToolkit.Maui;
-using Syncfusion.Maui.Toolkit.Hosting;
+using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
+using Syncfusion.Maui.Toolkit.Hosting;
+using System.Globalization;
 
 namespace GastoClass
 {
@@ -32,6 +33,11 @@ namespace GastoClass
                     fonts.AddFont("Poppins-Regular.ttf", "PoppinsRegular");
 
                 });
+            //Usa para poner las fechas en español, ejemplo (01 Ene 2026)
+            var culture = new CultureInfo("es-ES"); 
+            CultureInfo.DefaultThreadCurrentCulture = culture; 
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+
             builder.ConfigureSyncfusionToolkit();
 
             //vistas
@@ -50,7 +56,9 @@ namespace GastoClass
 
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
+            builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
             builder.Services.AddSingleton<ServicioGastos>();
+            builder.Services.AddSingleton<ServicioTarjetaCredito>();
             builder.Services.AddSingleton<RepositorioBaseDatos>();
 
 

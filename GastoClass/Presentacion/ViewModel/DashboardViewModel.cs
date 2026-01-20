@@ -475,6 +475,7 @@ public partial class DashboardViewModel : ObservableObject
                 {
                     Id = gasto.Id,
                     Monto = gasto.Monto,
+                    Fecha = gasto.Fecha,
                     Descripcion = gasto.Descripcion,
                     Categoria = gasto.Categoria,
                     NombreImagen = $"icono_{gasto.Categoria?.ToLower()}.png"

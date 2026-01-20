@@ -433,7 +433,7 @@
                                     <Label
                                         FontFamily="PoppinsRegular"
                                         FontSize="14"
-                                        Text="{Binding Categoria}"
+                                        Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
                                         TextColor="{StaticResource Gray500}" />
                                 </StackLayout>
                                 <Label

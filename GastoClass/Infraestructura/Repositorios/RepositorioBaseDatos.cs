@@ -21,7 +21,9 @@ namespace GastoClass.Infraestructura.Repositorios
                 //Si no fue creada, establecer la conexion pasando la ruta y las banderas
                 conexionBaseDatos = new SQLiteAsyncConnection(Constantes.RutaBaseDatos, Constantes.Flags);
                 //Creamos una tabla para almacenar los gastos
-                var resultado = await conexionBaseDatos.CreateTableAsync<Gasto>();
+                await conexionBaseDatos.CreateTableAsync<Gasto>();
+                await conexionBaseDatos.CreateTableAsync<TarjetaCredito>();
+                await conexionBaseDatos.CreateTableAsync<PreferenciaTarjeta>();
 
                 //Retornamos la conexion a la base de datos
                 return conexionBaseDatos;
