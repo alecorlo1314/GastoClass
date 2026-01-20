@@ -490,7 +490,10 @@
             </CollectionView>
         </StackLayout>
         <!--  AGREGAR TARJETA NUEVA  -->
-        <VerticalStackLayout Grid.Row="2" Spacing="28">
+        <VerticalStackLayout
+            Grid.Row="2"
+            HorizontalOptions="Center"
+            Spacing="28">
             <!--  FONDO BLANCO  -->
             <Label
                 FontFamily="PoppinsSemiBold"
