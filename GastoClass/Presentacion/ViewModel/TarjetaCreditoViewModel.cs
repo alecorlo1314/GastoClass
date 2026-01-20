@@ -36,52 +36,82 @@ namespace GastoClass.Presentacion.ViewModel
         /// Contiene el tipo de tarjeta en el sfcombobox
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MasDetallesEsAccesible))]
         private TipoTarjeta? tipoTarjeta;
 
         /// <summary>
         /// Contiene el nombre de la tajeta de credito
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MasDetallesEsAccesible))]
         private string? nombreTarjeta;
 
         /// <summary>
         /// Contiene los ultimos cuatro digitos
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MasDetallesEsAccesible))]
         private int? ultimosCuatroDigitos;
 
         /// <summary>
         /// Contiene la fecha de vencimiento
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MasDetallesEsAccesible))]
         private DateTime? fechaVencimiento;
 
         /// <summary>
         /// Contiene los datos del limite de credito
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FinalizarRegistroAccesible))]
         private decimal? limiteCredito;
 
         /// <summary>
         /// Contiene el tipo de moneda USA(Dolar) o CRC(Colones)
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FinalizarRegistroAccesible))]
         private TipoMoneda? tipoMoneda;
 
         /// <summary>
         /// Contiene el dia de corte
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FinalizarRegistroAccesible))]
         private int? diaCorte;
 
         /// <summary>
         /// Contiene el dia de pago
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FinalizarRegistroAccesible))]
         private int? diaPago;
 
+        /// <summary>
+        /// Contiene el nombre del banco
+        /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FinalizarRegistroAccesible))]
         private string? nombreBanco;
+
+        /// <summary>
+        /// Contiene el color del texto
+        /// </summary>
+        [ObservableProperty]
+        private string? colorTextoTarjeta;
+
+        /// <summary>
+        /// Contiene el icono del tipo de tarjeta
+        /// </summary>
+        [ObservableProperty]
+        private string? iconoTipoTarjeta;
+
+        /// <summary>
+        /// Contiene el icono del chip
+        /// </summary>
+        [ObservableProperty]
+        private string? iconoChip;
         #endregion
 
         #region Listas Observables
@@ -96,23 +126,68 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private ObservableCollection<TipoMoneda>? listaTipoMoneda = new();
+
+        /// <summary>
+        /// Contiene la lista de tarjetas de credito
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<TarjetaCredito>? listaTarjetasCredito = new();
         #endregion
 
         #region Propiedades Logicas
         /// <summary>
-        /// Indica si el bono de ver mas detalles es accesible
+        /// Indica si el botón de ver más detalles es accesible
+        /// Se habilita cuando los primeros 4 campos son válidos
         /// </summary>
-        [ObservableProperty]
-        private bool? masDetallesEsAccesible = false;
+        public bool MasDetallesEsAccesible =>
+            esValidoTipoTarjeta &&
+            esValidoNombreTarjeta &&
+            esValidoUltimosCuatroDigitos &&
+            esValidoFechaVencimiento;
 
         /// <summary>
-        /// Indica si el bono de finalizar el registro es accesible
+        /// Indica si el botón de finalizar el registro es accesible
+        /// Se habilita cuando TODOS los campos son válidos
+        /// </summary>
+        public bool FinalizarRegistroAccesible =>
+            MasDetallesEsAccesible &&
+            esValidoLimiteCredito &&
+            esValidoTipoMoneda &&
+            esValidoDiaCorte &&
+            esValidoDiaPago &&
+            esValidoNombreBanco;
+
+        /// <summary>
+        /// Indica si el popup de agregar tarjeta esta abierto
         /// </summary>
         [ObservableProperty]
-        private bool? finalizarRegistroAccesible = false;
-
-        [ObservableProperty]
         private bool? popupAgregaTarjetaEstaAbiero;
+
+        /// <summary>
+        /// Indica si el tipo de tarjeta es válido
+        /// </summary>
+        private bool esValidoTipoTarjeta = false;
+
+        /// <summary>
+        /// Indica si el nombre de tarjeta es válido
+        /// </summary>
+        private bool esValidoNombreTarjeta = false;
+
+        /// <summary>
+        /// Indica si los últimos cuatro dígitos son válidos
+        /// </summary>
+        private bool esValidoUltimosCuatroDigitos = false;
+
+        /// <summary>
+        /// Indica si la fecha de vencimiento es válida
+        /// </summary>
+        private bool esValidoFechaVencimiento = false;
+
+        private bool esValidoLimiteCredito = false;
+        private bool esValidoTipoMoneda = false;
+        private bool esValidoDiaCorte = false;
+        private bool esValidoDiaPago = false;
+        private bool esValidoNombreBanco = false;
         #endregion
 
         #region Mensajes
@@ -176,6 +251,8 @@ namespace GastoClass.Presentacion.ViewModel
         {
             //Inyeccion de dependencias
             _servicioTarjetaCredito = servicioTarjetaCredito;
+
+            _ = CargarTarjetasCredito();
             //Inicializamos la lista de tipos de tarjetas
             ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
             {
@@ -189,6 +266,21 @@ namespace GastoClass.Presentacion.ViewModel
                 new(){ Moneda = "CRC"},
                 new(){ Moneda = "USD"}
             };
+        }
+        #endregion
+
+        #region Carga Inicial
+        private async Task CargarTarjetasCredito()
+        {
+            try
+            {
+                var tarjetas = await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
+                ListaTarjetasCredito = new ObservableCollection<TarjetaCredito>(tarjetas!);
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            }
         }
         #endregion
 
@@ -212,21 +304,39 @@ namespace GastoClass.Presentacion.ViewModel
             {
                 ColorBorde = solid.Color.ToHex();
             }
+
         }
         /// <summary>
         /// Se ejecuta al tocar el boton de finalizar el registro
         /// </summary>
         /// <returns></returns>
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(FinalizarRegistroAccesible))]
         private async Task FinalizarRegistroTarjetaCredito()
         {
-            //Inicializamos un objeto PreferenciaTarjeta
-            PreferenciaTarjeta preferenciaTarjeta = new()
+            if (ColorHexa1 == ColorHexa2)
             {
-                ColorHex1 = ColorHexa1,
-                ColorHex2 = ColorHexa2,
-                ColorBorde = ColorBorde
-            };
+                ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
+                ColorBorde = Color.FromArgb("DFEAF2").ToHex();
+                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
+                IconoChip = "icono_chip_gris.png";
+            }
+            else
+            {
+                ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
+                ColorBorde = "Transparent";
+                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
+                IconoChip = "icono_chip_blanco.png";
+            }
+                //Inicializamos un objeto PreferenciaTarjeta
+                PreferenciaTarjeta preferenciaTarjeta = new()
+                {
+                    ColorHex1 = ColorHexa1,
+                    ColorHex2 = ColorHexa2,
+                    ColorBorde = ColorBorde,
+                    ColorTexto = ColorTextoTarjeta,
+                    IconoTipoTarjeta = IconoTipoTarjeta,
+                    IconoChip = IconoChip
+                };
             //Inicializamos un objeto TarjetaCredito
             TarjetaCredito tarjetaCredito = new ()
             {
@@ -278,14 +388,14 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (value == null)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
                 MensajeRequerimientoTipoTarjeta = "Debes seleccionar un tipo de tarjeta";
-                MasDetallesEsAccesible = false;
+                esValidoTipoTarjeta = false;
                 return;
             }
             MensajeRequerimientoTipoTarjeta = string.Empty;
-            MasDetallesEsAccesible = true;
+            esValidoTipoTarjeta = true;
         }
+
         /// <summary>
         /// Realiza la validacion para el nombre de la tarjeta
         /// </summary>
@@ -294,14 +404,14 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (string.IsNullOrWhiteSpace(value) || value.Length <= 2)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                MasDetallesEsAccesible = false;
+                esValidoNombreTarjeta = false;
                 MensajeRequerimientoNombreTarjeta = "Tiene que tener mas de 2 caracteres";
                 return;
             }
             MensajeRequerimientoNombreTarjeta = string.Empty;
-            MasDetallesEsAccesible = true;
+            esValidoNombreTarjeta = true;
         }
+
         /// <summary>
         /// Realiza la validacion para los ultimos cuatro digitos
         /// </summary>
@@ -311,14 +421,14 @@ namespace GastoClass.Presentacion.ViewModel
             //Validacion de longitud
             if (value?.ToString().Length != 4 || string.IsNullOrWhiteSpace(value.ToString()))
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                MasDetallesEsAccesible = false;
+                esValidoUltimosCuatroDigitos = false;
                 MensajeRequerimientoUltimosCuatroDigitos = "Tienen que ser 4 digitos";
                 return;
             }
             MensajeRequerimientoUltimosCuatroDigitos = string.Empty;
-            MasDetallesEsAccesible = true;
+            esValidoUltimosCuatroDigitos = true;
         }
+
         /// <summary>
         /// Realiza la validacion para la fecha de vencimiento
         /// </summary>
@@ -327,14 +437,14 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (value < DateTime.Now)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                MasDetallesEsAccesible = false;
+                esValidoFechaVencimiento = false;
                 MensajeRequerimientoFechaVencimiento = "La fecha de vencimiento no puede ser menor al dia de hoy";
                 return;
             }
-            MasDetallesEsAccesible = true;
             MensajeRequerimientoFechaVencimiento = string.Empty;
+            esValidoFechaVencimiento = true;
         }
+
         /// <summary>
         /// Realiza la validacion para el limite de credito
         /// </summary>
@@ -343,19 +453,23 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (value == 0)
             {
-                finalizarRegistroAccesible = false;
                 MensajeRequerimientoLimiteCredito = "No puede ser 0";
+                esValidoLimiteCredito = false;
+                ActualizarComandoFinalizar();
                 return;
             }
             if (value < 0)
             {
-                finalizarRegistroAccesible = false;
                 MensajeRequerimientoLimiteCredito = "No puede ser negativo";
+                esValidoLimiteCredito = false;
+                ActualizarComandoFinalizar();
                 return;
             }
-            finalizarRegistroAccesible = true;
             MensajeRequerimientoLimiteCredito = string.Empty;
+            esValidoLimiteCredito = true;
+            ActualizarComandoFinalizar();
         }
+
         /// <summary>
         /// Realiza la validacion para el tipo de moneda
         /// </summary>
@@ -364,37 +478,41 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (value == null)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
                 MensajeRequerimientoTipoMoneda = "Debes seleccionar un tipo de moneda";
-                finalizarRegistroAccesible = false;
+                esValidoTipoMoneda = false;
+                ActualizarComandoFinalizar();
                 return;
             }
             MensajeRequerimientoTipoMoneda = string.Empty;
-            finalizarRegistroAccesible = true;
+            esValidoTipoMoneda = true;
+            ActualizarComandoFinalizar();
         }
+
         /// <summary>
         /// Realiza la validacion para el dia de corte
         /// </summary>
         /// <param name="value"></param>
         partial void OnDiaCorteChanged(int? value)
         {
-            if(value == null)
+            if (value == null)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                finalizarRegistroAccesible = false;
+                esValidoDiaCorte = false;
                 MensajeRequerimientoDiaCorte = "Debes seleccionar un dia";
+                ActualizarComandoFinalizar();
                 return;
             }
-            if(value < 1 || value > 31)
+            if (value < 1 || value > 31)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                finalizarRegistroAccesible = false;
+                esValidoDiaCorte = false;
                 MensajeRequerimientoDiaCorte = "El dia debe estar entre 1 y 31";
+                ActualizarComandoFinalizar();
                 return;
             }
-            finalizarRegistroAccesible = true;
+            esValidoDiaCorte = true;
             MensajeRequerimientoDiaCorte = string.Empty;
+            ActualizarComandoFinalizar();
         }
+
         /// <summary>
         /// Realiza la validacion para el dia de pago
         /// </summary>
@@ -403,21 +521,23 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (value == null)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                finalizarRegistroAccesible = false;
+                esValidoDiaPago = false;
                 MensajeRequerimientoDiaPago = "Debes seleccionar un dia";
+                ActualizarComandoFinalizar();
                 return;
             }
             if (value < 1 || value > 31)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                finalizarRegistroAccesible = false;
+                esValidoDiaPago = false;
                 MensajeRequerimientoDiaPago = "El dia debe estar entre 1 y 31";
+                ActualizarComandoFinalizar();
                 return;
             }
-            finalizarRegistroAccesible = true;
+            esValidoDiaPago = true;
             MensajeRequerimientoDiaPago = string.Empty;
+            ActualizarComandoFinalizar();
         }
+
         /// <summary>
         /// Realiza la validacion para el nombre del banco
         /// </summary>
@@ -426,13 +546,22 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if (string.IsNullOrWhiteSpace(value) || value.Length <= 2)
             {
-                //bloquear el bono de ver mas detalles antes de sacar el popup de agregar tarjeta
-                finalizarRegistroAccesible = false;
+                esValidoNombreBanco = false;
                 MensajeRequerimientoNombreBanco = "Tiene que tener mas de 2 caracteres";
+                ActualizarComandoFinalizar();
                 return;
             }
             MensajeRequerimientoNombreBanco = string.Empty;
-            finalizarRegistroAccesible = true;
+            esValidoNombreBanco = true;
+            ActualizarComandoFinalizar();
+        }
+
+        /// <summary>
+        /// Actualiza el estado del comando FinalizarRegistro
+        /// </summary>
+        private void ActualizarComandoFinalizar()
+        {
+            FinalizarRegistroTarjetaCreditoCommand.NotifyCanExecuteChanged();
         }
         #endregion
 

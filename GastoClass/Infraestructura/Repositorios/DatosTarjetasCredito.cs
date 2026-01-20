@@ -29,40 +29,41 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
     {
         try
         {
-            //obtener la conexion a la base de datos
             var conexion = await _conexionBaseDatos.ObtenerConexion();
 
-            //Insertamos la preferencia de la tarjeta credito
-            if (tarjetaCredito.PreferenciaTarjeta?.Id != 0)
+            // Guardar o actualizar la preferencia si existe
+            if (tarjetaCredito.PreferenciaTarjeta != null)
             {
-                //Si la preferencia ya fue creada, no hacer nada
-                var preferencia = await conexion.UpdateAsync(tarjetaCredito.PreferenciaTarjeta);
-            }
-            else
-            {
-                //Si no fue creada, establecer la conexion pasando la ruta y las banderas
-                var preferencia = await conexion.InsertAsync(tarjetaCredito.PreferenciaTarjeta);
+                if (tarjetaCredito.PreferenciaTarjeta.Id > 0)
+                {
+                    await conexion.UpdateAsync(tarjetaCredito.PreferenciaTarjeta);
+                }
+                else
+                {
+                    await conexion.InsertAsync(tarjetaCredito.PreferenciaTarjeta);
+                }
+
+                // Asegurar que la tarjeta tenga el Id de la preferencia
+                tarjetaCredito.IdPreferenciaTarjeta = tarjetaCredito.PreferenciaTarjeta.Id;
             }
 
-            //Insertamos la tarjeta de credito
-            if (tarjetaCredito.Id != 0)
+            // Guardar o actualizar la tarjeta
+            if (tarjetaCredito.Id > 0)
             {
-                //Si la preferencia ya fue creada, no hacer nada
                 return await conexion.UpdateAsync(tarjetaCredito);
             }
             else
             {
-                //Si no fue creada, establecer la conexion pasando la ruta y las banderas
                 return await conexion.InsertAsync(tarjetaCredito);
             }
-
         }
         catch (Exception ex)
         {
-            // Manejo de errores
-            throw new Exception("Error al agregar la tarjeta de credito.", ex);
+            // Manejo de errores más claro
+            throw new InvalidOperationException("Error al agregar la tarjeta de crédito.", ex);
         }
     }
+
 
     /// <summary>
     /// Metodo para obtener todas las tarjetas de credito

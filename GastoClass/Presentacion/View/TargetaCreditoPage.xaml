@@ -11,7 +11,7 @@
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray900}">
     <!--  CONTENIDO  -->
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="*,Auto,*">
         <!--  POPUP AGREGAR TARJETA DE CREDITO  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
@@ -309,14 +309,12 @@
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
-                            IsEnabled="{Binding FinalizarRegistroAccesible}"
                             Text="Finalizar Registros "
                             TextColor="{StaticResource FondoBlanco}" />
                     </StackLayout>
                 </DataTemplate>
             </syncfusion:SfPopup.FooterTemplate>
         </syncfusion:SfPopup>
-
         <!--  LISTA DE TARJETAS  -->
         <StackLayout Grid.Column="0" Spacing="28">
             <!--  TITULO  -->
@@ -328,21 +326,26 @@
                 TextColor="{StaticResource Gray900}"
                 VerticalOptions="Center" />
             <!--  LISTA DE TARJETAS HORIZONTAL  -->
-            <CollectionView ItemsSource="{Binding ListaTarjetasCredito}">
+            <CollectionView ItemsSource="{Binding ListaTarjetasCredito}" SelectionMode="Single">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Horizontal" />
+                    <LinearItemsLayout ItemSpacing="16" Orientation="Horizontal" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <!--  ESTILO DE LA TARJETA DE CREDITO  -->
-                        <Border Stroke="{Binding ColorBorde}" StrokeShape="RoundRectangle 25">
+                        <Border
+                            Padding="24"
+                            HeightRequest="225"
+                            Stroke="{Binding PreferenciaTarjeta.ColorBorde}"
+                            StrokeShape="RoundRectangle 25"
+                            WidthRequest="350">
                             <Border.Background>
                                 <LinearGradientBrush EndPoint="0,1">
-                                    <GradientStop Offset="0.1" Color="{Binding ColorHex1}" />
-                                    <GradientStop Offset="1.0" Color="{Binding ColorHex2}" />
+                                    <GradientStop Offset="0.1" Color="{Binding PreferenciaTarjeta.ColorHex1}" />
+                                    <GradientStop Offset="1.0" Color="{Binding PreferenciaTarjeta.ColorHex2}" />
                                 </LinearGradientBrush>
                             </Border.Background>
-                            <Grid RowDefinitions="*,*,*">
+                            <Grid RowDefinitions="*,*,*" RowSpacing="16">
                                 <!--  ZONA SUPERIOR  -->
                                 <Grid Grid.Row="0" ColumnDefinitions="*,*">
                                     <!--  BALANCE  -->
@@ -355,22 +358,22 @@
                                             FontFamily="PoppinsRegular"
                                             FontSize="12"
                                             Text="Balance"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="20"
-                                            Text="Balance"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            Text="{Binding Balance, StringFormat='{0:C2}'}"
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                     </StackLayout>
                                     <!--  ICONO CHIP  -->
                                     <Image
                                         Grid.Column="1"
-                                        Aspect="AspectFill"
-                                        HeightRequest="34"
+                                        Aspect="AspectFit"
+                                        HeightRequest="32"
                                         HorizontalOptions="End"
-                                        Source="{Binding Chip}"
+                                        Source="{Binding PreferenciaTarjeta.IconoChip}"
                                         VerticalOptions="Center"
-                                        WidthRequest="34" />
+                                        WidthRequest="32" />
                                 </Grid>
                                 <!--  ZONA MEDIO  -->
                                 <Grid Grid.Row="1" ColumnDefinitions="*,*">
@@ -384,12 +387,12 @@
                                             FontFamily="PoppinsRegular"
                                             FontSize="12"
                                             Text="NOMBRE TARJETA"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                         <Label
                                             FontFamily="PoppinsMedium"
                                             FontSize="14"
-                                            Text="{Binding NombreTarjeta}"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            Text="{Binding NombreBanco}"
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                     </StackLayout>
                                     <!--  FECHA DE VENCIMIENTO  -->
                                     <StackLayout
@@ -400,36 +403,49 @@
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="12"
-                                            Text="NOMBRE TARJETA"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
-                                        <Label
-                                            FontFamily="PoppinsRegular"
-                                            FontSize="14"
-                                            Text="{Binding NombreTarjeta}"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            Text="FECHA VENCIMIENTO"
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                        <HorizontalStackLayout>
+                                            <Label
+                                                FontFamily="PoppinsRegular"
+                                                FontSize="14"
+                                                Text="{Binding MesVencimiento}"
+                                                TextColor="{Binding ColorTexto}" />
+                                            <Label
+                                                FontFamily="PoppinsRegular"
+                                                FontSize="14"
+                                                Text="/"
+                                                TextColor="{Binding ColorTexto}" />
+                                            <Label
+                                                FontFamily="PoppinsRegular"
+                                                FontSize="14"
+                                                Text="{Binding AnioVencimiento}"
+                                                TextColor="{Binding ColorTexto}" />
+                                        </HorizontalStackLayout>
                                     </StackLayout>
                                 </Grid>
                                 <!--  ZONA INFERIOR  -->
-                                <Grid ColumnDefinitions="7*,3*">
+                                <Grid Grid.Row="2" ColumnDefinitions="7*,3*">
                                     <!--  NUMERO DE TARJETA  -->
                                     <HorizontalStackLayout Grid.Column="0">
-                                        <Border HeightRequest="1" Stroke="{Binding ColorBorde}" />
+                                        <Border HeightRequest="1" Stroke="{Binding PreferenciaTarjeta.ColorBorde}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="22"
                                             Text="**** **** **** "
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="22"
-                                            Text="{Binding NumeroTarjeta}"
-                                            TextColor="{StaticResource ColorTextoTarjeta}" />
+                                            Text="{Binding UltimosCuatroDigitos}"
+                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                     </HorizontalStackLayout>
                                     <Image
-                                        Aspect="AspectFill"
+                                        Grid.Column="1"
+                                        Aspect="AspectFit"
                                         HeightRequest="30"
                                         HorizontalOptions="End"
-                                        Source="{Binding IconoTipoTarjeta}"
+                                        Source="{Binding PreferenciaTarjeta.IconoTipoTarjeta}"
                                         VerticalOptions="Center"
                                         WidthRequest="44" />
                                 </Grid>
