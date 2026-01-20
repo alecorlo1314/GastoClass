@@ -304,6 +304,21 @@ namespace GastoClass.Presentacion.ViewModel
             {
                 ColorBorde = solid.Color.ToHex();
             }
+            // para previsualizar cómo se verá la tarjeta
+            if (ColorHexa1 == ColorHexa2 && ColorHexa1 == "#FFFFFF")
+            {
+                // Tarjeta blanca: texto oscuro, iconos grises, borde visible
+                ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
+                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower() ?? "mastercard"}_gris.png";
+                IconoChip = "icono_chip_gris.png";
+            }
+            else
+            {
+                // Tarjetas de color: texto claro, iconos blancos, borde según selección
+                ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
+                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower() ?? "mastercard"}_blanco.png";
+                IconoChip = "icono_chip_blanco.png";
+            }
 
         }
         /// <summary>
@@ -313,29 +328,22 @@ namespace GastoClass.Presentacion.ViewModel
         [RelayCommand(CanExecute = nameof(FinalizarRegistroAccesible))]
         private async Task FinalizarRegistroTarjetaCredito()
         {
-            //Si es de color blanco la tarjeta 
-            if (ColorHexa1 == Color.FromArgb("FFFFFF").ToHex())
+            if(ColorHexa1 == ColorHexa2)
             {
                 ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
                 ColorBorde = Color.FromArgb("DFEAF2").ToHex();
                 IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
                 IconoChip = "icono_chip_gris.png";
-            }else if (ColorHexa1 == Color.FromArgb("000000").ToHex())
-            {
-                ColorTextoTarjeta = Color.FromArgb("E0E0E0").ToHex();
-                ColorBorde = Color.FromArgb("3B3B3B").ToHex();
-                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
-                IconoChip = "icono_chip_blanco.png";
             }
             else
             {
-                ColorTextoTarjeta = Color.FromArgb("E0E0E0").ToHex();
+                ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
                 ColorBorde = "Transparent";
                 IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
                 IconoChip = "icono_chip_blanco.png";
             }
-                //Inicializamos un objeto PreferenciaTarjeta
-                PreferenciaTarjeta preferenciaTarjeta = new()
+            //Inicializamos un objeto PreferenciaTarjeta
+            PreferenciaTarjeta preferenciaTarjeta = new()
                 {
                     ColorHex1 = ColorHexa1,
                     ColorHex2 = ColorHexa2,
