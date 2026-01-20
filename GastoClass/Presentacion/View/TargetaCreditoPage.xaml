@@ -515,6 +515,7 @@
                         Grid.Row="1"
                         ColumnDefinitions="*,*"
                         ColumnSpacing="28">
+
                         <!--  TIPO DE TARJETA  -->
                         <StackLayout Grid.Column="0" Spacing="4">
                             <Label
