@@ -11,7 +11,7 @@
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray900}">
     <!--  CONTENIDO  -->
-    <Grid RowDefinitions="*,Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*">
         <!--  POPUP AGREGAR TARJETA DE CREDITO  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
@@ -316,7 +316,10 @@
             </syncfusion:SfPopup.FooterTemplate>
         </syncfusion:SfPopup>
         <!--  LISTA DE TARJETAS  -->
-        <StackLayout Grid.Column="0" Spacing="28">
+        <StackLayout
+            Grid.Column="0"
+            Margin="0,0,0,24"
+            Spacing="20">
             <!--  TITULO  -->
             <Label
                 FontFamily="PoppinsSemiBold"
@@ -325,8 +328,9 @@
                 Text="Mis Tarjetas"
                 TextColor="{StaticResource Gray900}"
                 VerticalOptions="Center" />
+
             <!--  LISTA DE TARJETAS HORIZONTAL  -->
-            <CollectionView ItemsSource="{Binding ListaTarjetasCredito}" SelectionMode="Single">
+            <CollectionView ItemsSource="{Binding ListaTarjetasCredito}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout ItemSpacing="16" Orientation="Horizontal" />
                 </CollectionView.ItemsLayout>
@@ -389,7 +393,7 @@
                                             Text="NOMBRE TARJETA"
                                             TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                         <Label
-                                            FontFamily="PoppinsMedium"
+                                            FontFamily="PoppinsSemiBold"
                                             FontSize="14"
                                             Text="{Binding NombreBanco}"
                                             TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
@@ -397,6 +401,7 @@
                                     <!--  FECHA DE VENCIMIENTO  -->
                                     <StackLayout
                                         Grid.Column="1"
+                                        Margin="16,0,0,0"
                                         HorizontalOptions="Start"
                                         Spacing="4"
                                         VerticalOptions="Center">
@@ -407,27 +412,27 @@
                                             TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                         <HorizontalStackLayout>
                                             <Label
-                                                FontFamily="PoppinsRegular"
+                                                FontFamily="PoppinsSemiBold"
                                                 FontSize="14"
                                                 Text="{Binding MesVencimiento}"
-                                                TextColor="{Binding ColorTexto}" />
+                                                TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                             <Label
-                                                FontFamily="PoppinsRegular"
+                                                FontFamily="PoppinsSemiBold"
                                                 FontSize="14"
                                                 Text="/"
-                                                TextColor="{Binding ColorTexto}" />
+                                                TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                             <Label
-                                                FontFamily="PoppinsRegular"
+                                                FontFamily="PoppinsSemiBold"
                                                 FontSize="14"
                                                 Text="{Binding AnioVencimiento}"
-                                                TextColor="{Binding ColorTexto}" />
+                                                TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                         </HorizontalStackLayout>
                                     </StackLayout>
                                 </Grid>
                                 <!--  ZONA INFERIOR  -->
                                 <Grid Grid.Row="2" ColumnDefinitions="7*,3*">
                                     <!--  NUMERO DE TARJETA  -->
-                                    <HorizontalStackLayout Grid.Column="0">
+                                    <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
                                         <Border HeightRequest="1" Stroke="{Binding PreferenciaTarjeta.ColorBorde}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
@@ -643,6 +648,16 @@
                         Text="Mas Detalles"
                         TextColor="{StaticResource FondoBlanco}"
                         WidthRequest="150" />
+                    <Button
+                        Grid.Row="3"
+                        BackgroundColor="Red"
+                        Command="{Binding EliminarTarjetasCreditoCommand}"
+                        CornerRadius="15"
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="16"
+                        Text="Eliminar Tarjetas"
+                        TextColor="White"
+                        WidthRequest="200" />
                 </Grid>
             </Border>
         </VerticalStackLayout>

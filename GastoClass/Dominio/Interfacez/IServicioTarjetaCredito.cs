@@ -6,4 +6,5 @@ public interface IServicioTarjetaCredito
 {
     Task<int> AgregarTarjetaCreditoAsync(TarjetaCredito tarjetaCredito);
     Task<List<TarjetaCredito>?> ObtenerTarjetasCreditoAsync();
+    Task<int> EliminarTarjetasCreditoAsync();
 }

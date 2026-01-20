@@ -32,5 +32,10 @@ public class ServicioTarjetaCredito
     {
        return await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
     } 
+
+    public async Task<int> EliminarTarjetasCreditoAsync()
+    {
+        return await _servicioTarjetaCredito.EliminarTarjetasCreditoAsync();
+    }
     #endregion
 }

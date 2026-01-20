@@ -96,4 +96,22 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
             throw new Exception("Error al obtener todas las tarjetas de credito de la base de datos", ex);
         }
     }
+    public async Task<int> EliminarTarjetasCreditoAsync()
+    {
+        try
+        {
+            var conexion = await _conexionBaseDatos.ObtenerConexion();
+            var resultado = await conexion.DeleteAllAsync<TarjetaCredito>();
+            if(resultado > 0)
+            {
+                return await conexion.DeleteAllAsync<PreferenciaTarjeta>();
+            }
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores
+            throw new Exception("Error al eliminar todas las tarjetas de credito de la base de datos", ex);
+        }
+    }
 }

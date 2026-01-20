@@ -313,16 +313,23 @@ namespace GastoClass.Presentacion.ViewModel
         [RelayCommand(CanExecute = nameof(FinalizarRegistroAccesible))]
         private async Task FinalizarRegistroTarjetaCredito()
         {
-            if (ColorHexa1 == ColorHexa2)
+            //Si es de color blanco la tarjeta 
+            if (ColorHexa1 == Color.FromArgb("FFFFFF").ToHex())
             {
                 ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
                 ColorBorde = Color.FromArgb("DFEAF2").ToHex();
                 IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
                 IconoChip = "icono_chip_gris.png";
+            }else if (ColorHexa1 == Color.FromArgb("000000").ToHex())
+            {
+                ColorTextoTarjeta = Color.FromArgb("E0E0E0").ToHex();
+                ColorBorde = Color.FromArgb("3B3B3B").ToHex();
+                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
+                IconoChip = "icono_chip_blanco.png";
             }
             else
             {
-                ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
+                ColorTextoTarjeta = Color.FromArgb("E0E0E0").ToHex();
                 ColorBorde = "Transparent";
                 IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
                 IconoChip = "icono_chip_blanco.png";
@@ -366,6 +373,7 @@ namespace GastoClass.Presentacion.ViewModel
                     "La tarjeta se ingreso con exito", 
                     "Ok");
                 LimpiarCampos();
+                _ = CargarTarjetasCredito();
                 PopupAgregaTarjetaEstaAbiero = false;
             }
             else
@@ -373,6 +381,28 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.CurrentPage.DisplayAlertAsync
                     ("Error", 
                     "No se pudo guardar la tarjeta", 
+                    "Ok");
+                return;
+            }
+        }
+
+        [RelayCommand]
+        private async Task EliminarTarjetasCredito()
+        {
+            var resultado = await _servicioTarjetaCredito.EliminarTarjetasCreditoAsync();
+            if (resultado >= 1)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync
+                    ("Informacion",
+                    "Tarjeta eliminadas con exito",
+                    "Ok");
+                _ = CargarTarjetasCredito();
+            }
+            else
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync
+                    ("Error",
+                    "No se pudo eliminar las tarjetas",
                     "Ok");
                 return;
             }
