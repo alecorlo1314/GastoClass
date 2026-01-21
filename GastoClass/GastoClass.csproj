@@ -84,6 +84,9 @@
 	  <MauiXaml Update="Presentacion\View\DashboardPag.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Presentacion\View\DetallesTarjetaCreditoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Presentacion\View\HistorialGastosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
