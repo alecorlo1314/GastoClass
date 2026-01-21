@@ -9,11 +9,11 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
     /// <summary>
     /// Conexion a la base de datos
     /// </summary>
-    private readonly RepositorioBaseDatos _conexionBaseDatos;
+    private readonly AppDbContext _conexionBaseDatos;
     #endregion
 
     #region Contructor
-    public DatosTarjetasCredito(RepositorioBaseDatos repositorioBaseDatos)
+    public DatosTarjetasCredito(AppDbContext repositorioBaseDatos)
     {
         //Inyectamos la dependencia
         _conexionBaseDatos = repositorioBaseDatos;
@@ -121,6 +121,11 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
         }
     }
 
+    /// <summary>
+    /// Metodo para obtener todas las tarjetas de credito y mostrarlas en un grafico de donut
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public async Task<List<TotalGastoPorTarjeta>?> ObtenerGastosPorTarjetasCreditoAsync()
     {
         try
@@ -133,12 +138,12 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
 
             //Agruparlos con join
             var resultado = (from g in gastos
-                             join t in tarjetas
-                             on g.TarjetaId equals t.Id
+                             join t in tarjetas on g.TarjetaId equals t.Id
+                             group g by t.NombreTarjeta into grupo
                              select new TotalGastoPorTarjeta
                              {
-                                 NombreTarjeta = t.NombreTarjeta,
-                                 Total = g.Monto
+                                 NombreTarjeta = grupo.Key,
+                                 BalanceTotal = grupo.Sum(x => x.Monto)
                              }).ToList();
 
             return resultado;

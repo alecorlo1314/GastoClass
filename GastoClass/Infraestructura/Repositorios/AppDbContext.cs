@@ -6,7 +6,7 @@ namespace GastoClass.Infraestructura.Repositorios
     /// <summary>
     /// Proporciona acceso a los datos de gastos
     /// </summary>
-    public class RepositorioBaseDatos
+    public class AppDbContext
     {
         //Instancias la conexion a la base de datos SQLite
         SQLiteAsyncConnection? conexionBaseDatos;
