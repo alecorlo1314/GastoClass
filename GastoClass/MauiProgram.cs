@@ -46,6 +46,7 @@ namespace GastoClass
             builder.Services.AddTransient<MLDetallesPage>();
             builder.Services.AddTransient<ConfiguracionesPage>();
             builder.Services.AddTransient<TargetaCreditoPage>();
+            builder.Services.AddTransient<DetallesTarjetaCreditoPage>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ConfiguracionesViewModel>();
@@ -53,6 +54,7 @@ namespace GastoClass
             builder.Services.AddTransient<HistorialGastosViewModel>();
             builder.Services.AddTransient<MLDetallesViewModel>();
             builder.Services.AddTransient<TarjetaCreditoViewModel>();
+            builder.Services.AddTransient<DetallesTarjetaCreditoViewModel>();
 
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();

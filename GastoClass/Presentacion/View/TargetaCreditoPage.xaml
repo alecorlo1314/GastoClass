@@ -351,6 +351,10 @@
                                     <GradientStop Offset="1.0" Color="{Binding PreferenciaTarjeta.ColorHex2}" />
                                 </LinearGradientBrush>
                             </Border.Background>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vmTarjetaCredito:TarjetaCreditoViewModel}}, Path=TarjetaSeleccionadaCommand}" 
+                                                      CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
                             <Grid RowDefinitions="*,*,*" RowSpacing="16">
                                 <!--  ZONA SUPERIOR  -->
                                 <Grid Grid.Row="0" ColumnDefinitions="*,*">

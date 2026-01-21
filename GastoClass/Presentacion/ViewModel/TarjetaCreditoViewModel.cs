@@ -4,6 +4,7 @@ using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Utilidades;
 using GastoClass.Dominio.Model;
+using GastoClass.Presentacion.View;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -651,6 +652,21 @@ namespace GastoClass.Presentacion.ViewModel
             DiaCorte = null;
             DiaPago = null;
             NombreBanco = null;
+        }
+        #endregion
+
+        #region Navegacion
+        [RelayCommand]
+        private async Task TarjetaSeleccionada(TarjetaCredito tarjeta)
+        {
+            if (tarjeta == null) return;
+
+            // Navegar a la página de detalles pasando la tarjeta
+            await Shell.Current.GoToAsync(nameof(DetallesTarjetaCreditoPage),
+                new Dictionary<string, object>
+                {
+                    ["TarjetaCredito"] = tarjeta 
+                });
         }
         #endregion
     }
