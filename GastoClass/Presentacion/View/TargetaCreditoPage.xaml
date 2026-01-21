@@ -6,13 +6,14 @@
     xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:vmTarjetaCredito="clr-namespace:GastoClass.Presentacion.ViewModel"
     Title="Targetas de Credito"
     Padding="48,24"
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray900}">
     <!--  CONTENIDO  -->
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto">
         <!--  POPUP AGREGAR TARJETA DE CREDITO  -->
         <syncfusion:SfPopup
             x:Name="mipopup"
@@ -396,7 +397,7 @@
                                         <Label
                                             FontFamily="PoppinsSemiBold"
                                             FontSize="14"
-                                            Text="{Binding NombreBanco}"
+                                            Text="{Binding NombreTarjeta}"
                                             TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
                                     </StackLayout>
                                     <!--  FECHA DE VENCIMIENTO  -->
@@ -493,211 +494,219 @@
         <!--  ESTADISTICAS Y LISTA DE TARJETAS 3  -->
         <Grid
             Grid.Row="1"
-            ColumnDefinitions="4*,6*"
-            RowDefinitions="Auto,Auto">
-            <Label Grid.Row="0" Grid.Column="0" />
-            <Border
-                Grid.Row="1"
-                Grid.Column="0"
-                BackgroundColor="{StaticResource FondoBlanco}"
-                HeightRequest="310"
-                HorizontalOptions="Start"
-                Stroke="Transparent"
-                StrokeShape="RoundRectangle 20"
-                WidthRequest="350">
-                <chart:SfCircularChart>
-                    <chart:SfCircularChart.Legend>
-                        <chart:ChartLegend />
-                    </chart:SfCircularChart.Legend>
+            ColumnDefinitions="Auto,Auto"
+            ColumnSpacing="28">
+            <!--  GRAFICO DE DOUGHNUT  -->
+            <VerticalStackLayout Grid.Column="0" Spacing="28">
+                <Label
+                    FontFamily="PoppinsSemiBold"
+                    FontSize="22"
+                    Text="Estadísticas de Tarjetas"
+                    TextColor="{StaticResource Gray900}" />
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    BackgroundColor="{StaticResource FondoBlanco}"
+                    HeightRequest="350"
+                    HorizontalOptions="Start"
+                    IsVisible="{Binding BorderVisible}"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 20"
+                    WidthRequest="350">
+                    <chart:SfCircularChart>
+                        <chart:SfCircularChart.Legend>
+                            <chart:ChartLegend />
+                        </chart:SfCircularChart.Legend>
 
-                    <chart:DoughnutSeries
-                        EnableTooltip="True"
-                        ExplodeIndex="1"
-                        ExplodeOnTouch="True"
-                        InnerRadius="0.5"
-                        ItemsSource="{Binding ListaTotalGastosPorTarjeta}"
-                        Radius="0.8"
-                        ShowDataLabels="True"
-                        XBindingPath="NombreTarjeta"
-                        YBindingPath="Total" />
-                </chart:SfCircularChart>
-            </Border>
+                        <chart:DoughnutSeries
+                            EnableTooltip="True"
+                            ExplodeIndex="1"
+                            ExplodeOnTouch="True"
+                            InnerRadius="0.5"
+                            ItemsSource="{Binding ListaTotalGastosPorTarjeta}"
+                            Radius="0.8"
+                            ShowDataLabels="True"
+                            XBindingPath="NombreTarjeta"
+                            YBindingPath="BalanceTotal" />
+                    </chart:SfCircularChart>
+                </Border>
+            </VerticalStackLayout>
+            <!--  AGREGAR TARJETA NUEVA  -->
+            <VerticalStackLayout
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                Spacing="28">
+                <!--  FONDO BLANCO  -->
+                <Label
+                    FontFamily="PoppinsSemiBold"
+                    FontSize="22"
+                    Text="Agregar Tarjeta"
+                    TextColor="{StaticResource Gray900}" />
+                <Border
+                    Padding="28"
+                    BackgroundColor="{StaticResource FondoBlanco}"
+                    HorizontalOptions="Start"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 20"
+                    WidthRequest="1000">
+                    <Grid RowDefinitions="2*,3*,3*,2*" RowSpacing="8">
+                        <Label
+                            Grid.Row="0"
+                            FontFamily="PoppinsRegular"
+                            FontSize="16"
+                            Text="Añade una nueva tarjeta de crédito o débito a tu cuenta."
+                            TextColor="{StaticResource Gray600}" />
+                        <Grid
+                            Grid.Row="1"
+                            ColumnDefinitions="*,*"
+                            ColumnSpacing="28">
+
+                            <!--  TIPO DE TARJETA  -->
+                            <StackLayout Grid.Column="0" Spacing="4">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Tipo de Tarjeta"
+                                    TextColor="{StaticResource Gray600}" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    HeightRequest="50"
+                                    Stroke="{StaticResource Gray200}"
+                                    StrokeShape="RoundRectangle 15">
+                                    <editors:SfComboBox
+                                        Margin="4"
+                                        BackgroundColor="Transparent"
+                                        ClearButtonIconColor="{StaticResource Gray600}"
+                                        DisplayMemberPath="Tipo"
+                                        DropDownBackground="{StaticResource FondoBlanco}"
+                                        DropDownIconColor="{StaticResource Gray400}"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        IsEditable="False"
+                                        ItemsSource="{Binding ListaTipoTarjeta}"
+                                        Placeholder="Selecciona un tipo"
+                                        PlaceholderColor="{StaticResource Gray400}"
+                                        SelectedItem="{Binding TipoTarjeta}"
+                                        Stroke="Transparent"
+                                        TextColor="{x:StaticResource Gray950}"
+                                        TextMemberPath="Tipo" />
+                                </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoTipoTarjeta, Mode=TwoWay}"
+                                    TextColor="Red" />
+                            </StackLayout>
+                            <!--  NOMBRE DE LA TARJETA  -->
+                            <StackLayout Grid.Column="1" Spacing="4">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Nombre de la Tarjeta"
+                                    TextColor="{StaticResource Gray600}" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource Gray200}"
+                                    StrokeShape="RoundRectangle 15">
+                                    <Entry
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Placeholder="Ej.Economia, Walmart"
+                                        PlaceholderColor="{StaticResource Gray400}"
+                                        Text="{Binding NombreTarjeta}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoNombreTarjeta, Mode=TwoWay}"
+                                    TextColor="Red" />
+                            </StackLayout>
+                        </Grid>
+                        <Grid
+                            Grid.Row="2"
+                            ColumnDefinitions="*,*"
+                            ColumnSpacing="28">
+                            <!--  NUMERO DE LA TARJETA  -->
+                            <StackLayout Grid.Column="0" Spacing="4">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Ultimos Cuatro Digitos"
+                                    TextColor="{StaticResource Gray600}" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource Gray200}"
+                                    StrokeShape="RoundRectangle 15">
+                                    <Entry
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Keyboard="Numeric"
+                                        MaxLength="16"
+                                        Placeholder="****"
+                                        PlaceholderColor="{StaticResource Gray400}"
+                                        Text="{Binding UltimosCuatroDigitos}"
+                                        TextColor="{StaticResource Gray950}"
+                                        VerticalOptions="Center" />
+                                </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoUltimosCuatroDigitos, Mode=TwoWay}"
+                                    TextColor="Red" />
+                            </StackLayout>
+                            <!--  FECHA EXPIRACION  -->
+                            <StackLayout Grid.Column="1" Spacing="4">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Fecha de Vencimiento"
+                                    TextColor="{StaticResource Gray600}" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource Gray200}"
+                                    StrokeShape="RoundRectangle 15">
+                                    <DatePicker
+                                        Date="{Binding FechaVencimiento}"
+                                        FontSize="16"
+                                        Format="dd/MM/yyyy"
+                                        HorizontalOptions="Start"
+                                        MaximumDate="2030-12-31"
+                                        MinimumDate="2020-01-01"
+                                        TextColor="{StaticResource Gray600}"
+                                        WidthRequest="430" />
+                                </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoFechaVencimiento, Mode=TwoWay}"
+                                    TextColor="Red" />
+                            </StackLayout>
+                        </Grid>
+                        <Button
+                            Grid.Row="3"
+                            BackgroundColor="{StaticResource Azul Principal}"
+                            Clicked="Button_Clicked"
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="16"
+                            HorizontalOptions="Start"
+                            IsEnabled="{Binding MasDetallesEsAccesible}"
+                            Text="Mas Detalles"
+                            TextColor="{StaticResource FondoBlanco}"
+                            WidthRequest="150" />
+                        <Button
+                            Grid.Row="3"
+                            BackgroundColor="Red"
+                            Command="{Binding EliminarTarjetasCreditoCommand}"
+                            CornerRadius="15"
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="16"
+                            Text="Eliminar Tarjetas"
+                            TextColor="White"
+                            WidthRequest="200" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
         </Grid>
-        <!--  AGREGAR TARJETA NUEVA  -->
-        <VerticalStackLayout
-            Grid.Row="2"
-            HorizontalOptions="Center"
-            Spacing="28">
-            <!--  FONDO BLANCO  -->
-            <Label
-                FontFamily="PoppinsSemiBold"
-                FontSize="22"
-                Text="Agregar Tarjeta"
-                TextColor="{StaticResource Gray900}" />
-            <Border
-                Padding="28"
-                BackgroundColor="{StaticResource FondoBlanco}"
-                HorizontalOptions="Start"
-                Stroke="Transparent"
-                StrokeShape="RoundRectangle 20"
-                WidthRequest="1000">
-                <Grid RowDefinitions="2*,3*,3*,2*" RowSpacing="8">
-                    <Label
-                        Grid.Row="0"
-                        FontFamily="PoppinsRegular"
-                        FontSize="16"
-                        Text="Añade una nueva tarjeta de crédito o débito a tu cuenta."
-                        TextColor="{StaticResource Gray600}" />
-                    <Grid
-                        Grid.Row="1"
-                        ColumnDefinitions="*,*"
-                        ColumnSpacing="28">
-
-                        <!--  TIPO DE TARJETA  -->
-                        <StackLayout Grid.Column="0" Spacing="4">
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="16"
-                                Text="Tipo de Tarjeta"
-                                TextColor="{StaticResource Gray600}" />
-                            <Border
-                                BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                HeightRequest="50"
-                                Stroke="{StaticResource Gray200}"
-                                StrokeShape="RoundRectangle 15">
-                                <editors:SfComboBox
-                                    Margin="4"
-                                    BackgroundColor="Transparent"
-                                    ClearButtonIconColor="{StaticResource Gray600}"
-                                    DisplayMemberPath="Tipo"
-                                    DropDownBackground="{StaticResource FondoBlanco}"
-                                    DropDownIconColor="{StaticResource Gray400}"
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    IsEditable="False"
-                                    ItemsSource="{Binding ListaTipoTarjeta}"
-                                    Placeholder="Selecciona un tipo"
-                                    PlaceholderColor="{StaticResource Gray400}"
-                                    SelectedItem="{Binding TipoTarjeta}"
-                                    Stroke="Transparent"
-                                    TextColor="{x:StaticResource Gray950}"
-                                    TextMemberPath="Tipo" />
-                            </Border>
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="12"
-                                Text="{Binding MensajeRequerimientoTipoTarjeta, Mode=TwoWay}"
-                                TextColor="Red" />
-                        </StackLayout>
-                        <!--  NOMBRE DE LA TARJETA  -->
-                        <StackLayout Grid.Column="1" Spacing="4">
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="16"
-                                Text="Nombre de la Tarjeta"
-                                TextColor="{StaticResource Gray600}" />
-                            <Border
-                                BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                Stroke="{StaticResource Gray200}"
-                                StrokeShape="RoundRectangle 15">
-                                <Entry
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Placeholder="Ej.Economia, Walmart"
-                                    PlaceholderColor="{StaticResource Gray400}"
-                                    Text="{Binding NombreTarjeta}"
-                                    TextColor="{StaticResource Gray950}" />
-                            </Border>
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="12"
-                                Text="{Binding MensajeRequerimientoNombreTarjeta, Mode=TwoWay}"
-                                TextColor="Red" />
-                        </StackLayout>
-                    </Grid>
-                    <Grid
-                        Grid.Row="2"
-                        ColumnDefinitions="*,*"
-                        ColumnSpacing="28">
-                        <!--  NUMERO DE LA TARJETA  -->
-                        <StackLayout Grid.Column="0" Spacing="4">
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="16"
-                                Text="Ultimos Cuatro Digitos"
-                                TextColor="{StaticResource Gray600}" />
-                            <Border
-                                BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                Stroke="{StaticResource Gray200}"
-                                StrokeShape="RoundRectangle 15">
-                                <Entry
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Keyboard="Numeric"
-                                    MaxLength="16"
-                                    Placeholder="****"
-                                    PlaceholderColor="{StaticResource Gray400}"
-                                    Text="{Binding UltimosCuatroDigitos}"
-                                    TextColor="{StaticResource Gray950}"
-                                    VerticalOptions="Center" />
-                            </Border>
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="12"
-                                Text="{Binding MensajeRequerimientoUltimosCuatroDigitos, Mode=TwoWay}"
-                                TextColor="Red" />
-                        </StackLayout>
-                        <!--  FECHA EXPIRACION  -->
-                        <StackLayout Grid.Column="1" Spacing="4">
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="16"
-                                Text="Fecha de Vencimiento"
-                                TextColor="{StaticResource Gray600}" />
-                            <Border
-                                BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                Stroke="{StaticResource Gray200}"
-                                StrokeShape="RoundRectangle 15">
-                                <DatePicker
-                                    Date="{Binding FechaVencimiento}"
-                                    FontSize="16"
-                                    Format="dd/MM/yyyy"
-                                    HorizontalOptions="Start"
-                                    MaximumDate="2030-12-31"
-                                    MinimumDate="2020-01-01"
-                                    TextColor="{StaticResource Gray600}"
-                                    WidthRequest="430" />
-                            </Border>
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="12"
-                                Text="{Binding MensajeRequerimientoFechaVencimiento, Mode=TwoWay}"
-                                TextColor="Red" />
-                        </StackLayout>
-                    </Grid>
-                    <Button
-                        Grid.Row="3"
-                        BackgroundColor="{StaticResource Azul Principal}"
-                        Clicked="Button_Clicked"
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="16"
-                        HorizontalOptions="Start"
-                        IsEnabled="{Binding MasDetallesEsAccesible}"
-                        Text="Mas Detalles"
-                        TextColor="{StaticResource FondoBlanco}"
-                        WidthRequest="150" />
-                    <Button
-                        Grid.Row="3"
-                        BackgroundColor="Red"
-                        Command="{Binding EliminarTarjetasCreditoCommand}"
-                        CornerRadius="15"
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="16"
-                        Text="Eliminar Tarjetas"
-                        TextColor="White"
-                        WidthRequest="200" />
-                </Grid>
-            </Border>
-        </VerticalStackLayout>
     </Grid>
 </ContentPage>

@@ -6,8 +6,8 @@ namespace GastoClass.Infraestructura.Repositorios
     public class DatosGastos : IServicioGastos
     {
         //Inyeccion de dependecias
-        private readonly RepositorioBaseDatos _repositorioBaseDatos;
-        public DatosGastos(RepositorioBaseDatos repositorioBaseDatos)
+        private readonly AppDbContext _repositorioBaseDatos;
+        public DatosGastos(AppDbContext repositorioBaseDatos)
         {
             _repositorioBaseDatos = repositorioBaseDatos;
         }

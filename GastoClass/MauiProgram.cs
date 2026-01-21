@@ -59,7 +59,7 @@ namespace GastoClass
             builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
             builder.Services.AddSingleton<ServicioGastos>();
             builder.Services.AddSingleton<ServicioTarjetaCredito>();
-            builder.Services.AddSingleton<RepositorioBaseDatos>();
+            builder.Services.AddSingleton<AppDbContext>();
 
 
             // HTTP Client para el servicio de predicción

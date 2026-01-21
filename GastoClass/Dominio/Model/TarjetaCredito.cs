@@ -24,10 +24,4 @@ public class TarjetaCredito
     public int? IdPreferenciaTarjeta { get; set; }
     [Ignore]
     public PreferenciaTarjeta? PreferenciaTarjeta { get; set; }
-
-    //metodo calculo credito disponible
-    public decimal? CalcularCreditoDisponible()
-    {
-        return CreditoDisponible = LimiteCredito - Balance;
-    }
 }
