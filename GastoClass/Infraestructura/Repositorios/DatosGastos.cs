@@ -1,5 +1,7 @@
 ﻿using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
+using GastoClass.Infraestructura.Excepciones;
+using System;
 
 namespace GastoClass.Infraestructura.Repositorios
 {
@@ -148,21 +150,56 @@ namespace GastoClass.Infraestructura.Repositorios
         /// <param name="nuevoGasto"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<int> GuardarGastoAsync(Gasto nuevoGasto)
+        public async Task<int> GuardarGastoAsync(Gasto gasto)
         {
             try
             {
                 //obtener la conexion a la base de datos
                 var conexion = await _repositorioBaseDatos.ObtenerConexion();
-                if(nuevoGasto.Id != 0)
+                //validar que la tarjeta exista
+                var tarjeta = await conexion.FindAsync<TarjetaCredito>(gasto.TarjetaId);
+                //Actualizar gasto si el id es diferente de 0
+                if (gasto.Id != 0)
                 {
-                    return await conexion.UpdateAsync(nuevoGasto);
+                    //Validar que el gasto exista
+                    var gastoExistente = await conexion.FindAsync<Gasto>(gasto.Id);
+                    if(gastoExistente == null) throw new Exception("El gasto no existe.");
+
+                    //Validar que el nuevo monto/categoría sean correctos.
+                    if(gasto.Monto < 0 || gasto.Categoria == null) throw new Exception("El monto y la categoría deben ser correctos.");
+                    //antes de guardar el gasto, guardaremos el monto anterior
+                    decimal montoAnterior = gastoExistente.Monto;
+                    //Ajustar el balance actual si el monto actual es diferente al monto anterior
+                    if(gasto.Monto < montoAnterior)
+                    {
+                        //restamos la diferencia entre el monto anterior y el monto actual
+                        tarjeta.Balance -= montoAnterior - gasto.Monto;
+                    }else if(montoAnterior < gasto.Monto)
+                    {
+                        //sumamos la diferencia entre el monto actual y el monto anterior
+                        tarjeta.Balance += gasto.Monto - montoAnterior;
+                    }
+                    // Validar límite
+                    if (tarjeta.Balance > tarjeta.LimiteCredito) 
+                        throw new RespositorioGastoExcepcion("El balance actual de la tarjeta es mayor al limite de credito.");
+                    tarjeta.CreditoDisponible = tarjeta.LimiteCredito - tarjeta.Balance;
+                    //Actualizar tarjeta y gasto
+                    await conexion.UpdateAsync(gasto);
+                    return await conexion.UpdateAsync(tarjeta);
                 }
-                    await conexion.InsertAsync(nuevoGasto);
-                    //restarle lo que se gasto a la tarjeta
-                    var tarjeta = await conexion.FindAsync<TarjetaCredito>(nuevoGasto.TarjetaId);
-                    tarjeta.Balance += nuevoGasto.Monto;
-                    var resultado = await conexion.UpdateAsync(tarjeta);
+                if (tarjeta == null)
+                    throw new Exception("La tarjeta no existe.");
+                //Validar que el monto del gasto sea positivo y no exceda el crédito disponible.
+                if(gasto.Monto < 0 || gasto.Monto > tarjeta.CreditoDisponible) 
+                    throw new Exception($"El monto {gasto.Monto} del gasto no puede ser negativo o exceder el credito disponible.");
+                //Insertar gasto
+                await conexion.InsertAsync(gasto);
+                //Incrementar el balance actual de la tarjeta.
+                tarjeta.Balance += gasto.Monto;
+                //Restar el monto del gasto al crédito disponible.
+                tarjeta.CreditoDisponible = tarjeta.LimiteCredito - tarjeta.Balance;
+                //Actualizar tarjeta de credito
+                var resultado = await conexion.UpdateAsync(tarjeta);
                     return resultado;
             }
             catch (Exception ex)
@@ -200,8 +237,25 @@ namespace GastoClass.Infraestructura.Repositorios
             {
                 //obtener la conexion a la base de datos
                 var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                //Verificar que el gasto exista
+                var gasto = await conexion.FindAsync<Gasto>(eliminarGasto.Id);
+                var tarjeta = await conexion.FindAsync<TarjetaCredito>(gasto.TarjetaId);
+                if(gasto == null) throw new Exception("El gasto no existe.");
+                if (tarjeta == null)
+                {
+                    //Como no hay tarjeta , solamente eliminamos el gastos
+                    await conexion.DeleteAsync(gasto);
+                    throw new Exception("No existe gasto con la tarjeta.");
+                }
                 //Eliminar gastos
-                return await conexion.DeleteAsync(eliminarGasto);
+                await conexion.DeleteAsync(eliminarGasto);
+                //Sumar el monto eliminado al crédito disponible
+                tarjeta.CreditoDisponible += eliminarGasto.Monto;
+                //Restar el monto del gasto al balance actual.
+                tarjeta.Balance -= eliminarGasto.Monto;
+                //Actualización de la tarjeta
+                var resultado = await conexion.UpdateAsync(tarjeta);
+                return resultado;
             }
             catch (Exception ex)
             {

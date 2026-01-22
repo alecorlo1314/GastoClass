@@ -4,6 +4,7 @@
     <!--  Colores de la aplicación  -->
     <Color x:Key="Azul Principal">#4880FF</Color>
     <Color x:Key="AzulFondoSuave">#F0F7FF</Color>
+    <Color x:Key="RojoMontoGasto">#FE5C73</Color>
     <Color x:Key="ColorNegroTextoMenu">#202224</Color>
     <Color x:Key="FondoMenosBlanco">#F5F6FA</Color>
     <Color x:Key="FondoBlanco">White</Color>

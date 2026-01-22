@@ -10,7 +10,7 @@
     Shell.TitleColor="{StaticResource Gray900}">
 
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto">
+        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="28">
             <!--  ZONA SUPERIOR  -->
             <ScrollView Grid.Row="0" Orientation="Horizontal">
                 <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="32">
@@ -144,6 +144,104 @@
                     </Border>
                 </Grid>
             </ScrollView>
+            <!--  ZONA CENTRO  -->
+            <StackLayout Grid.Row="1" Spacing="20">
+                <Label
+                    FontFamily="PoppinsSemiBold"
+                    FontSize="20"
+                    Text="Ultimas Transacciones"
+                    TextColor="{StaticResource Gray900}" />
+                <Border
+                    Padding="16"
+                    BackgroundColor="{StaticResource FondoBlanco}"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 20">
+                    <CollectionView ItemsSource="{Binding ListaUltimosTresMovimientos}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid
+                                    Padding="8"
+                                    ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                                    ColumnSpacing="24">
+
+                                    <Image
+                                        Grid.Column="0"
+                                        Aspect="AspectFill"
+                                        HeightRequest="55"
+                                        HorizontalOptions="Center"
+                                        Source="{Binding NombreImagen}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="55" />
+
+                                    <StackLayout
+                                        Grid.Column="1"
+                                        Spacing="4"
+                                        VerticalOptions="Center"
+                                        WidthRequest="500">
+                                        <Label
+                                            FontFamily="PoppinsMedium"
+                                            FontSize="16"
+                                            LineBreakMode="WordWrap"
+                                            Text="{Binding Descripcion}"
+                                            TextColor="{StaticResource Gray900}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="14"
+                                            Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
+                                            TextColor="{StaticResource Gray500}" />
+                                    </StackLayout>
+
+                                    <Label
+                                        Grid.Column="2"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Text="{Binding Categoria}"
+                                        TextColor="{StaticResource Gray500}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="150" />
+
+                                    <HorizontalStackLayout Grid.Column="3">
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            Text="{Binding UltimosCuatroDigitos}"
+                                            TextColor="{StaticResource Gray600}"
+                                            VerticalOptions="Center"
+                                            WidthRequest="150" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            Text=" ****"
+                                            TextColor="{StaticResource Gray600}"
+                                            VerticalOptions="Center"
+                                            WidthRequest="150" />
+                                    </HorizontalStackLayout>
+
+                                    <Label
+                                        Grid.Column="4"
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Text="Completado"
+                                        TextColor="{StaticResource Gray600}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="150" />
+
+                                    <Label
+                                        Grid.Column="5"
+                                        FontFamily="PoppinsSemiBold"
+                                        FontSize="16"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
+                                        TextColor="{StaticResource RojoMontoGasto}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="150" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Border>
+
+            </StackLayout>
         </Grid>
     </ScrollView>
 </ContentPage>

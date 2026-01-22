@@ -199,7 +199,6 @@
                                         </editors:SfComboBox>
                                     </Border>
                                 </VerticalStackLayout>
-
                             </Grid>
 
                             <!--  FECHA  -->

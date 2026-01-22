@@ -154,4 +154,23 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
             throw new Exception("Error al obtener todas las tarjetas de credito de la base de datos", ex);
         }
     }
+
+    public async Task<List<Gasto>?> ObtenerUltimosTresGastosPorTarjetaCreditoAsync(int? tarjetaId)
+    {
+        try
+        {
+            //obtener la conexion a la base de datos
+            var conexion = await _conexionBaseDatos.ObtenerConexion();
+            //seleccionar los ultimos 3 gastos donde el id de la tarjeta sea el mismo
+            var resultado = await conexion.Table<Gasto>()
+                .Where(g => g.TarjetaId == tarjetaId).Take(3).ToListAsync();
+
+            return resultado;
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores
+            throw new Exception("Error al obtener todas las tarjetas de credito de la base de datos", ex);
+        }
+    }
 }

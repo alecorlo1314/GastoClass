@@ -9,4 +9,5 @@ public interface IServicioTarjetaCredito
     Task<List<TarjetaCredito>?> ObtenerTarjetasCreditoAsync();
     Task<int> EliminarTarjetasCreditoAsync();
     Task<List<TotalGastoPorTarjeta>?> ObtenerGastosPorTarjetasCreditoAsync();
+    Task<List<Gasto>?> ObtenerUltimosTresGastosPorTarjetaCreditoAsync(int? idTarjetaCredito);
 }

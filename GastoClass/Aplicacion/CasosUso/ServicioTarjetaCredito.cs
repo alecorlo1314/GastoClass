@@ -43,5 +43,10 @@ public class ServicioTarjetaCredito
     {
         return await _servicioTarjetaCredito.ObtenerGastosPorTarjetasCreditoAsync();
     }
+
+    public async Task<List<Gasto>?> ObtenerUltimosTresGastosPorTarjetaCreditoAsync(int? idTarjetaCredito)
+    {
+        return await _servicioTarjetaCredito.ObtenerUltimosTresGastosPorTarjetaCreditoAsync(idTarjetaCredito);
+    }
     #endregion
 }
