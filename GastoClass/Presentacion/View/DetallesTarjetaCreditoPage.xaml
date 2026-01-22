@@ -3,11 +3,147 @@
     x:Class="GastoClass.Presentacion.View.DetallesTarjetaCreditoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="DetallesTarjetaCreditoPage">
-    <VerticalStackLayout>
-        <Label
-            HorizontalOptions="Center"
-            Text="{Binding TarjetaCredito.NombreTarjeta}"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+    Title="DetallesTarjetaCreditoPage"
+    Padding="48,24"
+    BackgroundColor="{StaticResource FondoMenosBlanco}"
+    Shell.BackgroundColor="{StaticResource FondoBlanco}"
+    Shell.TitleColor="{StaticResource Gray900}">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto">
+            <!--  ZONA SUPERIOR  -->
+            <ScrollView Grid.Row="0" Orientation="Horizontal">
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="32">
+                    <!--  BALANCE ACTUAL  -->
+                    <Border
+                        Grid.Column="0"
+                        Padding="24"
+                        Background="{StaticResource FondoBlanco}"
+                        HeightRequest="120"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 20"
+                        WidthRequest="330">
+                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
+                            <Image
+                                Grid.Column="0"
+                                HeightRequest="70"
+                                Source="balance_actual.png"
+                                VerticalOptions="Center"
+                                WidthRequest="70" />
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Balance Actual"
+                                    TextColor="{StaticResource Gray600}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontFamily="PoppinsSemiBold"
+                                    FontSize="20"
+                                    Text="{Binding TarjetaCredito.Balance, StringFormat='₡{0:N2}'}"
+                                    TextColor="{StaticResource Gray900}"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                    <!--  CREDITO DISPONIBLE  -->
+                    <Border
+                        Grid.Column="1"
+                        Padding="24"
+                        Background="{StaticResource FondoBlanco}"
+                        HeightRequest="120"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 20"
+                        WidthRequest="330">
+                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
+                            <Image
+                                Grid.Column="0"
+                                HeightRequest="70"
+                                Source="credito_disponible.png"
+                                VerticalOptions="Center"
+                                WidthRequest="70" />
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Credito Disponible"
+                                    TextColor="{StaticResource Gray600}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontFamily="PoppinsSemiBold"
+                                    FontSize="20"
+                                    Text="{Binding TarjetaCredito.CreditoDisponible, StringFormat='₡{0:N2}'}"
+                                    TextColor="{StaticResource Gray900}"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                    <!--  LIMITE DE CREDITO  -->
+                    <Border
+                        Grid.Column="2"
+                        Padding="24"
+                        Background="{StaticResource FondoBlanco}"
+                        HeightRequest="120"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 20"
+                        WidthRequest="330">
+                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
+                            <Image
+                                Grid.Column="0"
+                                HeightRequest="70"
+                                Source="limite_credito.png"
+                                VerticalOptions="Center"
+                                WidthRequest="70" />
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Limite de Credito"
+                                    TextColor="{StaticResource Gray600}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontFamily="PoppinsSemiBold"
+                                    FontSize="20"
+                                    Text="{Binding TarjetaCredito.LimiteCredito, StringFormat='₡{0:N2}'}"
+                                    TextColor="{StaticResource Gray900}"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                    <!--  TIPO DE MONEDA  -->
+                    <Border
+                        Grid.Column="3"
+                        Padding="24"
+                        Background="{StaticResource FondoBlanco}"
+                        HeightRequest="120"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 20"
+                        WidthRequest="330">
+                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
+                            <Image
+                                Grid.Column="0"
+                                HeightRequest="70"
+                                Source="total_guardado.png"
+                                VerticalOptions="Center"
+                                WidthRequest="70" />
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    Text="Tipo de moneda"
+                                    TextColor="{StaticResource Gray600}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    FontFamily="PoppinsSemiBold"
+                                    FontSize="20"
+                                    Text="{Binding TarjetaCredito.Moneda}"
+                                    TextColor="{StaticResource Gray900}"
+                                    VerticalOptions="Center" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </ScrollView>
 </ContentPage>

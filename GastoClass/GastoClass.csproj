@@ -53,6 +53,11 @@
 		<MauiImage Update="Resources\Images\icono_chip_blanco.svg" Resize="True" BaseSize="300,185" /> 
 		<MauiImage Update="Resources\Images\icono_alimentacion.svg" Resize="True" BaseSize="300,185" />
 
+		<MauiImage Update="Resources\Images\balance_actual.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\credito_disponible.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\limite_credito.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\total_guardado.svg" Resize="True" BaseSize="300,185" />
+
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
