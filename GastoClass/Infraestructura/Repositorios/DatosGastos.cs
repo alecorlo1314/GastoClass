@@ -8,10 +8,10 @@ namespace GastoClass.Infraestructura.Repositorios
     public class DatosGastos : IServicioGastos
     {
         //Inyeccion de dependecias
-        private readonly AppDbContext _repositorioBaseDatos;
+        private readonly AppDbContext _conexion;
         public DatosGastos(AppDbContext repositorioBaseDatos)
         {
-            _repositorioBaseDatos = repositorioBaseDatos;
+            _conexion = repositorioBaseDatos;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace GastoClass.Infraestructura.Repositorios
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //Convertimos el mes y año en un rango de fechas
                 var inicioMes = new DateTime(anio, mes, 1); 
                 var finMes = inicioMes.AddMonths(1);
@@ -63,7 +63,7 @@ namespace GastoClass.Infraestructura.Repositorios
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //Convertimos el mes y año en un rango de fechas
                 var inicioMes = new DateTime(anio, mes, 1);
                 var finMes = inicioMes.AddMonths(1);
@@ -94,7 +94,7 @@ namespace GastoClass.Infraestructura.Repositorios
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //Convertimos el mes y año en un rango de fechas
                 var inicioMes = new DateTime(anio, mes, 1);
                 var finMes = inicioMes.AddMonths(1);
@@ -129,7 +129,7 @@ namespace GastoClass.Infraestructura.Repositorios
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //Consulta para obtener los ultimos 5 gastos ordenados por fecha descendente
                 var consulta = await conexion.Table<Gasto>()
                     .OrderByDescending(g => g.Fecha)
@@ -155,7 +155,7 @@ namespace GastoClass.Infraestructura.Repositorios
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //validar que la tarjeta exista
                 var tarjeta = await conexion.FindAsync<TarjetaCredito>(gasto.TarjetaId);
                 //Actualizar gasto si el id es diferente de 0
@@ -218,7 +218,7 @@ namespace GastoClass.Infraestructura.Repositorios
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //Consulta para obtener todos los gastos
                 var consulta = await conexion.Table<Gasto>()
                     .OrderByDescending(g => g.Fecha)
@@ -231,12 +231,18 @@ namespace GastoClass.Infraestructura.Repositorios
                 throw new Exception("Error al obtener todos los gastos de la base de datos", ex);
             }
         }
+        /// <summary>
+        /// Metodo para eliminar un gasto
+        /// </summary>
+        /// <param name="eliminarGasto"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<int> EliminarGastoAsync(Gasto eliminarGasto)
         {
             try
             {
                 //obtener la conexion a la base de datos
-                var conexion = await _repositorioBaseDatos.ObtenerConexion();
+                var conexion = await _conexion.ObtenerConexion();
                 //Verificar que el gasto exista
                 var gasto = await conexion.FindAsync<Gasto>(eliminarGasto.Id);
                 var tarjeta = await conexion.FindAsync<TarjetaCredito>(gasto.TarjetaId);
@@ -261,6 +267,28 @@ namespace GastoClass.Infraestructura.Repositorios
             {
                 // Manejo de errores
                 throw new Exception("Error al eliminar el gastos la base de datos", ex);
+            }
+        }
+
+        /// <summary>
+        /// Metodo para obtener un gasto
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="RespositorioGastoExcepcion"></exception>
+        public async Task<Gasto?> GastosPorIdAsync(int? id)
+        {
+            try
+            {
+                //obtener la conexion a la base de datos
+                var conexion = await _conexion.ObtenerConexion();
+                var gasto = await conexion.FindAsync<Gasto>(id!);
+                return gasto;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                throw new RespositorioGastoExcepcion("Error al obtener todas las tarjetas de credito de la base de datos", ex);
             }
         }
     }

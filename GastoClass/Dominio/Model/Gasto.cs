@@ -21,6 +21,7 @@ namespace GastoClass.Dominio.Model
         public string? Comercio { get; set; }
         public DateTime Fecha { get; set; }
         [Ignore]
+        public string? Estado { get; set; } = "Completado";
         public string? NombreImagen { get; set; }
 
         //Foreign key

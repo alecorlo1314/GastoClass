@@ -22,9 +22,9 @@
     <!--  CONTENEDOR  -->
     <Grid
         ColumnDefinitions="5*,5*"
-        ColumnSpacing="28"
+        ColumnSpacing="24"
         RowDefinitions="1*,2*,7*"
-        RowSpacing="28">
+        RowSpacing="24">
         <!--  ZONA SUPERIOR  -->
         <Label
             Grid.Row="0"
@@ -289,10 +289,10 @@
         <Border
             Grid.Row="1"
             Grid.Column="0"
-            Padding="16"
+            Padding="24"
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
-            StrokeShape="RoundRectangle 15">
+            StrokeShape="RoundRectangle 25">
             <Grid RowDefinitions="Auto,*" RowSpacing="16">
                 <Grid Grid.Row="0" ColumnDefinitions="9*,1*">
                     <Label
@@ -339,10 +339,10 @@
         <Border
             Grid.Row="1"
             Grid.Column="1"
-            Padding="16"
+            Padding="24"
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
-            StrokeShape="RoundRectangle 15">
+            StrokeShape="RoundRectangle 25">
             <Grid RowDefinitions="Auto,*" RowSpacing="16">
                 <Grid Grid.Row="0" ColumnDefinitions="9*,1*">
                     <Label
@@ -463,21 +463,15 @@
                         <DataTemplate>
                             <Grid
                                 Padding="8"
-                                ColumnDefinitions="Auto, Auto, Auto"
-                                ColumnSpacing="8">
-                                <Border
+                                ColumnDefinitions="Auto, Auto, *"
+                                ColumnSpacing="16">
+                                <Image
                                     Grid.Column="0"
-                                    BackgroundColor="{StaticResource AzulFondoSuave}"
-                                    HeightRequest="32"
-                                    Stroke="Transparent"
-                                    StrokeShape="RoundRectangle 20"
-                                    WidthRequest="32">
-                                    <Image
-                                        Aspect="AspectFill"
-                                        HeightRequest="24"
-                                        Source="{Binding NombreImagen}"
-                                        WidthRequest="24" />
-                                </Border>
+                                    Aspect="AspectFill"
+                                    HeightRequest="55"
+                                    Source="{Binding NombreImagen}"
+                                    WidthRequest="55" />
+
                                 <StackLayout
                                     Grid.Column="1"
                                     Spacing="4"
