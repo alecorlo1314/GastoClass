@@ -23,6 +23,10 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private ObservableCollection<UltimoTresMovimientoDTOs>? listaUltimosTresMovimientos = new();
+
+        public ObservableCollection<GastoCategoriaDiaDTO> DatosAlimentacion { get; set; }
+        public ObservableCollection<GastoCategoriaDiaDTO> DatosTransporte { get; set; }
+        public ObservableCollection<GastoCategoriaDiaDTO> DatosEntretenimiento { get; set; }
         #endregion
 
         #region Propiedades Objetos
@@ -69,8 +73,13 @@ namespace GastoClass.Presentacion.ViewModel
         public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito)
         {
             _servicioTarjetaCredito = servicioTarjetaCredito;
+            _ = CargarDatosGraficoBarras();
         }
 
+        /// <summary>
+        /// Carga los ultimos 3 movimientos de la tarjeta
+        /// </summary>
+        /// <returns></returns>
         private async Task CargarUltimosTresMovimientosAsync()
         {
             try
@@ -83,13 +92,25 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No se pudieron cargar los movimientos de la tarjeta "+ex.Message, "OK");
             }
          }
+        /// <summary>
+        /// Actualiza las propiedades para mostrar en la figura de la tarjeta
+        /// </summary>
+        /// <param name="value"></param>
         partial void OnTarjetaCreditoChanged(TarjetaCredito? value)
         {
 
             //Inicializar el id tarjeta
             IdTarjetaCredito = value?.Id;
             _ = CargarUltimosTresMovimientosAsync();
-
+            _ = InicializarPropiedades(value);
+        }
+        /// <summary>
+        /// Inicializa las propiedades para mostrar en la figura de la tarjeta
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private async Task InicializarPropiedades(TarjetaCredito? value)
+        {
             //Inicializar Tarjeta de Credito
             BalanceDetalles = value?.Balance;
             IconoChipDetalles = value?.PreferenciaTarjeta?.IconoChip;
@@ -102,6 +123,37 @@ namespace GastoClass.Presentacion.ViewModel
             ColorHex2Detalles = value?.PreferenciaTarjeta?.ColorHex2;
             ColorBordeDetalles = value?.PreferenciaTarjeta?.ColorBorde;
             ColorTextoDetalles = value?.PreferenciaTarjeta?.ColorTexto;
+        }
+
+        private async Task CargarDatosGraficoBarras()
+        {
+            DatosAlimentacion = new ObservableCollection<GastoCategoriaDiaDTO> 
+            { new () { Dia = "Lunes", Monto = 200 }, 
+              new () { Dia = "Martes", Monto = 150}, 
+              new () { Dia = "Miercoles", Monto = 180 },
+              new () { Dia = "Jueves", Monto = 100 },
+              new () { Dia = "Viernes", Monto = 50 },
+              new () { Dia = "Sabado", Monto = 200 },
+              new () { Dia = "Domingo", Monto = 100 }
+            };
+            DatosTransporte = new ObservableCollection<GastoCategoriaDiaDTO>
+            { new () { Dia = "Lunes", Monto = 200 },
+              new () { Dia = "Martes", Monto = 50},
+              new () { Dia = "Miercoles", Monto = 40 },
+              new () { Dia = "Jueves", Monto = 100 },
+              new () { Dia = "Viernes", Monto = 50 },
+              new () { Dia = "Sabado", Monto = 200 },
+              new () { Dia = "Domingo", Monto = 100 }
+            };
+            DatosEntretenimiento = new ObservableCollection<GastoCategoriaDiaDTO>
+            { new () { Dia = "Lunes", Monto = 50 },
+              new () { Dia = "Martes", Monto = 300},
+              new () { Dia = "Miercoles", Monto = 500 },
+              new () { Dia = "Jueves", Monto = 100 },
+              new () { Dia = "Viernes", Monto = 50 },
+              new () { Dia = "Sabado", Monto = 200 },
+              new () { Dia = "Domingo", Monto = 100 }
+            };
         }
     }
 }

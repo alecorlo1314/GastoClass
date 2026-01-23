@@ -407,6 +407,64 @@
                     </Border>
                 </StackLayout>
             </HorizontalStackLayout>
+            <!--  ZONA INFERIOR  -->
+            <Grid Grid.Row="2" ColumnDefinitions="*,*">
+                <StackLayout Grid.Column="0" Spacing="20">
+                    <Label
+                        FontFamily="PoppinsSemiBold"
+                        FontSize="20"
+                        HorizontalOptions="Start"
+                        Text="Resumen de gastos"
+                        TextColor="{StaticResource Gray900}" />
+                    <Border
+                        Padding="28"
+                        BackgroundColor="{StaticResource FondoBlanco}"
+                        HeightRequest="364"
+                        HorizontalOptions="Fill"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 20"
+                        VerticalOptions="Start">
+                        <chart:SfCartesianChart HeightRequest="292">
+                            <chart:SfCartesianChart.XAxes>
+                                <chart:CategoryAxis />
+                            </chart:SfCartesianChart.XAxes>
+                            <chart:SfCartesianChart.YAxes>
+                                <chart:NumericalAxis />
+                            </chart:SfCartesianChart.YAxes>
+
+                            <!--  Leyenda  -->
+                            <chart:SfCartesianChart.Legend>
+                                <chart:ChartLegend IsVisible="True" Placement="Bottom" />
+                            </chart:SfCartesianChart.Legend>
+
+                            <!--  Serie Supermercado  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosAlimentacion}"
+                                Label="Supermercado"
+                                XBindingPath="Dia"
+                                YBindingPath="Monto" />
+
+                            <!--  Serie Gasolina  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosTransporte}"
+                                Label="Gasolina"
+                                XBindingPath="Dia"
+                                YBindingPath="Monto" />
+
+                            <!--  Serie Entretenimiento  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosEntretenimiento}"
+                                Label="Entretenimiento"
+                                XBindingPath="Dia"
+                                YBindingPath="Monto" />
+                        </chart:SfCartesianChart>
+                    </Border>
+                </StackLayout>
+
+            </Grid>
         </Grid>
     </ScrollView>
 </ContentPage>
