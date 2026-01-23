@@ -1,6 +1,8 @@
 ﻿using GastoClass.Aplicacion.DTOs;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
+using GastoClass.Infraestructura.Excepciones;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GastoClass.Infraestructura.Repositorios;
 public class DatosTarjetasCredito : IServicioTarjetaCredito
@@ -153,5 +155,10 @@ public class DatosTarjetasCredito : IServicioTarjetaCredito
             // Manejo de errores
             throw new Exception("Error al obtener todas las tarjetas de credito de la base de datos", ex);
         }
+    }
+    public async Task<TarjetaCredito>? TarjetaPorIdAsync(int? idTarjetaCredito)
+    {
+        var conexion = await _conexionBaseDatos.ObtenerConexion();
+        return await conexion.FindAsync<TarjetaCredito>(idTarjetaCredito!);
     }
 }

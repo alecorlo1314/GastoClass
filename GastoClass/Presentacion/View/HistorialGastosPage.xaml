@@ -334,7 +334,7 @@
             StrokeShape="RoundRectangle 15">
             <Grid RowDefinitions="Auto,Auto,*" RowSpacing="16">
                 <!--  TITULOS DEL ENCABEZADO DE MOVIMIENTOS  -->
-                <Grid ColumnDefinitions="2*,1*,2*,2*,2*,1*">
+                <Grid ColumnDefinitions="2*,1*,2*,1*,1*,2*,1*">
                     <Label
                         Grid.Column="0"
                         FontFamily="PoppinsMedium"
@@ -361,17 +361,24 @@
                         FontFamily="PoppinsMedium"
                         FontSize="14"
                         HorizontalOptions="Start"
-                        Text="Fecha"
+                        Text="Tarjeta"
                         TextColor="{StaticResource Gray500}" />
                     <Label
                         Grid.Column="4"
                         FontFamily="PoppinsMedium"
                         FontSize="14"
                         HorizontalOptions="Start"
-                        Text="Monto"
+                        Text="Fecha"
                         TextColor="{StaticResource Gray500}" />
                     <Label
                         Grid.Column="5"
+                        FontFamily="PoppinsMedium"
+                        FontSize="14"
+                        HorizontalOptions="Start"
+                        Text="Monto"
+                        TextColor="{StaticResource Gray500}" />
+                    <Label
+                        Grid.Column="6"
                         FontFamily="PoppinsMedium"
                         FontSize="14"
                         HorizontalOptions="Start"
@@ -384,7 +391,7 @@
                 <CollectionView Grid.Row="2" ItemsSource="{Binding ListaGastosFiltrados}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="2*,1*,2*,2*,2*,1*" HeightRequest="48">
+                            <Grid ColumnDefinitions="2*,1*,2*,1*,1*,2*,1*" HeightRequest="48">
                                 <Label
                                     Grid.Column="0"
                                     FontFamily="PoppinsRegular"
@@ -414,7 +421,7 @@
                                     FontFamily="PoppinsRegular"
                                     FontSize="16"
                                     HorizontalOptions="Start"
-                                    Text="{Binding Fecha, StringFormat='{0:dd.MM.yy}'}"
+                                    Text="{Binding TarjetaId}"
                                     TextColor="{StaticResource Gray900}"
                                     VerticalOptions="Center" />
                                 <Label
@@ -422,11 +429,19 @@
                                     FontFamily="PoppinsRegular"
                                     FontSize="16"
                                     HorizontalOptions="Start"
+                                    Text="{Binding Fecha, StringFormat='{0:dd.MM.yy}'}"
+                                    TextColor="{StaticResource Gray900}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="5"
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="16"
+                                    HorizontalOptions="Start"
                                     Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
                                     TextColor="#FE5C73"
                                     VerticalOptions="Center" />
                                 <Border
-                                    Grid.Column="5"
+                                    Grid.Column="6"
                                     Padding="0"
                                     BackgroundColor="{StaticResource FondoMenosBlanco}"
                                     HeightRequest="42"

@@ -317,6 +317,7 @@ public partial class DashboardViewModel : ObservableObject
                 Descripcion = Descripcion,
                 Categoria = CategoriaFinal.DescripcionCategoriaRecomendada,
                 Monto = decimal.Parse(Monto!),
+                NombreImagen = $"icono_{CategoriaFinal.DescripcionCategoriaRecomendada?.ToLower()}.png",
                 Fecha = Fecha,
                 TarjetaId = TarjetaSeleccionada.Id
             };

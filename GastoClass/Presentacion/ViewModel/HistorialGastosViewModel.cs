@@ -121,6 +121,12 @@ namespace GastoClass.Presentacion.ViewModel
         private string? descripcionSeleccionada;
 
         /// <summary>
+        /// Fecha del gasto seleccionado
+        /// </summary>
+        [ObservableProperty]
+        private int idTarjetaSeleccionada;
+
+        /// <summary>
         /// Categoría seleccionada (manual o sugerida por ML)
         /// </summary>
         [ObservableProperty]
@@ -272,6 +278,7 @@ namespace GastoClass.Presentacion.ViewModel
             IdSeleccionado = gasto.Id;
             MontoSeleccionado = gasto.Monto;
             DescripcionSeleccionada = gasto.Descripcion;
+            IdTarjetaSeleccionada = gasto.TarjetaId;
             FechaSeleccionada = gasto.Fecha;
             CategoriaSeleccionada = gasto.Categoria;
 
@@ -463,8 +470,10 @@ namespace GastoClass.Presentacion.ViewModel
                     Id = IdSeleccionado,
                     Descripcion = DescripcionSeleccionada,
                     Monto = MontoSeleccionado,
+                    TarjetaId = IdTarjetaSeleccionada,
                     Fecha = FechaSeleccionada,
                     Categoria = CategoriaSeleccionada
+                    
                 };
 
                 IsBusy = true;

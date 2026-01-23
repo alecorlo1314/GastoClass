@@ -12,9 +12,9 @@ public class TarjetaCredito
     public int? UltimosCuatroDigitos { get; set; }
     public int? MesVencimiento { get; set; }
     public int? AnioVencimiento { get; set; }
-    public decimal? LimiteCredito { get; set; }
-    public decimal? Balance { get; set; }
-    public decimal? CreditoDisponible { get; set; }
+    public decimal? LimiteCredito { get; set; }//cuanto dinero se tiene al incio de cada mes
+    public decimal? Balance { get; set; } // tatal que se debe pagar a la tarjeta por cada compra sumada
+    public decimal? CreditoDisponible { get; set; } //es el limite de credito menos el balance
     public string? Moneda { get; set; }
     public int? DiaCorte { get; set; }
     public int? DiaPago { get; set; }
