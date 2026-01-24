@@ -63,7 +63,7 @@ public class ServicioTarjetaCredito
     public async Task<List<UltimoTresMovimientoDTOs>?> ObtenerUltimosTresGastosPorTarjetaCreditoAsync(int? idTarjetaCredito)
     {
         var gastos = await _servicioGastos.ObtenerGastosAsync();
-        if (!gastos.Any()) throw new ServiciosExcepciones("No se encontro el gastos");
+        if (!gastos!.Any()) throw new ServiciosExcepciones("No se encontro el gastos");
         var tarjeta = await _servicioTarjetaCredito.TarjetaPorIdAsync(idTarjetaCredito);
         if (tarjeta == null) throw new ServiciosExcepciones("No se encontro la tarjeta");
 
@@ -92,7 +92,11 @@ public class ServicioTarjetaCredito
         var query = from g in gastos
                     where g.TarjetaId == idTarjetaCredito
                     where g.Fecha >= fechaLimite
-                    group g by new { Dia = g.Fecha.DayOfWeek, g.Categoria }
+                    group g by new 
+                    { 
+                        Dia = g.Fecha.DayOfWeek, 
+                        g.Categoria 
+                    }
                     into grupo
                     select new GastoCategoriaUltimosSieteDiasTarjetaDTO
                     {

@@ -337,7 +337,7 @@ namespace GastoClass.Presentacion.ViewModel
         /// Actualiza una colección de categoría específica filtrando los resultados por nombre de categoría.
         /// Limpia la colección existente y la repuebla con los datos filtrados.
         /// </summary>
-        /// <param name="coleccion">Referencia a la colección observable a actualizar.</param>
+        /// <param name="coleccion">valor a la colección observable a actualizar.</param>
         /// <param name="resultados">Lista completa de gastos categorizados.</param>
         /// <param name="nombreCategoria">Nombre de la categoría a filtrar.</param>
         private void ActualizarCategoria(
@@ -353,7 +353,6 @@ namespace GastoClass.Presentacion.ViewModel
                 coleccion.Add(item);
             }
         }
-
 
         #endregion
     }
