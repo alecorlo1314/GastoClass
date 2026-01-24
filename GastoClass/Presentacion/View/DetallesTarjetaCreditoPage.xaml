@@ -443,7 +443,7 @@
                                 ItemsSource="{Binding DatosAlimentacion}"
                                 Label="Supermercado"
                                 XBindingPath="Dia"
-                                YBindingPath="Monto" />
+                                YBindingPath="TotalMonto" />
 
                             <!--  Serie Gasolina  -->
                             <chart:StackingColumnSeries
@@ -451,7 +451,7 @@
                                 ItemsSource="{Binding DatosTransporte}"
                                 Label="Gasolina"
                                 XBindingPath="Dia"
-                                YBindingPath="Monto" />
+                                YBindingPath="TotalMonto" />
 
                             <!--  Serie Entretenimiento  -->
                             <chart:StackingColumnSeries
@@ -459,7 +459,40 @@
                                 ItemsSource="{Binding DatosEntretenimiento}"
                                 Label="Entretenimiento"
                                 XBindingPath="Dia"
-                                YBindingPath="Monto" />
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie salud  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosSalud}"
+                                Label="Salud"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Compras  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosCompras}"
+                                Label="Compras"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Mascotas  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosMascotas}"
+                                Label="Mascotas"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Hogar  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosHogar}"
+                                Label="Hogar"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
                         </chart:SfCartesianChart>
                     </Border>
                 </StackLayout>

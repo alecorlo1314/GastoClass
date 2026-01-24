@@ -1,7 +1,8 @@
-﻿using GastoClass.Dominio.Interfacez;
+﻿using GastoClass.Aplicacion.DTOs;
+using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
 using GastoClass.Infraestructura.Excepciones;
-using System;
+using Syncfusion.Maui.DataSource.Extensions;
 
 namespace GastoClass.Infraestructura.Repositorios
 {
@@ -213,7 +214,7 @@ namespace GastoClass.Infraestructura.Repositorios
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<List<Gasto>> ObtenerGastosAsync()
+        public async Task<List<Gasto>?> ObtenerGastosAsync()
         {
             try
             {

@@ -2,6 +2,7 @@
 using GastoClass.Aplicacion.Excepciones;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
+using System.Globalization;
 
 namespace GastoClass.Aplicacion.CasosUso;
 public class ServicioTarjetaCredito
@@ -80,6 +81,27 @@ public class ServicioTarjetaCredito
                                Monto = gasto.Monto
                            }).Take(3).ToList();
         return resultados;
+    }
+
+    public async Task<List<GastoCategoriaUltimosSieteDiasTarjetaDTO>?> GastosPorCategoriaSemanaAsync(int? idTarjetaCredito)
+    {
+        var gastos = await _servicioGastos.ObtenerGastosAsync();
+
+        var fechaLimite = DateTime.Now.AddDays(-7);
+
+        var query = from g in gastos
+                    where g.TarjetaId == idTarjetaCredito
+                    where g.Fecha >= fechaLimite
+                    group g by new { Dia = g.Fecha.DayOfWeek, g.Categoria }
+                    into grupo
+                    select new GastoCategoriaUltimosSieteDiasTarjetaDTO
+                    {
+                        Dia = grupo.Key.Dia.ToString(),
+                        Categoria = grupo.Key.Categoria,
+                        TotalMonto = grupo.Sum(x => x.Monto)
+                    };
+
+        return query.ToList();
     }
     #endregion
 }

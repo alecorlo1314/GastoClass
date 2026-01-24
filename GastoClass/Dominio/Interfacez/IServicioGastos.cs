@@ -1,4 +1,5 @@
-﻿using GastoClass.Dominio.Model;
+﻿using GastoClass.Aplicacion.DTOs;
+using GastoClass.Dominio.Model;
 
 namespace GastoClass.Dominio.Interfacez
 {
@@ -17,7 +18,7 @@ namespace GastoClass.Dominio.Interfacez
         Task<List<Gasto>> ObtenerGastoTotalPorCategoriaMesAsync(int mes, int anio);
         Task<List<Gasto>> ObtenerUltimos5GastosAsync();
         Task<int> GuardarGastoAsync(Gasto gasto);
-        Task<List<Gasto>> ObtenerGastosAsync();
+        Task<List<Gasto>?> ObtenerGastosAsync();
         Task<int> EliminarGastoAsync(Gasto eliminarGasto);
         Task<Gasto?> GastosPorIdAsync(int? id);
     }
