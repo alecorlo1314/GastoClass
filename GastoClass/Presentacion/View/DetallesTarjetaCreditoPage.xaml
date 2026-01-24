@@ -7,6 +7,7 @@
     xmlns:vm="clr-namespace:GastoClass.Presentacion.ViewModel"
     Title="Detalles de tarjeta"
     Padding="48,24"
+    x:DataType="vm:DetallesTarjetaCreditoViewModel"
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray900}">
@@ -445,7 +446,7 @@
                                 XBindingPath="Dia"
                                 YBindingPath="TotalMonto" />
 
-                            <!--  Serie Gasolina  -->
+                            <!--  Serie Transporte  -->
                             <chart:StackingColumnSeries
                                 Width="0.6"
                                 ItemsSource="{Binding DatosTransporte}"
@@ -461,19 +462,59 @@
                                 XBindingPath="Dia"
                                 YBindingPath="TotalMonto" />
 
-                            <!--  Serie salud  -->
+                            <!--  Serie Servicios  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosServicios}"
+                                Label="Servicios"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Ropa  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosRopa}"
+                                Label="Ropa"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Deporte  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosDeportes}"
+                                Label="Deporte"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Viajes  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosViajes}"
+                                Label="Viajes"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Tecnologia  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosTecnologia}"
+                                Label="Tecnologia"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Educacion  -->
+                            <chart:StackingColumnSeries
+                                Width="0.6"
+                                ItemsSource="{Binding DatosEducacion}"
+                                Label="Educacion"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Salud  -->
                             <chart:StackingColumnSeries
                                 Width="0.6"
                                 ItemsSource="{Binding DatosSalud}"
                                 Label="Salud"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
-
-                            <!--  Series Compras  -->
-                            <chart:StackingColumnSeries
-                                Width="0.6"
-                                ItemsSource="{Binding DatosCompras}"
-                                Label="Compras"
                                 XBindingPath="Dia"
                                 YBindingPath="TotalMonto" />
 
