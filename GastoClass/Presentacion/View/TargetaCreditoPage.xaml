@@ -327,9 +327,10 @@
                 FontFamily="PoppinsSemiBold"
                 FontSize="22"
                 HorizontalOptions="Start"
+                IsVisible="{Binding TituloTarjetasVisible}"
                 Text="Mis Tarjetas"
                 TextColor="{StaticResource Gray900}"
-                VerticalOptions="Center" IsVisible="{Binding TituloTarjetasVisible}"/>
+                VerticalOptions="Center" />
 
             <!--  LISTA DE TARJETAS HORIZONTAL  -->
             <CollectionView ItemsSource="{Binding ListaTarjetasCredito}">
@@ -500,7 +501,10 @@
             ColumnDefinitions="Auto,Auto"
             ColumnSpacing="28">
             <!--  GRAFICO DE DOUGHNUT  -->
-            <VerticalStackLayout Grid.Column="0" Spacing="28">
+            <VerticalStackLayout
+                Grid.Column="0"
+                IsVisible="{Binding TituloGraficoVisible}"
+                Spacing="28">
                 <Label
                     FontFamily="PoppinsSemiBold"
                     FontSize="22"
@@ -535,17 +539,20 @@
                 </Border>
             </VerticalStackLayout>
             <!--  AGREGAR TARJETA NUEVA  -->
-            <VerticalStackLayout
+            <Grid
                 Grid.Column="1"
-                HorizontalOptions="Center"
-                Spacing="28">
+                HorizontalOptions="Start"
+                RowDefinitions="Auto,Auto"
+                RowSpacing="28">
                 <!--  FONDO BLANCO  -->
                 <Label
+                    Grid.Row="0"
                     FontFamily="PoppinsSemiBold"
                     FontSize="22"
                     Text="Agregar Tarjeta"
                     TextColor="{StaticResource Gray900}" />
                 <Border
+                    Grid.Row="1"
                     Padding="28"
                     BackgroundColor="{StaticResource FondoBlanco}"
                     HorizontalOptions="Start"
@@ -709,7 +716,7 @@
                             WidthRequest="200" />
                     </Grid>
                 </Border>
-            </VerticalStackLayout>
+            </Grid>
         </Grid>
     </Grid>
 </ContentPage>
