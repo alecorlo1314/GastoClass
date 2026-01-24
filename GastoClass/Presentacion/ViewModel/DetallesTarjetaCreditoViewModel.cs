@@ -26,84 +26,193 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
-        #region Listas
+        #region Propiedades de Navegación
+
         /// <summary>
-        /// Lista de movimientos de la tarjeta
+        /// Tarjeta de crédito recibida desde la pantalla anterior mediante QueryProperty.
+        /// Al establecerse, dispara la carga automática de datos relacionados.
+        /// </summary>
+        [ObservableProperty]
+        private TarjetaCredito? tarjetaCredito;
+
+        /// <summary>
+        /// ID de la tarjeta de crédito actual.
+        /// Se utiliza para consultar movimientos y gastos asociados.
+        /// </summary>
+        [ObservableProperty]
+        private int? idTarjetaCredito;
+
+        #endregion
+
+        #region Colecciones de Movimientos
+
+        /// <summary>
+        /// Colección de los últimos 3 movimientos/gastos de la tarjeta de crédito.
+        /// Se actualiza automáticamente cuando cambia la tarjeta seleccionada.
         /// </summary>
         [ObservableProperty]
         private ObservableCollection<UltimoTresMovimientoDTOs>? listaUltimosTresMovimientos = new();
 
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosAlimentacion = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosTransporte = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosEntretenimiento = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosServicios = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosRopa = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosDeportes = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosViajes = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosTecnologia = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosEducacion = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosSalud = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosMascotas = new();
-        [ObservableProperty]
-        public ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosHogar = new();
         #endregion
 
-        #region Propiedades Objetos
+        #region Colecciones de Gastos por Categoría (Últimos 7 Días)
+
         /// <summary>
-        /// Objeto Tarjeta Credito, recibido desde la pantalla anterior
+        /// Gastos de la categoría "Alimentación" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private TarjetaCredito? tarjetaCredito;
-        #endregion
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosAlimentacion = new();
 
-        #region Propiedades Primitivas
         /// <summary>
-        /// Contiene el id de la tarjeta detallada para consultar los movimientos
+        /// Gastos de la categoría "Transporte" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private int? idTarjetaCredito;
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosTransporte = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Entretenimiento" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosEntretenimiento = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Servicios" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosServicios = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Ropa" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosRopa = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Deportes" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosDeportes = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Viajes" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosViajes = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Tecnología" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosTecnologia = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Educación" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosEducacion = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Salud" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosSalud = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Mascotas" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosMascotas = new();
+
+        /// <summary>
+        /// Gastos de la categoría "Hogar" en los últimos 7 días.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosHogar = new();
+
         #endregion
 
-        #region Propiedades para mostrar en la figura de la tarjeta
+        #region Propiedades de Visualización de Tarjeta
+
+        /// <summary>
+        /// Balance actual de la tarjeta de crédito.
+        /// </summary>
         [ObservableProperty]
         private decimal? balanceDetalles;
+
+        /// <summary>
+        /// Ruta o nombre del icono del chip de la tarjeta.
+        /// </summary>
         [ObservableProperty]
         private string? iconoChipDetalles;
+
+        /// <summary>
+        /// Nombre del banco emisor de la tarjeta.
+        /// </summary>
         [ObservableProperty]
         private string? nombreBancoDetalles;
+
+        /// <summary>
+        /// Mes de vencimiento de la tarjeta (1-12).
+        /// </summary>
         [ObservableProperty]
         private int? mesVencimientoDetalles;
+
+        /// <summary>
+        /// Año de vencimiento de la tarjeta (formato completo, ej: 2025).
+        /// </summary>
         [ObservableProperty]
         private int? anioVencimientoDetalles;
+
+        /// <summary>
+        /// Últimos 4 dígitos del número de tarjeta para identificación.
+        /// </summary>
         [ObservableProperty]
         private int? ultimosCuatroDigitos;
+
+        /// <summary>
+        /// Ruta o nombre del icono del tipo de tarjeta (Visa, Mastercard, etc.).
+        /// </summary>
         [ObservableProperty]
         private string? iconoTipoTarjetaDetalles;
+
+        /// <summary>
+        /// Color primario en formato hexadecimal para el degradado de la tarjeta.
+        /// </summary>
         [ObservableProperty]
         private string? colorHex1Detalles;
+
+        /// <summary>
+        /// Color secundario en formato hexadecimal para el degradado de la tarjeta.
+        /// </summary>
         [ObservableProperty]
         private string? colorHex2Detalles;
+
+        /// <summary>
+        /// Color del borde de la tarjeta en formato hexadecimal.
+        /// </summary>
         [ObservableProperty]
         private string? colorBordeDetalles;
+
+        /// <summary>
+        /// Color del texto en la tarjeta en formato hexadecimal.
+        /// </summary>
         [ObservableProperty]
         private string? colorTextoDetalles;
+
         #endregion
 
+        #region Constructor
+
+        /// <summary>
+        /// Constructor del ViewModel.
+        /// </summary>
+        /// <param name="servicioTarjetaCredito">Servicio de tarjetas de crédito inyectado.</param>
         public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito)
         {
             _servicioTarjetaCredito = servicioTarjetaCredito;
         }
+
+        #endregion
 
         /// <summary>
         /// Carga los ultimos 3 movimientos de la tarjeta
