@@ -2,7 +2,7 @@
 
 public class GastoCategoriaUltimosSieteDiasTarjetaDTO
 {
-    public string? Categoria { get; set; }
     public string? Dia { get; set; }
+    public string? Categoria { get; set; }
     public decimal TotalMonto { get; set; }
 }

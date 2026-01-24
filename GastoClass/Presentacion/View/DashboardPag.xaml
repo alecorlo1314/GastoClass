@@ -293,7 +293,8 @@
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
             StrokeShape="RoundRectangle 25">
-            <Grid RowDefinitions="Auto,*" RowSpacing="16">
+
+            <Grid RowDefinitions="3*,7*" RowSpacing="16">
                 <Grid Grid.Row="0" ColumnDefinitions="9*,1*">
                     <Label
                         Grid.Column="0"
@@ -304,7 +305,7 @@
                     <Label
                         Grid.Column="1"
                         FontFamily="InterSemiBold"
-                        FontSize="28"
+                        FontSize="24"
                         Text="₡"
                         TextColor="{StaticResource Black}" />
                 </Grid>
@@ -315,11 +316,11 @@
                     <Image
                         Grid.Column="0"
                         Aspect="AspectFill"
-                        HeightRequest="50"
+                        HeightRequest="55"
                         HorizontalOptions="Center"
                         Source="icono_totalgasto.png"
                         VerticalOptions="Start"
-                        WidthRequest="50" />
+                        WidthRequest="55" />
                     <VerticalStackLayout Grid.Column="1">
                         <Label
                             FontFamily="InterSemiBold"
@@ -343,7 +344,7 @@
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
             StrokeShape="RoundRectangle 25">
-            <Grid RowDefinitions="Auto,*" RowSpacing="16">
+            <Grid RowDefinitions="3*,7*" RowSpacing="16">
                 <Grid Grid.Row="0" ColumnDefinitions="9*,1*">
                     <Label
                         Grid.Column="0"
@@ -353,7 +354,7 @@
                         TextColor="{StaticResource Black}" />
                     <Image
                         Grid.Column="1"
-                        Aspect="AspectFill"
+                        Aspect="AspectFit"
                         HeightRequest="24"
                         Source="list_icon.png"
                         WidthRequest="24" />
@@ -365,11 +366,11 @@
                     <Image
                         Grid.Column="0"
                         Aspect="AspectFill"
-                        HeightRequest="50"
+                        HeightRequest="55"
                         HorizontalOptions="Center"
                         Source="icono_transacciones.png"
                         VerticalOptions="Start"
-                        WidthRequest="50" />
+                        WidthRequest="55" />
                     <VerticalStackLayout Grid.Column="1">
                         <Label
                             Grid.Row="0"
@@ -442,7 +443,7 @@
             BackgroundColor="{StaticResource FondoBlanco}"
             Stroke="Transparent"
             StrokeShape="RoundRectangle 15">
-            <Grid RowDefinitions="1*,9*">
+            <Grid RowDefinitions="Auto,Auto">
                 <VerticalStackLayout Grid.Row="0" Spacing="4">
                     <Label
                         FontFamily="InterSemiBold"

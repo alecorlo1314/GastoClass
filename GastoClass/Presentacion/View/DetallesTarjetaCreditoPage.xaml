@@ -292,7 +292,7 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid
-                                        Padding="8"
+                                        Padding="6"
                                         ColumnDefinitions="1*,2*,2*,1*,2*,2*"
                                         ColumnSpacing="24"
                                         WidthRequest="1010">
@@ -414,7 +414,7 @@
                         FontFamily="PoppinsSemiBold"
                         FontSize="20"
                         HorizontalOptions="Start"
-                        Text="Resumen de gastos"
+                        Text="Gastos por categoría últimos 7 días"
                         TextColor="{StaticResource Gray900}" />
                     <Border
                         Padding="28"
@@ -439,15 +439,15 @@
 
                             <!--  Serie Supermercado  -->
                             <chart:StackingColumnSeries
-                                Width="0.6"
+                                Width="0.3"
                                 ItemsSource="{Binding DatosAlimentacion}"
                                 Label="Supermercado"
                                 XBindingPath="Dia"
                                 YBindingPath="TotalMonto" />
 
-                            <!--  Serie Gasolina  -->
+                            <!--  Serie Transporte  -->
                             <chart:StackingColumnSeries
-                                Width="0.6"
+                                Width="0.3"
                                 ItemsSource="{Binding DatosTransporte}"
                                 Label="Gasolina"
                                 XBindingPath="Dia"
@@ -455,31 +455,71 @@
 
                             <!--  Serie Entretenimiento  -->
                             <chart:StackingColumnSeries
-                                Width="0.6"
+                                Width="0.3"
                                 ItemsSource="{Binding DatosEntretenimiento}"
                                 Label="Entretenimiento"
                                 XBindingPath="Dia"
                                 YBindingPath="TotalMonto" />
 
-                            <!--  Serie salud  -->
+                            <!--  Serie Servicios  -->
                             <chart:StackingColumnSeries
-                                Width="0.6"
+                                Width="0.3"
+                                ItemsSource="{Binding DatosServicios}"
+                                Label="Servicios"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Ropa  -->
+                            <chart:StackingColumnSeries
+                                Width="0.3"
+                                ItemsSource="{Binding DatosRopa}"
+                                Label="Ropa"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Deporte  -->
+                            <chart:StackingColumnSeries
+                                Width="0.3"
+                                ItemsSource="{Binding DatosDeportes}"
+                                Label="Deporte"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Viajes  -->
+                            <chart:StackingColumnSeries
+                                Width="0.3"
+                                ItemsSource="{Binding DatosViajes}"
+                                Label="Viajes"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Tecnologia  -->
+                            <chart:StackingColumnSeries
+                                Width="0.3"
+                                ItemsSource="{Binding DatosTecnologia}"
+                                Label="Tecnologia"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Series Educacion  -->
+                            <chart:StackingColumnSeries
+                                Width="0.3"
+                                ItemsSource="{Binding DatosEducacion}"
+                                Label="Educacion"
+                                XBindingPath="Dia"
+                                YBindingPath="TotalMonto" />
+
+                            <!--  Serie Salud  -->
+                            <chart:StackingColumnSeries
+                                Width="0.3"
                                 ItemsSource="{Binding DatosSalud}"
                                 Label="Salud"
                                 XBindingPath="Dia"
                                 YBindingPath="TotalMonto" />
 
-                            <!--  Series Compras  -->
-                            <chart:StackingColumnSeries
-                                Width="0.6"
-                                ItemsSource="{Binding DatosCompras}"
-                                Label="Compras"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
-
                             <!--  Series Mascotas  -->
                             <chart:StackingColumnSeries
-                                Width="0.6"
+                                Width="0.3"
                                 ItemsSource="{Binding DatosMascotas}"
                                 Label="Mascotas"
                                 XBindingPath="Dia"
@@ -487,7 +527,7 @@
 
                             <!--  Series Hogar  -->
                             <chart:StackingColumnSeries
-                                Width="0.6"
+                                Width="0.3"
                                 ItemsSource="{Binding DatosHogar}"
                                 Label="Hogar"
                                 XBindingPath="Dia"

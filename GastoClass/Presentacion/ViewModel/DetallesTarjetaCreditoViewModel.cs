@@ -1,5 +1,4 @@
-﻿
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.Dominio.Model;
@@ -214,137 +213,147 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
+        #region Métodos de Carga de Datos
+
         /// <summary>
-        /// Carga los ultimos 3 movimientos de la tarjeta
+        /// Carga los últimos 3 movimientos/gastos de la tarjeta de crédito actual.
+        /// Maneja errores mostrando un alert al usuario.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Tarea asíncrona.</returns>
         private async Task CargarUltimosTresMovimientosAsync()
         {
             try
             {
-                var movimientos = await _servicioTarjetaCredito.ObtenerUltimosTresGastosPorTarjetaCreditoAsync(IdTarjetaCredito);
-                ListaUltimosTresMovimientos = new ObservableCollection<UltimoTresMovimientoDTOs>(movimientos!);
+                if (IdTarjetaCredito == null) return;
+
+                var movimientos = await _servicioTarjetaCredito
+                    .ObtenerUltimosTresGastosPorTarjetaCreditoAsync(IdTarjetaCredito);
+
+                ListaUltimosTresMovimientos = movimientos != null
+                    ? new ObservableCollection<UltimoTresMovimientoDTOs>(movimientos)
+                    : new ObservableCollection<UltimoTresMovimientoDTOs>();
             }
             catch (Exception ex)
             {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No se pudieron cargar los movimientos de la tarjeta "+ex.Message, "OK");
+                await Shell.Current.CurrentPage.DisplayAlertAsync(
+                    "Error",
+                    $"No se pudieron cargar los movimientos de la tarjeta: {ex.Message}",
+                    "OK");
             }
-         }
+        }
+
+        #region Métodos de Cambio de Propiedades (Property Changed)
+
         /// <summary>
-        /// Actualiza las propiedades para mostrar en la figura de la tarjeta
+        /// Se ejecuta automáticamente cuando la propiedad TarjetaCredito cambia.
+        /// Inicializa el ID de la tarjeta y dispara la carga de datos relacionados:
+        /// - Últimos 3 movimientos
+        /// - Propiedades visuales de la tarjeta
+        /// - Gastos por categoría de los últimos 7 días
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Nueva tarjeta de crédito seleccionada.</param>
         partial void OnTarjetaCreditoChanged(TarjetaCredito? value)
         {
-            //Inicializar el id tarjeta
-            IdTarjetaCredito = value?.Id;
+            if (value == null) return;
+
+            IdTarjetaCredito = value.Id;
+
+            // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
             _ = CargarUltimosTresMovimientosAsync();
-            _ = InicializarPropiedades(value);
-            _ = CargarGastosPorTarjetaCreditoAsync(value!.Id);
+            _ = InicializarPropiedadesVisualesAsync(value);
+            _ = CargarGastosPorCategoriaAsync(value.Id);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Inicializa las propiedades visuales de la tarjeta a partir del objeto TarjetaCredito.
+        /// Estas propiedades se usan para renderizar la representación visual de la tarjeta.
+        /// </summary>
+        /// <param name="value">Tarjeta de crédito de la cual extraer las propiedades.</param>
+        /// <returns>Tarea asíncrona.</returns>
+        private Task InicializarPropiedadesVisualesAsync(TarjetaCredito? value)
+        {
+            if (value == null) return Task.CompletedTask;
+
+            BalanceDetalles = value.Balance;
+            IconoChipDetalles = value.PreferenciaTarjeta?.IconoChip;
+            NombreBancoDetalles = value.NombreBanco;
+            MesVencimientoDetalles = value.MesVencimiento;
+            AnioVencimientoDetalles = value.AnioVencimiento;
+            UltimosCuatroDigitos = value.UltimosCuatroDigitos;
+            IconoTipoTarjetaDetalles = value.PreferenciaTarjeta?.IconoTipoTarjeta;
+            ColorHex1Detalles = value.PreferenciaTarjeta?.ColorHex1;
+            ColorHex2Detalles = value.PreferenciaTarjeta?.ColorHex2;
+            ColorBordeDetalles = value.PreferenciaTarjeta?.ColorBorde;
+            ColorTextoDetalles = value.PreferenciaTarjeta?.ColorTexto;
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Carga los gastos por categoria de la tarjeta
+        /// Carga y categoriza los gastos de los últimos 7 días por categoría.
+        /// Cada categoría se almacena en su colección observable correspondiente
+        /// para ser mostrada en gráficos o listas categorizadas.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        private async Task CargarGastosPorTarjetaCreditoAsync(int id)
+        /// <param name="idTarjeta">ID de la tarjeta de la cual cargar los gastos.</param>
+        /// <returns>Tarea asíncrona.</returns>
+        private async Task CargarGastosPorCategoriaAsync(int idTarjeta)
         {
-            var resultados = await _servicioTarjetaCredito.GastosPorCategoriaSemanaAsync(id);
+            try
+            {
+                var resultados = await _servicioTarjetaCredito.GastosPorCategoriaSemanaAsync(idTarjeta);
 
-            DatosAlimentacion?.Clear();
-            DatosAlimentacion = new(
-                from gasto in resultados
-                where gasto.Categoria == "Alimentacion"
-                select gasto);
+                if (resultados == null) return;
 
-            DatosTransporte?.Clear();
-            DatosTransporte = new(
-                from gasto in resultados
-                where gasto.Categoria == "Transporte"
-                select gasto);
-
-            DatosEntretenimiento?.Clear();
-            DatosEntretenimiento = new(
-                from gasto in resultados
-                where gasto.Categoria == "Entretenimiento"
-                select gasto);
-
-            DatosServicios?.Clear();
-            DatosServicios = new(
-                from gasto in resultados
-                where gasto.Categoria == "Servicios"
-                select gasto);
-
-            DatosRopa?.Clear();
-            DatosRopa = new(
-                from gasto in resultados
-                where gasto.Categoria == "Ropa"
-                select gasto);
-
-            DatosDeportes?.Clear();
-            DatosDeportes = new(
-                from gasto in resultados
-                where gasto.Categoria == "Deportes"
-                select gasto);
-
-            DatosViajes?.Clear();
-            DatosViajes = new(
-                from gasto in resultados
-                where gasto.Categoria == "Viajes"
-                select gasto);
-
-            DatosTecnologia?.Clear();
-            DatosTecnologia = new(
-                from gasto in resultados
-                where gasto.Categoria == "Tecnologia"
-                select gasto);
-
-            DatosEducacion?.Clear();
-            DatosEducacion = new(
-                from gasto in resultados
-                where gasto.Categoria == "Educacion"
-                select gasto);
-
-            DatosSalud?.Clear();
-            DatosSalud = new(
-                from gasto in resultados
-                where gasto.Categoria == "Salud"
-                select gasto);
-
-            DatosMascotas?.Clear();
-            DatosMascotas = new(
-                from gasto in resultados
-                where gasto.Categoria == "Mascotas"
-                select gasto);
-
-            DatosHogar?.Clear();
-            DatosHogar = new(
-                from gasto in resultados
-                where gasto.Categoria == "Hogar"
-                select gasto);
+                // Limpiar y cargar cada categoría
+                ActualizarCategoria(DatosAlimentacion, resultados, "Alimentacion");
+                ActualizarCategoria(DatosTransporte, resultados, "Transporte");
+                ActualizarCategoria(DatosEntretenimiento, resultados, "Entretenimiento");
+                ActualizarCategoria(DatosServicios, resultados, "Servicios");
+                ActualizarCategoria(DatosRopa, resultados, "Ropa");
+                ActualizarCategoria(DatosDeportes, resultados, "Deportes");
+                ActualizarCategoria(DatosViajes, resultados, "Viajes");
+                ActualizarCategoria(DatosTecnologia, resultados, "Tecnologia");
+                ActualizarCategoria(DatosEducacion, resultados, "Educacion");
+                ActualizarCategoria(DatosSalud, resultados, "Salud");
+                ActualizarCategoria(DatosMascotas, resultados, "Mascotas");
+                ActualizarCategoria(DatosHogar, resultados, "Hogar");
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync(
+                    "Error",
+                    $"No se pudieron cargar los gastos por categoría: {ex.Message}",
+                    "OK");
+            }
         }
 
+        #endregion
+
+        #region Métodos Auxiliares
 
         /// <summary>
-        /// Inicializa las propiedades para mostrar en la figura de la tarjeta
+        /// Actualiza una colección de categoría específica filtrando los resultados por nombre de categoría.
+        /// Limpia la colección existente y la repuebla con los datos filtrados.
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private async Task InicializarPropiedades(TarjetaCredito? value)
+        /// <param name="coleccion">valor a la colección observable a actualizar.</param>
+        /// <param name="resultados">Lista completa de gastos categorizados.</param>
+        /// <param name="nombreCategoria">Nombre de la categoría a filtrar.</param>
+        private void ActualizarCategoria(
+            ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? coleccion,
+            IEnumerable<GastoCategoriaUltimosSieteDiasTarjetaDTO> resultados,
+            string nombreCategoria)
         {
-            //Inicializar Tarjeta de Credito
-            BalanceDetalles = value?.Balance;
-            IconoChipDetalles = value?.PreferenciaTarjeta?.IconoChip;
-            NombreBancoDetalles = value?.NombreBanco;
-            MesVencimientoDetalles = value?.MesVencimiento;
-            AnioVencimientoDetalles = value?.AnioVencimiento;
-            UltimosCuatroDigitos = value?.UltimosCuatroDigitos;
-            IconoTipoTarjetaDetalles = value?.PreferenciaTarjeta?.IconoTipoTarjeta;
-            ColorHex1Detalles = value?.PreferenciaTarjeta?.ColorHex1;
-            ColorHex2Detalles = value?.PreferenciaTarjeta?.ColorHex2;
-            ColorBordeDetalles = value?.PreferenciaTarjeta?.ColorBorde;
-            ColorTextoDetalles = value?.PreferenciaTarjeta?.ColorTexto;
+            if (coleccion == null) return;
+
+            coleccion.Clear();
+            foreach (var item in resultados.Where(g => g.Categoria == nombreCategoria))
+            {
+                coleccion.Add(item);
+            }
         }
+
+        #endregion
     }
 }
