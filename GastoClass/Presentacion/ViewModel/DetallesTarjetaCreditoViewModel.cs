@@ -214,22 +214,35 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
+        #region Métodos de Carga de Datos
+
         /// <summary>
-        /// Carga los ultimos 3 movimientos de la tarjeta
+        /// Carga los últimos 3 movimientos/gastos de la tarjeta de crédito actual.
+        /// Maneja errores mostrando un alert al usuario.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Tarea asíncrona.</returns>
         private async Task CargarUltimosTresMovimientosAsync()
         {
             try
             {
-                var movimientos = await _servicioTarjetaCredito.ObtenerUltimosTresGastosPorTarjetaCreditoAsync(IdTarjetaCredito);
-                ListaUltimosTresMovimientos = new ObservableCollection<UltimoTresMovimientoDTOs>(movimientos!);
+                if (IdTarjetaCredito == null) return;
+
+                var movimientos = await _servicioTarjetaCredito
+                    .ObtenerUltimosTresGastosPorTarjetaCreditoAsync(IdTarjetaCredito);
+
+                ListaUltimosTresMovimientos = movimientos != null
+                    ? new ObservableCollection<UltimoTresMovimientoDTOs>(movimientos)
+                    : new ObservableCollection<UltimoTresMovimientoDTOs>();
             }
             catch (Exception ex)
             {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No se pudieron cargar los movimientos de la tarjeta "+ex.Message, "OK");
+                await Shell.Current.CurrentPage.DisplayAlertAsync(
+                    "Error",
+                    $"No se pudieron cargar los movimientos de la tarjeta: {ex.Message}",
+                    "OK");
             }
-         }
+        }
+
         #region Métodos de Cambio de Propiedades (Property Changed)
 
         /// <summary>
