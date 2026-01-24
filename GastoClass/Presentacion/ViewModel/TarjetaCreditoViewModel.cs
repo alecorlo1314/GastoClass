@@ -199,6 +199,9 @@ namespace GastoClass.Presentacion.ViewModel
 
         [ObservableProperty]
         private bool? borderVisible;
+
+        [ObservableProperty]
+        private bool? tituloTarjetasVisible;
         #endregion
 
         #region Mensajes
@@ -293,6 +296,7 @@ namespace GastoClass.Presentacion.ViewModel
                 var tarjetas = await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
                 ListaTarjetasCredito = new ObservableCollection<TarjetaCredito>(tarjetas!);
                 BorderVisible = tarjetas?.Count == 0 || tarjetas == null ? false : true;
+                TituloTarjetasVisible = tarjetas?.Count == 0 || tarjetas == null ? false : true;
             }
             catch (Exception ex)
             {

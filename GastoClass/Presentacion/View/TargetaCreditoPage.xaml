@@ -329,7 +329,7 @@
                 HorizontalOptions="Start"
                 Text="Mis Tarjetas"
                 TextColor="{StaticResource Gray900}"
-                VerticalOptions="Center" />
+                VerticalOptions="Center" IsVisible="{Binding TituloTarjetasVisible}"/>
 
             <!--  LISTA DE TARJETAS HORIZONTAL  -->
             <CollectionView ItemsSource="{Binding ListaTarjetasCredito}">
