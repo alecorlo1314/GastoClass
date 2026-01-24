@@ -230,18 +230,29 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No se pudieron cargar los movimientos de la tarjeta "+ex.Message, "OK");
             }
          }
+        #region Métodos de Cambio de Propiedades (Property Changed)
+
         /// <summary>
-        /// Actualiza las propiedades para mostrar en la figura de la tarjeta
+        /// Se ejecuta automáticamente cuando la propiedad TarjetaCredito cambia.
+        /// Inicializa el ID de la tarjeta y dispara la carga de datos relacionados:
+        /// - Últimos 3 movimientos
+        /// - Propiedades visuales de la tarjeta
+        /// - Gastos por categoría de los últimos 7 días
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Nueva tarjeta de crédito seleccionada.</param>
         partial void OnTarjetaCreditoChanged(TarjetaCredito? value)
         {
-            //Inicializar el id tarjeta
-            IdTarjetaCredito = value?.Id;
+            if (value == null) return;
+
+            IdTarjetaCredito = value.Id;
+
+            // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
             _ = CargarUltimosTresMovimientosAsync();
-            _ = InicializarPropiedades(value);
-            _ = CargarGastosPorTarjetaCreditoAsync(value!.Id);
+            _ = InicializarPropiedadesVisualesAsync(value);
+            _ = CargarGastosPorCategoriaAsync(value.Id);
         }
+
+        #endregion
 
         /// <summary>
         /// Carga los gastos por categoria de la tarjeta
