@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="GastoClass.Aplicacion/GastoClass.Aplicacion.csproj" Id="e2b6fb1b-7fd3-4aa7-8c36-ee62684cd9fe" />
   <Project Path="GastoClass.Dominio/GastoClass.Dominio.csproj" Id="fa68626c-7de3-4931-bdf9-7f6142cc8852" />
   <Project Path="GastoClass/GastoClass.csproj" />
   <Project Path="MLCategorias_WebApi1/MLCategorias_WebApi.csproj" />

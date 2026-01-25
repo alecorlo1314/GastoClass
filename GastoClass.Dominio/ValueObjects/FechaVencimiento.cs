@@ -26,4 +26,6 @@ public record FechaVencimiento
         Mes = mes;
         Anio = anio;
     }
+
+    public override string ToString() => $"{Mes:D2}/{Anio}";
 }
