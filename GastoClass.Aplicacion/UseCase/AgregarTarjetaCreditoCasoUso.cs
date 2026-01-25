@@ -1,6 +1,9 @@
-﻿using GastoClass.Aplicacion.Excepciones;
+﻿using GastoClass.Aplicacion.Common;
+using GastoClass.Aplicacion.DTOs;
+using GastoClass.Aplicacion.Excepciones;
 using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Enums;
+using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.Dominio.ValueObjects;
 
@@ -27,30 +30,38 @@ public class AgregarTarjetaCreditoCasoUso
     #endregion
 
     #region Agregar Tarjeta de Credito
-    public async Task<int>? Ejecutar(string tipo, string nombre, string ultimosCuatroDigitos, int mes, int anio)
+    public async Task<ResultadosValidacion> Ejecutar(TarjetaCreditoDto tarjetaCreditoDto)
     {
-        //Relizar validaciones
-        if (string.IsNullOrWhiteSpace(tipo))
-            throw new ExcepcionValidacionCasoUso("El tipo de tarjeta es requerido");
+        //Intanciar el validador de errores
+        var validador = new ResultadosValidacion();
+        try
+        {
+            //Se mapea el Dto tarjeta de credito
+            var tarjeta = new TarjetaCredito(
+                        Guid.NewGuid(),
+                        TipoTarjeta.Visa,
+                        new NombreTarjeta(tarjetaCreditoDto.Nombre!),
+                        new UltimosCuatroDigitosTarjeta(tarjetaCreditoDto.UltimosCuatroDigitos!),
+                        new FechaVencimiento(tarjetaCreditoDto.MesVencimiento, tarjetaCreditoDto.AnioVencimiento)
+                    );
 
-        if (string.IsNullOrWhiteSpace(nombre))
-            throw new ExcepcionValidacionCasoUso("El nombre de la tarjeta es requerido");
-
-        if (!Enum.TryParse<TipoTarjeta>(ultimosCuatroDigitos, out var tipoTarjeta))
-            throw new ExcepcionValidacionCasoUso("Tipo de tarjeta inválido");
-
-        //Se mapea el Dto tarjeta de credito
-        var tarjeta = new TarjetaCredito(
-                    Guid.NewGuid(),
-                    tipoTarjeta,
-                    new NombreTarjeta(nombre),
-                    new UltimosCuatroDigitosTarjeta(ultimosCuatroDigitos),
-                    new FechaVencimiento(mes, anio)
-                );
-
-        //Se envial al repositorio
-        //devuelve 1 si se agrego correctamente, 0 si no
-        return await _repositorioTarjetaCredito.AgregarAsync(tarjeta);
+            //Se envial al repositorio
+            //devuelve 1 si se agrego correctamente, 0 si no
+            await _repositorioTarjetaCredito.AgregarAsync(tarjeta);
+        }
+        catch (ExceptionNombreTarjetaInvalida ex)
+        {
+            validador.Errores["NombreTarjeta"] = ex.Message;
+        }
+        catch (ExcepcionNumeroTarjetaInvalida ex)
+        {
+            validador.Errores["UltimosCuatroDigitos"] = ex.Message;
+        }
+        catch (ExcepcionVencimientoTarjeta ex)
+        {
+            validador.Errores["Vencimiento"] = ex.Message;
+        }
+        return validador;
     }
 
     #endregion

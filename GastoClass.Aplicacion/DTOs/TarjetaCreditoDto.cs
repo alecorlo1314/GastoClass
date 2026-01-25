@@ -9,5 +9,6 @@ public class TarjetaCreditoDto
     public string? Tipo { get; set; }
     public string? Nombre { get; set; }
     public string? UltimosCuatroDigitos { get; set; }
-    public string? Vencimiento { get; set; }
+    public int MesVencimiento { get; set; }
+    public int AnioVencimiento { get; set; }
 }

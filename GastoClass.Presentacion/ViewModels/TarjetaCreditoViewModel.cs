@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Common;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Excepciones;
 using GastoClass.Aplicacion.UseCase;
 using GastoClass.Dominio.Excepciones;
-using GastoClass.Dominio.ValueObjects;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.Views;
@@ -30,8 +30,17 @@ public partial class TarjetaCreditoViewModel : ObservableObject
     [ObservableProperty]
     private bool isBusy;
 
+    #endregion
+
+    #region Mensajes Error
     [ObservableProperty]
-    private string? mensajeError;
+    private string? nombreTarjetaError;
+
+    [ObservableProperty]
+    private string? ultimosCuatroDigitosError;
+
+    [ObservableProperty]
+    private string? fechaExpiracionError;
 
     #endregion
 
@@ -60,14 +69,14 @@ public partial class TarjetaCreditoViewModel : ObservableObject
         AgregarTarjetaCreditoCasoUso agregarTarjetaCreditoCasoUso)
     {
         _eliminarTarjetaCasoUso = eliminarTarjetaCasoUso;
-        _obtenerTarjetaCredito = obtenerTarjetaCredito;
+        _obtenerTarjetaCreditoCasoUso = obtenerTarjetaCredito;
         _actualizarNombreTarjetaCasoUso = actualizarNombreTarjetaCasoUso;
         _agregarTarjetaCreditoCasoUso = agregarTarjetaCreditoCasoUso;
     }
 
     #endregion
 
-    #region Comandos
+    #region Comando Cargar
     /// <summary>
     /// Commando se encarga de obtener las tarjetas
     /// </summary>
@@ -80,7 +89,6 @@ public partial class TarjetaCreditoViewModel : ObservableObject
         try
         {
             IsBusy = true;
-            MensajeError = null;
 
             TarjetasCredito.Clear();
             var tarjetas = await _obtenerTarjetaCreditoCasoUso.Ejecutar();
@@ -90,7 +98,10 @@ public partial class TarjetaCreditoViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            MensajeError = ex.Message;
+           await Shell.Current.DisplayAlertAsync(
+               "Error", 
+               "Ocurrio un error al obtener las tarjetas: " + ex.Message,
+               "Aceptar");
         }
         finally
         {
@@ -98,6 +109,9 @@ public partial class TarjetaCreditoViewModel : ObservableObject
         }
     }
 
+    #endregion
+
+    #region Comando Agregar Tarjeta
     /// <summary>
     /// Commando se encarga de agregar una tarjeta
     /// </summary>
@@ -107,38 +121,42 @@ public partial class TarjetaCreditoViewModel : ObservableObject
     {
         if (IsBusy) return;
 
+        IsBusy = true;
+        LimpiarMensajesError();
         try
         {
-            IsBusy = true;
-            MensajeError = null;
+            TarjetaCreditoDto tarjetaCredito = new()
+            {
+                Tipo = TipoTarjetaSeleccionada,
+                Nombre = NombreTarjeta,
+                UltimosCuatroDigitos = UltimosCuatroDigitos,
+                MesVencimiento = MesExpiracion,
+                AnioVencimiento = AnioExpiracion
+            };
 
-            await _agregarTarjetaCreditoCasoUso.Ejecutar(
-                TipoTarjetaSeleccionada,
-                NombreTarjeta,
-                UltimosCuatroDigitos,
-                MesExpiracion,
-                AnioExpiracion);
+            var resultado = await _agregarTarjetaCreditoCasoUso.Ejecutar(tarjetaCredito);
 
+            if (!resultado.EsValido)
+            {
+                NombreTarjetaError = resultado.Errores.GetValueOrDefault("NombreTarjeta");
+                UltimosCuatroDigitosError = resultado.Errores.GetValueOrDefault("UltimosCuatroDigitos");
+                FechaExpiracionError = resultado.Errores.GetValueOrDefault("Vencimiento");
+                return;
+            }
+            await Shell.Current.DisplayAlertAsync("Exito", "Tarjeta Agregada", "Aceptar");
             LimpiarFormulario();
             await CargarAsync();
         }
-        catch (ExcepcionValidacionCasoUso ex)
+        catch (Exception ex)
         {
-            MensajeError = ex.Message;
-        }
-        catch (ExcepcionDominio ex)
-        {
-            MensajeError = ex.Message;
-        }
-        catch (Exception)
-        {
-            MensajeError = "Ocurrió un error inesperado";
+            await Shell.Current.DisplayAlertAsync("Error", "Ocurrio un error al agregar la tarjeta", "Aceptar");
         }
         finally
         {
             IsBusy = false;
         }
     }
+
     #endregion
 
     #region Metodo Auxiliares
@@ -150,6 +168,12 @@ public partial class TarjetaCreditoViewModel : ObservableObject
         MesExpiracion = DateTime.Now.Month;
         AnioExpiracion = DateTime.Now.Year;
     }
-
+    
+    private void LimpiarMensajesError()
+    {
+        NombreTarjetaError = null;
+        UltimosCuatroDigitosError = null;
+        FechaExpiracionError = null;
+    }
     #endregion
 }
