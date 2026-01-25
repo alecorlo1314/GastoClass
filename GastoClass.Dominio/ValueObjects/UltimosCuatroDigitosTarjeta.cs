@@ -1,16 +1,15 @@
-﻿
-using GastoClass.Dominio.Excepciones;
+﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 
 namespace GastoClass.Dominio.ValueObjects;
 
 public record UltimosCuatroDigitosTarjeta
 {
-    public string Valor { get; }
+    public int Valor { get; }
 
-    public UltimosCuatroDigitosTarjeta(string valor)
+    public UltimosCuatroDigitosTarjeta(int valor)
     {
-        if (string.IsNullOrWhiteSpace(valor)
-            || valor.Length != 4 
+        if (string.IsNullOrWhiteSpace(valor.ToString())
+            || valor.ToString().Length != 4
             || !int.TryParse(valor.ToString(), out _))
         {
             throw new ExcepcionNumeroTarjetaInvalida();

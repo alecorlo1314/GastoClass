@@ -1,4 +1,4 @@
-﻿namespace GastoClass.Dominio.Excepciones;
+﻿namespace GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 
 /// <summary>
 /// Esta clase se encarga de manejar las excepciones del dominio

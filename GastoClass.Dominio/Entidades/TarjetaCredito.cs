@@ -1,6 +1,4 @@
-﻿
-using GastoClass.Dominio.Enums;
-using GastoClass.Dominio.ValueObjects;
+﻿using GastoClass.Dominio.ValueObjects;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -9,27 +7,48 @@ namespace GastoClass.Dominio.Entidades;
 /// </summary>
 public class TarjetaCredito
 {
-    public Guid Id { get; }
+    public int Id { get; }
     public TipoTarjeta Tipo { get; }
-    public NombreTarjeta? Nombre { get; private set; }
-    public UltimosCuatroDigitosTarjeta? UltimosCuatro { get; }
-    public FechaVencimiento? Vencimiento { get; }
+    public NombreTarjeta Nombre { get; private set; }
+    public UltimosCuatroDigitosTarjeta UltimosCuatro { get; }
+    public MesVencimiento MesVencimiento { get; }
+    public AnioVencimiento AnioVencimiento { get; }
+    public LimiteCredito LimiteCredito { get; }
+    public Moneda TipoMoneda { get; }
+    public DiaCorte DiaCorte { get; }
+    public DiaPago DiaPago { get; }
+    public NombreBanco NombreBanco { get; }
+    public PreferenciaTarjeta Preferencia { get; }
 
     public TarjetaCredito(
-        Guid id, 
+        int id, 
         TipoTarjeta tipo, 
-        NombreTarjeta? nombre, 
-        UltimosCuatroDigitosTarjeta? ultimosCuatro, 
-        FechaVencimiento? vencimiento)
+        NombreTarjeta nombre, 
+        UltimosCuatroDigitosTarjeta ultimosCuatro, 
+        MesVencimiento mesVencimiento,
+        AnioVencimiento anioVencimiento,
+        LimiteCredito limiteCredito,
+        Moneda tipoMoneda,
+        DiaCorte diaCorte,
+        DiaPago diaPago,
+        NombreBanco nombreBanco, 
+        PreferenciaTarjeta preferencia)
     {
         Id = id;
         Tipo = tipo;
         Nombre = nombre;
         UltimosCuatro = ultimosCuatro;
-        Vencimiento = vencimiento;
+        MesVencimiento = mesVencimiento;
+        AnioVencimiento = anioVencimiento;
+        LimiteCredito = limiteCredito;
+        TipoMoneda = tipoMoneda;
+        DiaCorte = diaCorte;
+        DiaPago = diaPago;
+        NombreBanco = nombreBanco;
+        Preferencia = preferencia;
     }
 
-    public void ActualizarNombre(NombreTarjeta? nombre)
+    public void ActualizarNombre(NombreTarjeta nombre)
     {
         Nombre = nombre;
     }

@@ -3,7 +3,7 @@ using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Excepciones;
 using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Enums;
-using GastoClass.Dominio.Excepciones;
+using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.Dominio.ValueObjects;
 
@@ -42,7 +42,7 @@ public class AgregarTarjetaCreditoCasoUso
                         TipoTarjeta.Visa,
                         new NombreTarjeta(tarjetaCreditoDto.Nombre!),
                         new UltimosCuatroDigitosTarjeta(tarjetaCreditoDto.UltimosCuatroDigitos!),
-                        new FechaVencimiento(tarjetaCreditoDto.MesVencimiento, tarjetaCreditoDto.AnioVencimiento)
+                        new MesVencimiento(tarjetaCreditoDto.MesVencimiento, tarjetaCreditoDto.AnioVencimiento)
                     );
 
             //Se envial al repositorio

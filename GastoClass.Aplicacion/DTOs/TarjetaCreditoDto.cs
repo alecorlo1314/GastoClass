@@ -3,7 +3,7 @@
 /// Se encarga de la entrada / salida de la aplicacion
 /// No recibe ViewModels, Entidades de forma directa desde la capa de Presentacion
 /// </summary>
-public class TarjetaCreditoDto
+public record TarjetaCreditoDto
 {
     public Guid Id { get; set; }
     public string? Tipo { get; set; }

@@ -1,4 +1,5 @@
 ﻿using GastoClass.Dominio.Excepciones;
+using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 
 namespace GastoClass.Dominio.ValueObjects;
 
