@@ -25,11 +25,14 @@ public class EliminarTarjetaCasoUso
 
     #endregion
 
-    public async Task<int>? EliminarTarjetaAsyn(Guid? idTarjetaCredito)
+    #region Metodo Eliminar tarjeta
+    public async Task<int>? Ejecutar(Guid? idTarjetaCredito)
     {
         if (idTarjetaCredito == Guid.Empty)
             throw new ExcepcionValidacionCasoUso("Id de tarjeta inválido");
 
         return await _repositorioTarjetaCredito.EliminarAsync(idTarjetaCredito);
     }
+
+    #endregion
 }

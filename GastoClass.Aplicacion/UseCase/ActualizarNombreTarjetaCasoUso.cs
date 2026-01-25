@@ -4,7 +4,7 @@ using GastoClass.Dominio.ValueObjects;
 
 namespace GastoClass.Aplicacion.UseCase;
 
-public class ActualizarNombreTarjeta
+public class ActualizarNombreTarjetaCasoUso
 {
     #region Inyeccion de Dependencias 
     /// <summary>
@@ -15,7 +15,7 @@ public class ActualizarNombreTarjeta
     #endregion
 
     #region Constructor
-    public ActualizarNombreTarjeta(IRepositorioTarjetaCredito repositorioTarjetaCredito)
+    public ActualizarNombreTarjetaCasoUso(IRepositorioTarjetaCredito repositorioTarjetaCredito)
     {
         _repositorioTarjetaCredito = repositorioTarjetaCredito;
     }
@@ -23,7 +23,7 @@ public class ActualizarNombreTarjeta
     #endregion
 
     #region Actualizar Tarjeta
-    public async Task<int>? ActualizarTarjetaAsync(Guid? idTarjetaCredito, string? nombreTarjetaCredito)
+    public async Task<int>? Ejecutar(Guid? idTarjetaCredito, string? nombreTarjetaCredito)
     {
         if (idTarjetaCredito == Guid.Empty)
             throw new ExcepcionValidacionCasoUso("Tarjeta inválida");

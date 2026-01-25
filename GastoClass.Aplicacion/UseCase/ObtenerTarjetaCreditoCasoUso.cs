@@ -22,7 +22,7 @@ public class ObtenerTarjetaCreditoCasoUso
     #endregion
 
     #region Obtener Tarjetas de Credito
-    public async Task<List<TarjetaCreditoDto>?> ObtenerTarjetasCredito()
+    public async Task<List<TarjetaCreditoDto>?> Ejecutar()
     {
         //devuelve una lista de *entidades* de Tarjeta de Credito
         var resultados = await _repositorioTarjetaCredito.ObtenerTodosAsync();
