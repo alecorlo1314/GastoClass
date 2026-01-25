@@ -27,25 +27,25 @@ public class AgregarTarjetaCreditoCasoUso
     #endregion
 
     #region Agregar Tarjeta de Credito
-    public async Task<int>? AgregarTarjetaCreditoAsync(TarjetaCredito? tarjetaCredito)
+    public async Task<int>? Ejecutar(string tipo, string nombre, string ultimosCuatroDigitos, int mes, int anio)
     {
         //Relizar validaciones
-        if (string.IsNullOrWhiteSpace(tarjetaCredito?.Tipo.ToString()))
+        if (string.IsNullOrWhiteSpace(tipo))
             throw new ExcepcionValidacionCasoUso("El tipo de tarjeta es requerido");
 
-        if (string.IsNullOrWhiteSpace(tarjetaCredito.Nombre?.Valor))
+        if (string.IsNullOrWhiteSpace(nombre))
             throw new ExcepcionValidacionCasoUso("El nombre de la tarjeta es requerido");
 
-        if (!Enum.TryParse<TipoTarjeta>(tarjetaCredito.Tipo.ToString(), out var tipoTarjeta))
+        if (!Enum.TryParse<TipoTarjeta>(ultimosCuatroDigitos, out var tipoTarjeta))
             throw new ExcepcionValidacionCasoUso("Tipo de tarjeta inválido");
 
         //Se mapea el Dto tarjeta de credito
         var tarjeta = new TarjetaCredito(
                     Guid.NewGuid(),
                     tipoTarjeta,
-                    new NombreTarjeta(tarjetaCredito.Nombre.Valor),
-                    new UltimosCuatroDigitosTarjeta(tarjetaCredito.UltimosCuatro!.Valor),
-                    new FechaVencimiento(tarjetaCredito.Vencimiento!.Mes, tarjetaCredito.Vencimiento.Anio)
+                    new NombreTarjeta(nombre),
+                    new UltimosCuatroDigitosTarjeta(ultimosCuatroDigitos),
+                    new FechaVencimiento(mes, anio)
                 );
 
         //Se envial al repositorio
