@@ -1,8 +1,6 @@
 ﻿using GastoClass.Aplicacion.Common;
-using GastoClass.Aplicacion.Excepciones;
 using GastoClass.Aplicacion.Gastos.Commands;
 using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 using MediatR;
@@ -24,10 +22,6 @@ namespace GastoClass.Aplicacion.Gastos.Handlers
 
         public async Task<ResultadosValidacion> Handle(CrearTarjetaCreditoCommand request, CancellationToken cancellationToken)
         {
-            //Intanciar el validador de errores
-            var validador = new ResultadosValidacion();
-            try
-            {
                 //Se mapea el Dto tarjeta de credito
                 var tarjeta = new TarjetaCredito(
                             request.Id!.Value,
@@ -44,48 +38,9 @@ namespace GastoClass.Aplicacion.Gastos.Handlers
                         );
                 // Devolvera un conjunto de errores si la tarjeta de credito es invalida
                 await repositorioTarjetaCredito.AgregarAsync(tarjeta);
-            }
-            catch (ExcepcionTipoTarjetaInvalido ex)
-            {
-                validador.Errores["TipoTarjeta"] = ex.Message;
-            }
-            catch (ExceptionNombreTarjetaInvalida ex)
-            {
-                validador.Errores["NombreTarjeta"] = ex.Message;
-            }
-            catch (ExcepcionNumeroTarjetaInvalida ex)
-            {
-                validador.Errores["UltimosCuatroDigitos"] = ex.Message;
-            }
-            catch (ExcepcionLimiteCreditoInvalido ex)
-            {
-                validador.Errores["LimiteCredito"] = ex.Message;
-            }
-            catch (ExcepcionMonedaInvalida ex)
-            {
-                validador.Errores["Moneda"] = ex.Message;
-            }
-            catch (ExcepcionDiaCorteInvalido ex)
-            {
-                validador.Errores["DiaCorte"] = ex.Message;
-            }
-            catch (ExcepcionDiaPagoInvalido ex)
-            {
-                validador.Errores["DiaPago"] = ex.Message;
-            }
-            catch (ExcepcionBancoNullInvalido ex)
-            {
-                validador.Errores["Banco"] = ex.Message;
-            }
-            catch (ExcepcionBancoLongitudInvalida ex)
-            {
-                validador.Errores["Banco"] = ex.Message;
-            }
-            catch (ExcepcionDominio ex)
-            {
-                validador.Errores.Add("Informacion", ex.Message);
-            }
-            return validador;
+            //retorna los resultados de las validaciones que se capturaron
+            //usando ExcepcionBehavior
+                return new ResultadosValidacion();
         }
 
         #endregion
