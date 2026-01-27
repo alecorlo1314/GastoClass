@@ -12,12 +12,12 @@ public readonly record struct MesVencimiento
 
     public MesVencimiento(int mesVencimiento)
     {
-        if (mesVencimiento < 1 || mesVencimiento > 12 ||
-            string.IsNullOrWhiteSpace(mesVencimiento.ToString()) || 
-            string.IsNullOrEmpty(mesVencimiento.ToString()))
-        {
-            throw new ExcepcionMesVencimientoInvalido();
-        }
+        if (string.IsNullOrWhiteSpace(mesVencimiento.ToString()))
+            throw new ExcepcionMesVencimientoInvalido(nameof(mesVencimiento), "Mes es requerido");
+        if(mesVencimiento < 1) 
+            throw new ExcepcionMesVencimientoInvalido(nameof(mesVencimiento), "No puede ser menor a 1");
+        if(mesVencimiento > 12) 
+            throw new ExcepcionMesVencimientoInvalido(nameof(mesVencimiento), "No puede ser mayor a 12");
         Mes = mesVencimiento;
     }
 }

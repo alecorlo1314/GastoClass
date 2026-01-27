@@ -10,7 +10,7 @@ public readonly record struct Comercio
     {
         if (string.IsNullOrWhiteSpace(valor))
         {
-            throw new ExcepcionComercioRequerido();
+            throw new ExcepcionComercioRequerido(nameof(valor), "Comercio es requerido");
         }
         Valor = valor;
     }

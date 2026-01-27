@@ -9,7 +9,7 @@ public readonly record struct Fecha
     {
         if(fecha!.Value.Year < 2024)
         {
-            throw new ExcepcionFechaInvalida();
+            throw new ExcepcionFechaInvalida(nameof(fecha),"No puede ser menor al 2024");
         }
         Valor = fecha;
     }

@@ -9,12 +9,12 @@ public readonly record struct Monto
     {
         if(string.IsNullOrWhiteSpace(valor.ToString()))
         {
-            throw new ExcepcionMontoRequerido();
+            throw new ExcepcionMontoRequerido(nameof(valor), "Monto es requerido");
         }
         Valor = valor;
         if(valor <= 0)
         {
-            throw new ExcepcionMontoNegativo();
+            throw new ExcepcionMontoNegativo(nameof(valor),"Monto no puede ser 0 o negativo");
         }
         Valor = valor;
     } 

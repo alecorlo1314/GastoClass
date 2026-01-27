@@ -12,7 +12,7 @@ public readonly record struct AnioVencimiento
             string.IsNullOrWhiteSpace(anioVencimiento.ToString()) || 
             string.IsNullOrEmpty(anioVencimiento.ToString()))
         {
-            throw new ExcepcionAnioVencimientoInvalido();
+            throw new ExcepcionAnioVencimientoInvalido(nameof(anioVencimiento), "Anio invalido");
         }
         Anio = anioVencimiento;
     }

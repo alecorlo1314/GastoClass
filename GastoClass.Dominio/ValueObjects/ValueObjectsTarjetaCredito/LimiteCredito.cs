@@ -8,10 +8,9 @@ public readonly record struct LimiteCredito
 
     public LimiteCredito(decimal limiteCredito)
     {
-        if (string.IsNullOrWhiteSpace(limiteCredito.ToString()) || limiteCredito <= 0)
-        {
-            throw new ExcepcionLimiteCreditoInvalido();
-        }
+        if (string.IsNullOrWhiteSpace(limiteCredito.ToString()))
+            throw new ExcepcionLimiteCreditoInvalido(nameof(limiteCredito), "Limite Credito es requerido");
+        if(limiteCredito <= 0) throw new ExcepcionLimiteCreditoInvalido(nameof(limiteCredito), "No puede ser menor a 0");
         Valor = limiteCredito;
     }
 }

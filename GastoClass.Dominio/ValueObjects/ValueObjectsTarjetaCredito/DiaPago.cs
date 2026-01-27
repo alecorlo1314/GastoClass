@@ -8,10 +8,13 @@ public readonly record struct DiaPago
 
     public DiaPago(int diaPago)
     {
-        if (diaPago < 1 || diaPago > 31 || string.IsNullOrWhiteSpace(diaPago.ToString()) || string.IsNullOrEmpty(diaPago.ToString()))
-        {
-            throw new ExcepcionDiaPagoInvalido();
-        }
+        Dia = diaPago;
+        if (string.IsNullOrWhiteSpace(diaPago.ToString()))
+            throw new ExcepcionDiaPagoInvalido(nameof(diaPago), "Dia es requerido");
+        if (diaPago < 1)
+            throw new ExcepcionDiaPagoInvalido(nameof(diaPago), "No puede ser menor a 1");
+        if (diaPago > 31)
+            throw new ExcepcionDiaPagoInvalido(nameof(diaPago), "No puede ser mayor a 31");
         Dia = diaPago;
     }
 }

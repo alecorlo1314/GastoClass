@@ -8,10 +8,8 @@ public readonly record struct Moneda
 
     public Moneda(string tipoMoneda)
     {
-        if (string.IsNullOrWhiteSpace(tipoMoneda) || string.IsNullOrEmpty(tipoMoneda))
-        {
-            throw new ExcepcionMonedaInvalida();
-        }
+        if (string.IsNullOrWhiteSpace(tipoMoneda))
+            throw new ExcepcionMonedaInvalida(nameof(tipoMoneda), "El tipo de moneda no puede estar vacío.");
 
         Valor = tipoMoneda;
     }

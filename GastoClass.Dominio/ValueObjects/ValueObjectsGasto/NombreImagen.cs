@@ -8,7 +8,7 @@ public readonly record struct NombreImagen
     {
         if (string.IsNullOrWhiteSpace(valor))
         {
-            throw new ExcepcionNombreImagenRequerido();
+            throw new ExcepcionNombreImagenRequerido(nameof(valor),"Nombre imagen es requerida");
         }
         Valor = valor;
     }

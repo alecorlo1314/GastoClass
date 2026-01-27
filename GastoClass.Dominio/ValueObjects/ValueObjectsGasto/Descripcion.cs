@@ -10,12 +10,12 @@ public readonly record struct Descripcion
     {
         if (string.IsNullOrWhiteSpace(valor))
         {
-            throw new ExcepcionDescripcionInvalida();
+            throw new ExcepcionDescripcionInvalida(nameof(valor), "Descripcion es requerida");
         }
         Valor = valor.Trim();
         if (valor.Length > 200)
         {
-            throw new ExcepcionDescripcionInvalida();
+            throw new ExcepcionDescripcionInvalida(nameof(valor), "No puede ser mayor a 200 caracteres");
         }
         Valor = valor;
     }

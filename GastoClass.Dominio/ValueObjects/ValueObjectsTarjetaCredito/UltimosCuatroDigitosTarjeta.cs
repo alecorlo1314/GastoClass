@@ -8,12 +8,10 @@ public readonly record struct UltimosCuatroDigitosTarjeta
 
     public UltimosCuatroDigitosTarjeta(int valor)
     {
-        if (string.IsNullOrWhiteSpace(valor.ToString())
-            || valor.ToString().Length != 4
-            || !int.TryParse(valor.ToString(), out _))
-        {
-            throw new ExcepcionNumeroTarjetaInvalida();
-        }
-        this.Valor = valor;
+        if (string.IsNullOrWhiteSpace(valor.ToString()))
+            throw new ExcepcionNumeroTarjetaInvalida(nameof(valor), "El número de tarjeta no puede estar vacío.");
+        if (valor != 4) 
+            throw new ExcepcionNumeroTarjetaInvalida(nameof(valor), "El número de tarjeta debe ser de 4 digitos.");
+        Valor = valor;
     }
 }

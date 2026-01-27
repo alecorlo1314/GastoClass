@@ -9,10 +9,9 @@ public readonly record struct NombreBanco
     public NombreBanco(string nombreBanco)
     {
         if (string.IsNullOrWhiteSpace(nombreBanco) || string.IsNullOrEmpty(nombreBanco))
-            throw new ExcepcionBancoNullInvalido();
-
+            throw new ExcepcionNumeroTarjetaInvalida(nameof(nombreBanco), "Banco es requerido");
         if(nombreBanco.Length < 2) 
-            throw new ExcepcionBancoLongitudInvalida();
+            throw new ExcepcionBancoLongitudInvalida(nameof(nombreBanco), "No puede ser menor a 2");
         Valor = nombreBanco;
     }
 }

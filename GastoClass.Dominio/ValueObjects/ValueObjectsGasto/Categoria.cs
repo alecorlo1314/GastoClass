@@ -10,7 +10,7 @@ public readonly record struct Categoria
     {
         if (string.IsNullOrWhiteSpace(valor))
         {
-            throw new ExcepcionCategoriaInvalida();
+            throw new ExcepcionCategoriaInvalida(nameof(valor), "Categoria es requerida");
         }
         Valor = valor;
     }
