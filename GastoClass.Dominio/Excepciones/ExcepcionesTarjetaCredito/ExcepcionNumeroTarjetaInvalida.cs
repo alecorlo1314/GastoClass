@@ -9,6 +9,7 @@
 /// </summary>
 public class ExcepcionNumeroTarjetaInvalida : ExcepcionDominio
 {
-    public ExcepcionNumeroTarjetaInvalida() 
-        : base("Los últimos 4 dígitos de la tarjeta no son válidos") { }
+    public ExcepcionNumeroTarjetaInvalida(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

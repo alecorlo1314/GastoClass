@@ -2,5 +2,7 @@
 
 public class ExcepcionAnioVencimientoInvalido : ExcepcionDominio
 {
-    public ExcepcionAnioVencimientoInvalido() : base("El año de vencimiento es inválido") { }
+    public ExcepcionAnioVencimientoInvalido(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

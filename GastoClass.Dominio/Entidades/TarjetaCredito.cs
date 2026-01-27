@@ -1,4 +1,4 @@
-﻿using GastoClass.Dominio.ValueObjects;
+﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -18,7 +18,6 @@ public class TarjetaCredito
     public DiaCorte DiaCorte { get; }
     public DiaPago DiaPago { get; }
     public NombreBanco NombreBanco { get; }
-    public PreferenciaTarjeta Preferencia { get; }
 
     public TarjetaCredito(
         int id, 
@@ -31,8 +30,7 @@ public class TarjetaCredito
         Moneda tipoMoneda,
         DiaCorte diaCorte,
         DiaPago diaPago,
-        NombreBanco nombreBanco, 
-        PreferenciaTarjeta preferencia)
+        NombreBanco nombreBanco)
     {
         Id = id;
         Tipo = tipo;
@@ -45,7 +43,6 @@ public class TarjetaCredito
         DiaCorte = diaCorte;
         DiaPago = diaPago;
         NombreBanco = nombreBanco;
-        Preferencia = preferencia;
     }
 
     public void ActualizarNombre(NombreTarjeta nombre)

@@ -2,5 +2,7 @@
 
 public class ExcepcionDiaCorteInvalido : ExcepcionDominio
 {
-    public ExcepcionDiaCorteInvalido() : base("El día de corte es inválido") { }
+    public ExcepcionDiaCorteInvalido(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

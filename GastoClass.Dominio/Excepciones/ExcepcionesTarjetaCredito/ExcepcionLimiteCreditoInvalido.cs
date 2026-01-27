@@ -2,5 +2,7 @@
 
 public class ExcepcionLimiteCreditoInvalido : ExcepcionDominio
 {
-    public ExcepcionLimiteCreditoInvalido() : base("El límite de crédito es inválido") { }
+    public ExcepcionLimiteCreditoInvalido(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

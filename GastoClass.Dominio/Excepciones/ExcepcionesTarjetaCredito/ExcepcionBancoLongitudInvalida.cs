@@ -2,5 +2,7 @@
 
 public class ExcepcionBancoLongitudInvalida : ExcepcionDominio
 {
-    public ExcepcionBancoLongitudInvalida() : base("Debe tener mas de 3 caracteres") { }
+    public ExcepcionBancoLongitudInvalida(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

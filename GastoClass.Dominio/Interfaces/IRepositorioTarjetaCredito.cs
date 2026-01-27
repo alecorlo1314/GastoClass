@@ -8,4 +8,5 @@ public interface IRepositorioTarjetaCredito
     Task AgregarAsync(TarjetaCredito tarjetaCredito);
     Task ActualizarAsync(TarjetaCredito tarjetaCredito);
     Task EliminarAsync(int idTarjetaCredito);
+    Task<TarjetaCredito?> ObtenerPorIdAsync(int id);
 }

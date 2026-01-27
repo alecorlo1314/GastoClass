@@ -2,5 +2,7 @@
 
 public class ExcepcionTipoTarjetaInvalido : ExcepcionDominio
 {
-    public ExcepcionTipoTarjetaInvalido() : base("Debes seleccionar un tipo de tarjeta") { }
+    public ExcepcionTipoTarjetaInvalido(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

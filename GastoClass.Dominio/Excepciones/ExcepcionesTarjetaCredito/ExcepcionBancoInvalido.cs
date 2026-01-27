@@ -2,5 +2,7 @@
 
 public class ExcepcionBancoNullInvalido : ExcepcionDominio
 {
-    public ExcepcionBancoNullInvalido() : base("No puede ser nulo") { }
+    public ExcepcionBancoNullInvalido(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

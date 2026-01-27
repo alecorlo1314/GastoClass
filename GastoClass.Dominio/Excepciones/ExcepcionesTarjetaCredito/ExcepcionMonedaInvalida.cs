@@ -2,5 +2,7 @@
 
 public class ExcepcionMonedaInvalida : ExcepcionDominio
 {
-    public ExcepcionMonedaInvalida() : base("Debes seleccionar una moneda") { }
+    public ExcepcionMonedaInvalida(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

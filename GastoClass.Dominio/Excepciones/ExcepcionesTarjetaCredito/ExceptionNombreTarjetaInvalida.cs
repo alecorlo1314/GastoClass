@@ -8,6 +8,7 @@
 /// </summary>
 public class ExceptionNombreTarjetaInvalida : ExcepcionDominio
 {
-    public ExceptionNombreTarjetaInvalida() 
-        : base("El nombre de la tarjeta es inválido") { }
+    public ExceptionNombreTarjetaInvalida(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }

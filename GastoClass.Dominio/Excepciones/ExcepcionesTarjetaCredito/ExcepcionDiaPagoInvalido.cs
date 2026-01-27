@@ -2,5 +2,7 @@
 
 public class ExcepcionDiaPagoInvalido : ExcepcionDominio
 {
-    public ExcepcionDiaPagoInvalido() : base("El día de pago es inválido") { }
+    public ExcepcionDiaPagoInvalido(string campo, string? mensaje) : base(campo, mensaje)
+    {
+    }
 }
