@@ -1,6 +1,5 @@
 ﻿using GastoClass.Aplicacion.Excepciones;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.Dominio.ValueObjects;
 
 namespace GastoClass.Aplicacion.UseCase.TarjetaCreditoCasoUso;
 

@@ -32,6 +32,23 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
         }
     }
 
+    public async Task<int> CantidadMesAsync(int mes, int anio)
+    {
+        //obtener la conexion a la base de datos
+        var conexion = await _conexion.ObtenerConexionAsync();
+        //Convertimos el mes y año en un rango de fechas
+        var inicioMes = new DateTime(anio, mes, 1);
+        var finMes = inicioMes.AddMonths(1);
+        //Consulta para obtener los gastos del mes y año especificados
+        var consulta = conexion.Table<GastoEntidad>()
+            .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes);
+        //contamos la cantidad de transacciones
+        var cantidadTransacciones = await consulta.CountAsync();
+
+        //retornamos la cantidad de transacciones
+        return cantidadTransacciones;
+    }
+
     public async Task EliminarAsync(int id)
     {
         var conexion = await _conexion.ObtenerConexionAsync();
@@ -57,5 +74,61 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
                entidades
                .Select(g => GastoMapper.ToDomain(g))
                .ToList();
+    }
+
+    public Task<List<Gasto>?> ObtenerTodosAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<decimal> TotalMesAsync(int mes, int anio)
+    {
+        //Establecer conexion
+        var conexion = await _conexion.ObtenerConexionAsync();
+        //Convertimos el mes y año en un rango de fechas
+        var inicioMes = new DateTime(anio, mes, 1);
+        var finMes = inicioMes.AddMonths(1);
+        //Consulta para obtener los gastos del mes y año especificados
+        var consulta = conexion.Table<GastoEntidad>()
+            .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes);
+        //lo convertimos en lista asyncrona
+        var gastosDelMes = await consulta.ToListAsync();
+        //inicializamos el total de gastos
+        decimal totalGastos = 0;
+        //iteramos sobre los gastos y sumamos los montos
+        foreach (var gasto in gastosDelMes)
+        {
+            totalGastos += gasto.Monto;
+        }
+        //retornamos el total de gastos
+        return totalGastos;
+    }
+    public async Task<List<Gasto>?> GastoPorCategoriaMes(int mes, int anio)
+    {
+        //obtener la conexion a la base de datos
+        var conexion = await _conexion.ObtenerConexionAsync();
+        //Convertimos el mes y año en un rango de fechas
+        var inicioMes = new DateTime(anio, mes, 1);
+        var finMes = inicioMes.AddMonths(1);
+        //Consulta para obtener los gastos del mes y ano por categoria especificados
+        var consulta = (await conexion.Table<GastoEntidad>().ToListAsync())
+            .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes)
+            .GroupBy(g => g.Categoria)
+            .Select(g => new GastoEntidad
+            {
+                //Se pasa la categoria
+                Categoria = g.Key,
+                //Se suma el monto por categoria
+                Monto = g.Sum(x => x.Monto)
+                //Se ordena de mayor a menor
+            }).OrderByDescending(g => g.Monto);
+         List<Gasto> listaGasto = new();
+        foreach (var gasto in consulta)
+        {
+            //Mapear a dominio
+            listaGasto.Add(GastoMapper.ToDomain(gasto));
+        }
+        return listaGasto;
+
     }
 }

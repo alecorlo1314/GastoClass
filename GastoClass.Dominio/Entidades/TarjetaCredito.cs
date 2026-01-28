@@ -8,16 +8,16 @@ namespace GastoClass.Dominio.Entidades;
 public class TarjetaCredito
 {
     public int Id { get; }
-    public TipoTarjeta Tipo { get; }
-    public NombreTarjeta Nombre { get; private set; }
-    public UltimosCuatroDigitosTarjeta UltimosCuatro { get; }
+    public TipoTarjeta Tipo { get; private set; }
+    public NombreTarjeta NombreTarjeta { get; private set; }
+    public UltimosCuatroDigitosTarjeta UltimosCuatroDigitos { get; }
     public MesVencimiento MesVencimiento { get; }
     public AnioVencimiento AnioVencimiento { get; }
     public LimiteCredito LimiteCredito { get; }
-    public Moneda TipoMoneda { get; }
+    public TipoMoneda TipoMoneda { get; private set; }
     public DiaCorte DiaCorte { get; }
     public DiaPago DiaPago { get; }
-    public NombreBanco NombreBanco { get; }
+    public NombreBanco NombreBanco { get; private set; }
 
     public TarjetaCredito(
         int id, 
@@ -27,15 +27,15 @@ public class TarjetaCredito
         MesVencimiento mesVencimiento,
         AnioVencimiento anioVencimiento,
         LimiteCredito limiteCredito,
-        Moneda tipoMoneda,
+        TipoMoneda tipoMoneda,
         DiaCorte diaCorte,
         DiaPago diaPago,
         NombreBanco nombreBanco)
     {
         Id = id;
         Tipo = tipo;
-        Nombre = nombre;
-        UltimosCuatro = ultimosCuatro;
+        NombreTarjeta = nombre;
+        UltimosCuatroDigitos = ultimosCuatro;
         MesVencimiento = mesVencimiento;
         AnioVencimiento = anioVencimiento;
         LimiteCredito = limiteCredito;
@@ -44,9 +44,15 @@ public class TarjetaCredito
         DiaPago = diaPago;
         NombreBanco = nombreBanco;
     }
-
-    public void ActualizarNombre(NombreTarjeta nombre)
+    public void ActualizarDatos(
+        TipoTarjeta tipoTarjeta,
+        NombreTarjeta nombreTarjeta,
+        TipoMoneda tipoMoneda,
+        NombreBanco nombreBanco)
     {
-        Nombre = nombre;
+        Tipo = tipoTarjeta;
+        NombreTarjeta = nombreTarjeta;
+        TipoMoneda = tipoMoneda;
+        NombreBanco = nombreBanco;
     }
 }

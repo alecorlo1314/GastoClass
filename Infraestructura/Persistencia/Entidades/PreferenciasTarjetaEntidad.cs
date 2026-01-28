@@ -1,7 +1,7 @@
 ﻿using SQLite;
 namespace Infraestructura.Persistencia.Entidades;
 
-public class PreferenciasTarjeta
+public class PreferenciasTarjetaEntidad
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }

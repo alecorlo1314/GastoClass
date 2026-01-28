@@ -44,7 +44,7 @@ public class AgregarTarjetaCreditoCasoUso
                         new MesVencimiento(tarjetaCreditoDto.MesVencimiento),
                         new AnioVencimiento(tarjetaCreditoDto.AnioVencimiento),
                         new LimiteCredito(tarjetaCreditoDto.LimiteCredito!.Value),
-                        new Moneda(tarjetaCreditoDto.Moneda!),
+                        new TipoMoneda(tarjetaCreditoDto.Moneda!),
                         new DiaCorte(tarjetaCreditoDto.DiaCorte!.Value),
                         new DiaPago(tarjetaCreditoDto.DiaPago!.Value),
                         new NombreBanco(tarjetaCreditoDto.NombreBanco!)

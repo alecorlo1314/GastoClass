@@ -37,14 +37,14 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
         {
             Id = tarjetaCredito.Id,
             TipoTarjeta = tarjetaCredito.Tipo.Valor,
-            NombreTarjeta = tarjetaCredito.Nombre.Valor,
-            UltimosCuatroDigitos = tarjetaCredito.UltimosCuatro.Valor,
+            NombreTarjeta = tarjetaCredito.NombreTarjeta.Valor,
+            UltimosCuatroDigitos = tarjetaCredito.UltimosCuatroDigitos.Valor,
             MesVencimiento = tarjetaCredito.MesVencimiento.Mes,
             AnioVencimiento = tarjetaCredito.AnioVencimiento.Anio,
             LimiteCredito = tarjetaCredito.LimiteCredito.Valor,
             Balance = 0,
             CreditoDisponible = tarjetaCredito.LimiteCredito.Valor,
-            Moneda = tarjetaCredito.TipoMoneda.Valor,
+            Moneda = tarjetaCredito.TipoMoneda.Tipo,
             DiaCorte = tarjetaCredito.DiaCorte.Dia,
             DiaPago = tarjetaCredito.DiaPago.Dia,
             NombreBanco = tarjetaCredito.NombreBanco.Valor,
@@ -61,7 +61,13 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
         }
     }
 
-    public Task EliminarAsync(int idTarjetaCredito)
+    public async Task EliminarAsync(int idTarjetaCredito)
+    {
+        var conexion = await _conexion.ObtenerConexionAsync();
+        await conexion.Table<TarjetaCreditoEntidad>().DeleteAsync();
+    }
+
+    public Task<TarjetaCredito?> ObtenerPorIdAsync(int id)
     {
         throw new NotImplementedException();
     }

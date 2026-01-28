@@ -11,9 +11,13 @@ public class PreferenciaTarjeta
     public string? IconoChip { get;} 
 
     public PreferenciaTarjeta(
-        int id, string? colorHex1, string? colorHex2, 
-        string? colorBorde, string? colorTexto, string? 
-        iconoTipoTarjeta, string? iconoChip)
+        int id, 
+        string? colorHex1, 
+        string? colorHex2, 
+        string? colorBorde, 
+        string? colorTexto, 
+        string? iconoTipoTarjeta, 
+        string? iconoChip)
     {
         Id = id;
         ColorHex1 = colorHex1;

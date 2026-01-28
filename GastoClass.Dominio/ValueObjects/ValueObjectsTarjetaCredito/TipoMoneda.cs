@@ -1,8 +1,8 @@
 ﻿namespace GastoClass.Dominio.Entidades;
 
-public class TipoMoneda
+public readonly record struct TipoMoneda
 {
-    public string? Tipo { get; set; }
+    public string? Tipo { get; }
 
     public TipoMoneda(string? TipoMoneda)
     {

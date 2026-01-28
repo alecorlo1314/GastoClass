@@ -4,7 +4,7 @@ using MediatR;
 
 namespace GastoClass.Aplicacion.Gastos.Commands
 {
-    public class CrearTarjetaCreditoCommand : 
+    public class AgragarTarjetaCreditoCommand : 
         IRequest<ResultadosValidacion>
     {
         public int? Id { get; init; }
@@ -21,6 +21,6 @@ namespace GastoClass.Aplicacion.Gastos.Commands
         public int? DiaPago { get; init; }
         public string? NombreBanco { get; init; }
         public int idPreferencia { get; init; }
-        public PreferenciasTarjetaCreditoDto PreferenciaTarjeta { get; init; }
+        public PreferenciasTarjetaCreditoDto? PreferenciaTarjeta { get; init; }
     }
 }

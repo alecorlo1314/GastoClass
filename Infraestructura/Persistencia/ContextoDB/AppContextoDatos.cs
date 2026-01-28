@@ -21,7 +21,7 @@ public class AppContextoDatos
             //Creamos una tabla para almacenar los gastos
             //await conexionBaseDatos.CreateTableAsync<Gasto>();
             await conexionBaseDatos.CreateTableAsync<TarjetaCreditoEntidad>();
-            //await conexionBaseDatos.CreateTableAsync<PreferenciaTarjeta>();
+            await conexionBaseDatos.CreateTableAsync<PreferenciasTarjetaEntidad>();
 
             //Retornamos la conexion a la base de datos
             return conexionBaseDatos;

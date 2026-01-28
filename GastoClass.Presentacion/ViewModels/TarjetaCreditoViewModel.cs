@@ -311,7 +311,7 @@ public partial class TarjetaCreditoViewModel : ObservableObject
                 IconoChip = IconoChip
             };
             //Inicializamos un objeto TarjetaCredito
-            var resultado = await _mediator.Send(new CrearTarjetaCreditoCommand
+            var resultado = await _mediator.Send(new AgragarTarjetaCreditoCommand
             {
                 TipoTarjeta = TipoTarjetaSeleccionada?.Valor,
                 Nombre = NombreTarjeta,
@@ -321,7 +321,7 @@ public partial class TarjetaCreditoViewModel : ObservableObject
                 LimiteCredito = LimiteCredito,
                 Balance = 0,
                 CreditoDisponible = LimiteCredito,
-                Moneda = TipoMonedaSeleccionada?.Tipo,
+                Moneda = TipoMonedaSeleccionada.Tipo,
                 DiaCorte = DiaCorte,
                 DiaPago = DiaPago,
                 NombreBanco = NombreBanco,

@@ -10,5 +10,8 @@ namespace GastoClass.Dominio.Interfaces
         Task EliminarAsync(int id);
         Task<Gasto?> ObtenerPorIdAsync(int id);
         Task<List<Gasto>?> ObtenerTodosAsync();
+        Task<decimal> TotalMesAsync(int mes, int anio);
+        Task<int> CantidadMesAsync(int mes, int anio);
+        Task<List<Gasto>?> GastoPorCategoriaMes(int mes, int anio);
     }
 }
