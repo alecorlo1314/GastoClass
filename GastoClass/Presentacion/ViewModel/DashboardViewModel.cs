@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
+using MediatR;
 using System.Collections.ObjectModel;
 using System.Timers;
 
@@ -18,6 +20,8 @@ public partial class DashboardViewModel : ObservableObject
     private readonly PredictionApiService _serviceML;
     private readonly ServicioGastos _gastoService;
     private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
+
+    private readonly IMediator? _mediator;
 
     #endregion
 
@@ -46,7 +50,7 @@ public partial class DashboardViewModel : ObservableObject
     private string? _monto;
 
     [ObservableProperty]
-    private TarjetaCredito tarjetaSeleccionada;
+    private TarjetaCredito? tarjetaSeleccionada;
 
     /// <summary>
     /// Fecha del gasto, por defecto es hoy
@@ -136,17 +140,18 @@ public partial class DashboardViewModel : ObservableObject
     /// Constructor del ViewModel
     /// Inicializa servicios, timer y carga datos iniciales del dashboard
     /// </summary>
-    public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos, ServicioTarjetaCredito servicioTarjetaCredito)
+    public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos, ServicioTarjetaCredito servicioTarjetaCredito, IMediator mediator)
     {
         // Inyección de dependencias
         _serviceML = predictionApiService;
         _gastoService = servicioGastos;
         _servicioTarjetaCredito = servicioTarjetaCredito;
 
+        _mediator = mediator;
+
         // Cargar datos iniciales del dashboard
-        _ = TotalGastadoEsteMes();
-        _ = CantidadTransaccionesEsteMes();
         _ = CargarGastosPorCategoria();
+        _ = CargarTransaccionesGastoTotal();
         _ = ObtenerUltimos5GastosAsync();
         _ = CargarTarjetasAsync();
 
@@ -319,7 +324,7 @@ public partial class DashboardViewModel : ObservableObject
                 Monto = decimal.Parse(Monto!),
                 NombreImagen = $"icono_{CategoriaFinal.DescripcionCategoriaRecomendada?.ToLower()}.png",
                 Fecha = Fecha,
-                TarjetaId = TarjetaSeleccionada.Id
+                TarjetaId = TarjetaSeleccionada!.Id
             };
 
             // Guardar gasto en la base de datos
@@ -340,8 +345,7 @@ public partial class DashboardViewModel : ObservableObject
                 CategoriaFinal = null;
 
                 // Recargar datos del dashboard
-                _ = TotalGastadoEsteMes();
-                _ = CantidadTransaccionesEsteMes();
+                _ = CargarTransaccionesGastoTotal();
                 _ = CargarGastosPorCategoria();
                 _ = ObtenerUltimos5GastosAsync();
             }
@@ -389,41 +393,25 @@ public partial class DashboardViewModel : ObservableObject
 
     #endregion
 
-    #region Métodos de Carga de Datos del Dashboard
-
-    /// <summary>
-    /// Obtiene el total de dinero gastado en el mes actual
-    /// Actualiza la propiedad GastoTotalMes
-    /// </summary>
-    private async Task TotalGastadoEsteMes()
+    #region Métodos de Carga de Datos 
+    private async Task CargarTransaccionesGastoTotal()
     {
         try
         {
-            var total = await _gastoService.ObtenerGastosTotalesDelMesAsync(DateTime.Now.Month, DateTime.Now.Year);
-            GastoTotalMes = total;
+            var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
+            GastoTotalMes = consulta.TotalGastado;
+            CantidadTransacciones = consulta.CantidadTransacciones;
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-        }
-    }
-
-    /// <summary>
-    /// Obtiene la cantidad de transacciones realizadas en el mes actual
-    /// Actualiza el mensaje descriptivo de transacciones
-    /// </summary>
-    private async Task CantidadTransaccionesEsteMes()
-    {
-        try
-        {
-            var total = await _gastoService.ObtenerTransaccionesDelMesAsync(DateTime.Now.Month, DateTime.Now.Year);
-            CantidadTransacciones = total;
-           
-            MostrarMensajeCantidadTransacciones();
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                var page = Shell.Current?.CurrentPage ?? Application.Current?.MainPage;
+                if (page != null)
+                    await page.DisplayAlertAsync("Error", ex.Message, "OK");
+                else
+                    System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+            });
         }
     }
 
