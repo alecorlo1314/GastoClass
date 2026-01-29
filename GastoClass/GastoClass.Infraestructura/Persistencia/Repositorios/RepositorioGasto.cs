@@ -59,9 +59,19 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
                .ToList();
     }
 
-    public Task<List<GastoDominio>?> ObtenerTodosAsync()
+    public async Task<List<GastoDominio>?> ObtenerTodosAsync()
     {
-        throw new NotImplementedException();
+        //obtener la conexion a la base de datos
+        var conexion = await _conexion.ObtenerConexionAsync();
+        //Obtener todos los gastos
+        var entidades = await conexion
+            .Table<GastoEntidad>()
+            .ToListAsync();
+        //Mapear a dominio
+        return entidades == null ? null : 
+               entidades
+               .Select(g => GastoMapper.ToDomain(g))
+               .ToList();
     }
 
     public async Task<decimal> TotalMesAsync(int mes, int anio)

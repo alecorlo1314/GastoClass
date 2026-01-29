@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Dashboard.Consultas.ObtenerUltimosGastos;
 using GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
 using GastoClass.Dominio.Model;
 using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
@@ -103,7 +104,7 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<GastoPorCategoriaDto> gastoPorCategoriasMes = new();
     [ObservableProperty]
-    private ObservableCollection<Gasto>? ultimosCincoMovimientos = new();
+    private ObservableCollection<UltimoCincoGastosDto>? ultimosCincoMovimientos = new();
     public IDictionary<string, float>? ListaConPuntos { get; set; }
     [ObservableProperty]
     private ObservableCollection<TarjetaCredito> listaTarjetasCredito = new();
@@ -129,6 +130,8 @@ public partial class DashboardViewModel : ObservableObject
         _ = CargarTransaccionesGastoTotal();
         _ = CargarGastosPorCategoria();
         _ = ObtenerUltimos5GastosAsync();
+
+        //Esto es solo para el popup de agregar gastos
         _ = CargarTarjetasAsync();
 
         // Configurar timer para predicciones ML con retardo de 500ms
@@ -377,6 +380,7 @@ public partial class DashboardViewModel : ObservableObject
             var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
             GastoTotalMes = consulta.TotalGastado;
             CantidadTransacciones = consulta.CantidadTransacciones;
+            MostrarMensajeCantidadTransacciones();
         }
         catch (Exception ex)
         {
@@ -438,23 +442,13 @@ public partial class DashboardViewModel : ObservableObject
     {
         try
         {
-            var ultimos5Gastos = await _gastoService.ObtenerUltimos5GastosAsync();
+            var ultimosCincoGastos = await _mediator!.Send(new ObtenerUltimosTresGastosConsulta());
 
             // Limpiar y agregar los últimos 5 gastos a la colección observable
             UltimosCincoMovimientos?.Clear();
-
-            foreach (var gasto in ultimos5Gastos)
-            {
-                UltimosCincoMovimientos?.Add(new Gasto
-                {
-                    Id = gasto.Id,
-                    Monto = gasto.Monto,
-                    Fecha = gasto.Fecha,
-                    Descripcion = gasto.Descripcion,
-                    Categoria = gasto.Categoria,
-                    NombreImagen = $"icono_{gasto.Categoria?.ToLower()}.png"
-                });
-            }
+            UltimosCincoMovimientos = ultimosCincoGastos == null ?
+                new ObservableCollection<UltimoCincoGastosDto>() :
+                new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
         }
         catch (Exception ex)
         {
