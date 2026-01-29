@@ -13,6 +13,7 @@ public class TarjetaCredito
     public UltimosCuatroDigitosTarjeta UltimosCuatroDigitos { get; }
     public MesVencimiento MesVencimiento { get; }
     public AnioVencimiento AnioVencimiento { get; }
+    public decimal Balance { get; }
     public LimiteCredito LimiteCredito { get; }
     public TipoMoneda TipoMoneda { get; private set; }
     public DiaCorte DiaCorte { get; }

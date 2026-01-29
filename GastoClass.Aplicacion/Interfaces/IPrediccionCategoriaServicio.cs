@@ -1,8 +1,8 @@
-﻿using GastoClass.Aplicacion.Dashboard.DTOs;
+﻿using GastoClass.Aplicacion.Servicios.DTOs;
 
 namespace GastoClass.Aplicacion.Interfaces;
 
 public interface IPrediccionCategoriaServicio
 {
-    Task<PrediccionCategoriaDto> PredecirAsync(string descripcion);
+    Task<CategoriaPredichaDto> PredecirAsync(string descripcion);
 }

@@ -1,6 +1,6 @@
 ﻿namespace GastoClass.Aplicacion.Dashboard.Consultas.ObtenerUltimosGastos;
 
-public class GastoUltimosCincoDto
+public class GastoUltimosTresDto
 {
     public string? Icono { get; set; }
     public string? Descripcion { get; set; }

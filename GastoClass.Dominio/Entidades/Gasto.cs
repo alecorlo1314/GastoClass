@@ -33,4 +33,26 @@ public class Gasto
         TarjetaId = tarjetaId;
     }
     public void SetId(int id) => Id = id;
+
+    public static Gasto Crear(
+        string? descripcion,
+        decimal monto,
+        string? categoria,
+        string? comercio,
+        DateTime fecha,
+        string? estado,
+        int tarjetaId,
+        string? nombreImagen)
+    {
+        return new Gasto(
+            descripcion: new Descripcion(descripcion!),
+            monto: new Monto(monto),
+            categoria: new Categoria(categoria),
+            comercio: new Comercio(comercio!),
+            fecha: new Fecha(fecha),
+            estado: new Estado(estado!),
+            nombreImagen: new NombreImagen(nombreImagen),
+            tarjetaId: tarjetaId
+        );
+    }
 }

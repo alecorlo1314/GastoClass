@@ -27,7 +27,7 @@ public class RepositorioPreferenciasTarjetaCredito(AppContextoDatos contextoDato
         await conexion.DeleteAsync(preferenciaEnidad);
     }
 
-    public async Task<PreferenciaTarjeta?> ObtenerPorId(int idPreferencia)
+    public async Task<PreferenciaTarjeta?> ObtenerPorIdTarjeta(int idPreferencia)
     {
         //Establecer conexion 
         var conexion = await contextoDatos.ObtenerConexionAsync();

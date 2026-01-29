@@ -1,7 +1,7 @@
 ﻿using GastoClass.Aplicacion.Common;
 using MediatR;
 
-namespace GastoClass.Aplicacion.Gastos.Commands;
+namespace GastoClass.Aplicacion.CarpetaGastos.Commands;
 
 public class ActualizarTarjetaCreditoCommand :
     IRequest<ResultadosValidacion>

@@ -1,12 +1,12 @@
-﻿using GastoClass.Aplicacion.Common;
-using GastoClass.Aplicacion.Gastos.Commands;
+﻿using GastoClass.Aplicacion.CarpetaGastos.Commands;
+using GastoClass.Aplicacion.Common;
 using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 using MediatR;
 
-namespace GastoClass.Aplicacion.Gastos.Handlers;
+namespace GastoClass.Aplicacion.CarpetaGastos.Handlers;
 
 public class ActualizarTarjetaCreditoCommandHandler(IRepositorioTarjetaCredito repositorioTarjetaCredito) :
     IRequestHandler<ActualizarTarjetaCreditoCommand, ResultadosValidacion>
