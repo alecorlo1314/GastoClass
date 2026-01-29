@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
 using GastoClass.Dominio.Model;
 using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
 using MediatR;
@@ -95,40 +96,15 @@ public partial class DashboardViewModel : ObservableObject
     #endregion
 
     #region Colecciones Observables
-
-    /// <summary>
-    /// Lista de resultados de predicción del modelo ML
-    /// </summary>
     [ObservableProperty]
     private ObservableCollection<ResultadoPrediccion> listaResultadoPredicciones = new();
-
-    /// <summary>
-    /// Lista de categorías recomendadas con sus probabilidades
-    /// Ordenadas por score descendente
-    /// </summary>
     [ObservableProperty]
     private ObservableCollection<CategoriasRecomendadas> categoriasRecomendadas = new();
-
-    /// <summary>
-    /// Gastos agrupados por categoría para gráfico circular
-    /// Contiene el monto total gastado por cada categoría en el mes
-    /// </summary>
     [ObservableProperty]
-    private ObservableCollection<Gasto> gastoPorCategoriasMes = new();
-
-    /// <summary>
-    /// Últimos 5 movimientos/gastos registrados
-    /// Para mostrar en el dashboard
-    /// </summary>
+    private ObservableCollection<GastoPorCategoriaDto> gastoPorCategoriasMes = new();
     [ObservableProperty]
     private ObservableCollection<Gasto>? ultimosCincoMovimientos = new();
-
-    /// <summary>
-    /// Diccionario con categorías y sus probabilidades
-    /// Key: Nombre de categoría, Value: Probabilidad (0-1)
-    /// </summary>
     public IDictionary<string, float>? ListaConPuntos { get; set; }
-
     [ObservableProperty]
     private ObservableCollection<TarjetaCredito> listaTarjetasCredito = new();
 
@@ -150,8 +126,8 @@ public partial class DashboardViewModel : ObservableObject
         _mediator = mediator;
 
         // Cargar datos iniciales del dashboard
-        _ = CargarGastosPorCategoria();
         _ = CargarTransaccionesGastoTotal();
+        _ = CargarGastosPorCategoria();
         _ = ObtenerUltimos5GastosAsync();
         _ = CargarTarjetasAsync();
 
@@ -442,13 +418,11 @@ public partial class DashboardViewModel : ObservableObject
     {
         try
         {
-            var gastosPorCategoria = await _gastoService.ObtenerGastoTotalPorCategoriaMesAsync(DateTime.Now.Month, DateTime.Now.Year);
+            var gastosPorCategoria = await _mediator!.Send(new ObtenerGastosPorCategoriaConsulta(DateTime.Now.Month, DateTime.Now.Year));
             GastoPorCategoriasMes.Clear();
-
-            foreach (var gasto in gastosPorCategoria)
-            {
-                GastoPorCategoriasMes.Add(gasto);
-            }
+            GastoPorCategoriasMes = gastosPorCategoria == null ?
+                new ObservableCollection<GastoPorCategoriaDto>() :
+                new ObservableCollection<GastoPorCategoriaDto>(gastosPorCategoria);
         }
         catch (Exception ex)
         {

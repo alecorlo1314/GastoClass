@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
 using GastoClass.GastoClass.Dominio.Interfaces;
@@ -74,6 +75,7 @@ namespace GastoClass
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerResumenMesConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosPorCategoriaConsulta).Assembly);
             });
 
             // HTTP Client para el servicio de predicción
