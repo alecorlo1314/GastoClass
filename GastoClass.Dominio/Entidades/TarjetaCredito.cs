@@ -1,6 +1,4 @@
-﻿
-using GastoClass.Dominio.Enums;
-using GastoClass.Dominio.ValueObjects;
+﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -9,28 +7,53 @@ namespace GastoClass.Dominio.Entidades;
 /// </summary>
 public class TarjetaCredito
 {
-    public Guid Id { get; }
-    public TipoTarjeta Tipo { get; }
-    public NombreTarjeta? Nombre { get; private set; }
-    public UltimosCuatroDigitosTarjeta? UltimosCuatro { get; }
-    public FechaVencimiento? Vencimiento { get; }
+    public int Id { get; }
+    public TipoTarjeta Tipo { get; private set; }
+    public NombreTarjeta NombreTarjeta { get; private set; }
+    public UltimosCuatroDigitosTarjeta UltimosCuatroDigitos { get; }
+    public MesVencimiento MesVencimiento { get; }
+    public AnioVencimiento AnioVencimiento { get; }
+    public decimal Balance { get; }
+    public LimiteCredito LimiteCredito { get; }
+    public TipoMoneda TipoMoneda { get; private set; }
+    public DiaCorte DiaCorte { get; }
+    public DiaPago DiaPago { get; }
+    public NombreBanco NombreBanco { get; private set; }
 
     public TarjetaCredito(
-        Guid id, 
+        int id, 
         TipoTarjeta tipo, 
-        NombreTarjeta? nombre, 
-        UltimosCuatroDigitosTarjeta? ultimosCuatro, 
-        FechaVencimiento? vencimiento)
+        NombreTarjeta nombre, 
+        UltimosCuatroDigitosTarjeta ultimosCuatro, 
+        MesVencimiento mesVencimiento,
+        AnioVencimiento anioVencimiento,
+        LimiteCredito limiteCredito,
+        TipoMoneda tipoMoneda,
+        DiaCorte diaCorte,
+        DiaPago diaPago,
+        NombreBanco nombreBanco)
     {
         Id = id;
         Tipo = tipo;
-        Nombre = nombre;
-        UltimosCuatro = ultimosCuatro;
-        Vencimiento = vencimiento;
+        NombreTarjeta = nombre;
+        UltimosCuatroDigitos = ultimosCuatro;
+        MesVencimiento = mesVencimiento;
+        AnioVencimiento = anioVencimiento;
+        LimiteCredito = limiteCredito;
+        TipoMoneda = tipoMoneda;
+        DiaCorte = diaCorte;
+        DiaPago = diaPago;
+        NombreBanco = nombreBanco;
     }
-
-    public void ActualizarNombre(NombreTarjeta? nombre)
+    public void ActualizarDatos(
+        TipoTarjeta tipoTarjeta,
+        NombreTarjeta nombreTarjeta,
+        TipoMoneda tipoMoneda,
+        NombreBanco nombreBanco)
     {
-        Nombre = nombre;
+        Tipo = tipoTarjeta;
+        NombreTarjeta = nombreTarjeta;
+        TipoMoneda = tipoMoneda;
+        NombreBanco = nombreBanco;
     }
 }

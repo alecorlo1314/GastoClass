@@ -1,8 +1,6 @@
 ﻿using GastoClass.Aplicacion.DTOs;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.Dominio.Model;
-using GastoClass.Infraestructura.Excepciones;
-using System.Security.Cryptography.X509Certificates;
 
 namespace GastoClass.Infraestructura.Repositorios;
 public class DatosTarjetasCredito : IServicioTarjetaCredito

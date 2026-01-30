@@ -82,6 +82,8 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="MediatR" Version="14.0.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="Microsoft.ML" Version="5.0.0" />
@@ -93,30 +95,34 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Presentacion\View\ConfiguracionesPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentacion\View\ConfiguracionesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Presentacion\View\DashboardPag.xaml">
+	  <MauiXaml Update="GastoClass.Presentacion\View\DashboardPag.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Presentacion\View\DetallesTarjetaCreditoPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentacion\View\DetallesTarjetaCreditoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Presentacion\View\HistorialGastosPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentacion\View\HistorialGastosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Presentacion\View\MLDetallesPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentacion\View\MLDetallesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Presentacion\View\TargetaCreditoPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentacion\View\TargetaCreditoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Presentacion\View\DashboardPag.xaml.cs">
+	  <Compile Update="GastoClass.Presentacion\View\DashboardPag.xaml.cs">
 	    <DependentUpon>DashboardPag.xaml</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="GastoClass.Aplicacion\Gasto\Consultas\" />
 	</ItemGroup>
 
 </Project>

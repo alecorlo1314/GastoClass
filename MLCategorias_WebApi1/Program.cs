@@ -3,7 +3,6 @@ using Microsoft.Extensions.ML;
 using Microsoft.ML.Data;
 using Microsoft.OpenApi.Models;
 using MLCategorias_WebApi.DTO;
-using System.Reflection.Emit;
 using static MLCategorias;
 
 // Configure app
@@ -42,7 +41,7 @@ app.MapPost("/api/v1/Predict",
     // Inyectar el pool de motores de prediccion
     PredictionEnginePool<ModelInput, ModelOutput> pool,
     //Para realizar la solicitud de prediccion
-    PredictionRequestDto request
+    SolicitudPrediccionDto request
 ) =>
 //Logica del endpoint
 {
@@ -65,9 +64,9 @@ app.MapPost("/api/v1/Predict",
     var labelColumn = schemas.GetColumnOrNull("Categoria");
 
 
-        var keyNames = new VBuffer<ReadOnlyMemory<char>>();
-        labelColumn.Value.GetKeyValues(ref keyNames);
-        var categories = keyNames.DenseValues().Select(x => x.ToString()).ToArray();
+    var keyNames = new VBuffer<ReadOnlyMemory<char>>();
+    labelColumn.Value.GetKeyValues(ref keyNames);
+    var categories = keyNames.DenseValues().Select(x => x.ToString()).ToArray();
 
     for (int i = 0; i < categories.Length; i++)
     {
@@ -75,13 +74,14 @@ app.MapPost("/api/v1/Predict",
     }
 
     //Crear el response DTO para la respuesta
-    var response = new PredictionResponseDto
+    var response = new RespuestaPrediccionDto
     {
         //Tomamos solamente la etiqueta predicha y la confianza mas alta
-        Categoria = prediction.PredictedLabel,
+        CategoriaPrincipal = prediction.PredictedLabel,
         Confidencial = prediction.Score.Max()
         //lista de categorias en prediction.Score
-        ,scoreDict = scoreDict
+        ,
+        scoreDict = scoreDict
     };
     //Retornar la respuesta con codigo 200 que significa que todo salio bien
     return Results.Ok(response);

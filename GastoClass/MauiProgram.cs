@@ -1,13 +1,22 @@
 ﻿using CommunityToolkit.Maui;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Interfaces;
+using GastoClass.Aplicacion.Servicios;
+using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 using GastoClass.Dominio.Interfacez;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
+using GastoClass.GastoClass.Dominio.Interfaces;
 using GastoClass.Infraestructura.Repositorios;
 using GastoClass.Presentacion.View;
 using GastoClass.Presentacion.ViewModel;
+using Infraestructura.Persistencia.ContextoDB;
+using Infraestructura.Persistencia.Repositorios;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using System.Globalization;
+using System.Reflection;
 
 namespace GastoClass
 {
@@ -59,10 +68,20 @@ namespace GastoClass
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
             builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
+            builder.Services.AddScoped<IRepositorioGasto, RepositorioGasto>();
+            builder.Services.AddSingleton<IPrediccionCategoriaServicio, PrediccionCategoriaServicio>();
+            builder.Services.AddSingleton<PrediccionCategoriaServicio>();
+            builder.Services.AddSingleton<AppContextoDatos>();
             builder.Services.AddSingleton<ServicioGastos>();
             builder.Services.AddSingleton<ServicioTarjetaCredito>();
             builder.Services.AddSingleton<AppDbContext>();
 
+            // Registrar MediatR indicando el assembly donde están tus Handlers
+            builder.Services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerResumenMesConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosPorCategoriaConsulta).Assembly);
+            });
 
             // HTTP Client para el servicio de predicción
             builder.Services.AddSingleton(sp =>
