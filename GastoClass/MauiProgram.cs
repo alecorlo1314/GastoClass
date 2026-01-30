@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using GastoClass.Aplicacion.CasosUso;
-using GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
 using GastoClass.Dominio.Interfacez;
-using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using GastoClass.Infraestructura.Repositorios;
 using GastoClass.Presentacion.View;

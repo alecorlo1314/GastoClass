@@ -1,4 +1,4 @@
-﻿namespace GastoClass.Aplicacion.Dashboard.Consultas.ObtenerUltimosGastos;
+﻿namespace GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 
 public class UltimoCincoGastosDto
 {

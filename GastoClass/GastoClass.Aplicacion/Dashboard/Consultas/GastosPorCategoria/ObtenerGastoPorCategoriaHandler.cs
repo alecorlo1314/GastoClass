@@ -1,7 +1,8 @@
-﻿using GastoClass.GastoClass.Dominio.Interfaces;
+﻿using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.GastoClass.Dominio.Interfaces;
 using MediatR;
 
-namespace GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
+namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 
 public class ObtenerGastoPorCategoriaHandler( IRepositorioGasto repositorioGasto) :
     IRequestHandler<ObtenerGastosPorCategoriaConsulta, List<GastoPorCategoriaDto>?>

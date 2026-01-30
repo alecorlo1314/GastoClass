@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
-using GastoClass.Aplicacion.Dashboard.Consultas.ObtenerUltimosGastos;
 using GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
 using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
+using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
 using MediatR;
 using System.Collections.ObjectModel;

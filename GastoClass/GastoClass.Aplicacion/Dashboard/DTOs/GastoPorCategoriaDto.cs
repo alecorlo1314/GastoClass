@@ -1,4 +1,4 @@
-﻿namespace GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
+﻿namespace GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 
 public class GastoPorCategoriaDto
 {

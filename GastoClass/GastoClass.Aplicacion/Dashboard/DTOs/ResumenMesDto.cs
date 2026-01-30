@@ -1,4 +1,4 @@
-﻿namespace GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
+﻿namespace GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 
 public class ResumenMesDto
 {

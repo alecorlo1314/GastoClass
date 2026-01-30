@@ -1,7 +1,8 @@
-﻿using GastoClass.GastoClass.Dominio.Interfaces;
+﻿using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.GastoClass.Dominio.Interfaces;
 using MediatR;
 
-namespace GastoClass.Aplicacion.Dashboard.Consultas.ObtenerUltimosGastos;
+namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 
 public class ObtenerUltimosTresGastosHandler(IRepositorioGasto repositorioGasto)
     : IRequestHandler<ObtenerUltimosTresGastosConsulta, List<UltimoCincoGastosDto>>
