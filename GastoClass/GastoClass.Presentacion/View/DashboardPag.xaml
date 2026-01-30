@@ -222,6 +222,12 @@
                                         Format="dd/MM/yyyy"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <!--  Mensaje Error  -->
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding ErrorFecha}"
+                                    TextColor="{StaticResource RojoError}" />
                             </VerticalStackLayout>
 
                             <!--  CATEGORIA  -->
@@ -275,7 +281,7 @@
                             WidthRequest="140" />
                         <Button
                             BackgroundColor="{StaticResource Azul Principal}"
-                            Command="{Binding AgregarGastoCommand}"
+                            Command="{Binding GuardarGastoCommand}"
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
