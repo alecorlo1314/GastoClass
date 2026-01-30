@@ -41,7 +41,7 @@ app.MapPost("/api/v1/Predict",
     // Inyectar el pool de motores de prediccion
     PredictionEnginePool<ModelInput, ModelOutput> pool,
     //Para realizar la solicitud de prediccion
-    PredictionRequestDto request
+    SolicitudPrediccionDto request
 ) =>
 //Logica del endpoint
 {
@@ -74,10 +74,10 @@ app.MapPost("/api/v1/Predict",
     }
 
     //Crear el response DTO para la respuesta
-    var response = new PredictionResponseDto
+    var response = new RespuestaPrediccionDto
     {
         //Tomamos solamente la etiqueta predicha y la confianza mas alta
-        Categoria = prediction.PredictedLabel,
+        CategoriaPrincipal = prediction.PredictedLabel,
         Confidencial = prediction.Score.Max()
         //lista de categorias en prediction.Score
         ,

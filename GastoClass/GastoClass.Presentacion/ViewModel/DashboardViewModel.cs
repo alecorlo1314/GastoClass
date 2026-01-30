@@ -1,15 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using GastoClass.Aplicacion.CasosUso;
-using GastoClass.Aplicacion.Dashboard.GastosPorCategoria;
-using GastoClass.Dominio.Model;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
-using GastoClass.GastoClass.Aplicacion.Dashboard.ResumenMes;
 using MediatR;
 using System.Collections.ObjectModel;
-using System.Timers;
 
 namespace GastoClass.Presentacion.ViewModel;
 
@@ -19,64 +14,21 @@ namespace GastoClass.Presentacion.ViewModel;
 /// </summary>
 public partial class DashboardViewModel : ObservableObject
 {
-    #region Servicios e Inyección de Dependencias
-
-    private readonly PredictionApiService _serviceML;
-    private readonly ServicioGastos _gastoService;
-    private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
-
+    #region Inyección de Dependencias
     private readonly IMediator? _mediator;
+
 
     #endregion
 
-    #region Propiedades para Control de Predicción ML
+    public AgregarGastoViewModel AgregarGastoVM { get; }
 
-    // Timer para retardo de 500ms en predicciones
-    private static System.Timers.Timer? _timer;
+    #region Propiedades para Control de Predicción ML
     // Token de cancelación para predicciones en curso
     private CancellationTokenSource? _cts;
 
     #endregion
 
-    #region Propiedades Observables - Formulario de Gasto
-
-    /// <summary>
-    /// Descripción del gasto ingresada por el usuario
-    /// Al cambiar, dispara la predicción ML con retardo
-    /// </summary>
-    [ObservableProperty]
-    private string? _descripcion;
-
-    /// <summary>
-    /// Monto del gasto en formato string
-    /// </summary>
-    [ObservableProperty]
-    private string? _monto;
-
-    [ObservableProperty]
-    private TarjetaCredito? tarjetaSeleccionada;
-
-    /// <summary>
-    /// Fecha del gasto, por defecto es hoy
-    /// </summary>
-    [ObservableProperty]
-    private DateTime _fecha = DateTime.Now;
-
-    /// <summary>
-    /// Categoría recomendada por el modelo ML
-    /// </summary>
-    [ObservableProperty]
-    private CategoriasRecomendadas? categoriaRecomendadaML;
-
-    /// <summary>
-    /// Categoría final seleccionada que se guardará en BD
-    /// </summary>
-    [ObservableProperty]
-    private CategoriasRecomendadas? categoriaFinal;
-
-    #endregion
-
-    #region Propiedades Observables - Datos del Dashboard
+    #region Propiedades Observables
 
     /// <summary>
     /// Total de dinero gastado en el mes actual
@@ -100,278 +52,48 @@ public partial class DashboardViewModel : ObservableObject
 
     #region Colecciones Observables
     [ObservableProperty]
-    private ObservableCollection<ResultadoPrediccion> listaResultadoPredicciones = new();
-    [ObservableProperty]
-    private ObservableCollection<CategoriasRecomendadas> categoriasRecomendadas = new();
-    [ObservableProperty]
     private ObservableCollection<GastoPorCategoriaDto> gastoPorCategoriasMes = new();
     [ObservableProperty]
     private ObservableCollection<UltimoCincoGastosDto>? ultimosCincoMovimientos = new();
-    public IDictionary<string, float>? ListaConPuntos { get; set; }
-    [ObservableProperty]
-    private ObservableCollection<TarjetaCredito> listaTarjetasCredito = new();
 
     #endregion
 
     #region Constructor
-
-    /// <summary>
-    /// Constructor del ViewModel
-    /// Inicializa servicios, timer y carga datos iniciales del dashboard
-    /// </summary>
-    public DashboardViewModel(PredictionApiService predictionApiService, ServicioGastos servicioGastos, ServicioTarjetaCredito servicioTarjetaCredito, IMediator mediator)
+    public DashboardViewModel(IMediator mediator, AgregarGastoViewModel agregarGastoVM)
     {
-        // Inyección de dependencias
-        _serviceML = predictionApiService;
-        _gastoService = servicioGastos;
-        _servicioTarjetaCredito = servicioTarjetaCredito;
-
         _mediator = mediator;
 
         // Cargar datos iniciales del dashboard
         _ = CargarTransaccionesGastoTotal();
         _ = CargarGastosPorCategoria();
         _ = ObtenerUltimos5GastosAsync();
+        AgregarGastoVM = agregarGastoVM;
 
-        //Esto es solo para el popup de agregar gastos
-        _ = CargarTarjetasAsync();
-
-        // Configurar timer para predicciones ML con retardo de 500ms
-        _timer = new System.Timers.Timer(500);
-        _timer.AutoReset = false;
-        _timer.Elapsed += async (_, _) =>
-        {
-            await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
-        };
-        _servicioTarjetaCredito = servicioTarjetaCredito;
+        agregarGastoVM.GastoAgregado += OnGastoAgregado;
     }
 
     #endregion
 
-    #region Manejadores de Cambios de Propiedades
-
-    /// <summary>
-    /// Se ejecuta cuando cambia la descripción del gasto
-    /// Cancela predicciones previas e inicia nueva predicción con retardo de 500ms
-    /// </summary>
-    partial void OnDescripcionChanged(string? oldValue, string? newValue)
+    #region Event Handlers
+    private async void OnGastoAgregado()
     {
-        // Validar que la descripción sea válida (mínimo 3 caracteres)
-        if (!EsDescripcionValida(newValue)) return;
-
-        // Cancelar cualquier predicción en curso
-        _cts?.Cancel();
-
-        // Crear nuevo token de cancelación
-        _cts = new CancellationTokenSource();
-
-        // Iniciar tarea de predicción con retardo
-        _ = Task.Run(async () =>
+        await MainThread.InvokeOnMainThreadAsync(async () =>
         {
-            try
-            {
-                // Esperar 500ms antes de hacer la predicción
-                await Task.Delay(500, _cts.Token);
-
-                // Ejecutar predicción en el hilo principal
-                await MainThread.InvokeOnMainThreadAsync(TiempoRealPrediccionAsync);
-            }
-            catch (TaskCanceledException)
-            {
-                // La tarea fue cancelada porque el usuario siguió escribiendo
-            }
+            await RefrescarDashboardAsync();
         });
     }
 
     #endregion
 
-    #region Métodos de Predicción ML
-
-    /// <summary>
-    /// Obtiene predicción en tiempo real del modelo ML
-    /// Actualiza categoría recomendada y lista de probabilidades
-    /// </summary>
-    private async Task TiempoRealPrediccionAsync()
+    #region Métodos Públicos
+    public async Task RefrescarDashboardAsync()
     {
-        // Validar que la descripción sea válida
-        if (!EsDescripcionValida(Descripcion)) return;
-
-        try
-        {
-            // Obtener predicción desde el servicio ML
-            var prediction = await _serviceML.PredictAsync(Descripcion!);
-
-            // Limpiar lista de predicciones anteriores
-            ListaResultadoPredicciones?.Clear();
-
-            // Agregar nueva predicción
-            if (prediction != null)
-                ListaResultadoPredicciones?.Add(prediction);
-
-            // Actualizar categoría recomendada con mayor probabilidad
-            CategoriaRecomendadaML = new CategoriasRecomendadas
-            {
-                DescripcionCategoriaRecomendada = prediction!.Categoria,
-                ScoreCategoriaRecomendada = prediction.Confidencial
-            };
-
-            // Establecer como categoría final por defecto
-            CategoriaFinal = CategoriaRecomendadaML;
-
-            // Limpiar y actualizar diccionario de probabilidades
-            ListaConPuntos?.Clear();
-            ListaConPuntos = prediction.scoreDict;
-
-            // Cargar todas las categorías con sus probabilidades
-            await CargarCategoriasMLRecomendadas();
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error en predicción", ex.Message, "OK");
-        }
+        await Task.WhenAll(
+            CargarTransaccionesGastoTotal(),
+            CargarGastosPorCategoria(),
+            ObtenerUltimos5GastosAsync()
+        );
     }
-
-    /// <summary>
-    /// Carga la lista de categorías recomendadas ordenadas por probabilidad
-    /// Convierte el diccionario de puntos en una colección observable
-    /// </summary>
-    private async Task CargarCategoriasMLRecomendadas()
-    {
-        try
-        {
-            // Validar que exista el diccionario de puntos
-            if (ListaConPuntos == null) return;
-
-            // Limpiar categorías anteriores
-            CategoriasRecomendadas?.Clear();
-
-            // Agregar cada categoría con su probabilidad a la colección
-            foreach (var (key, value) in ListaConPuntos)
-            {
-                CategoriasRecomendadas?.Add(new CategoriasRecomendadas
-                {
-                    DescripcionCategoriaRecomendada = key,
-                    ScoreCategoriaRecomendada = value
-                });
-            }
-
-            // Ordenar lista descendentemente por probabilidad
-            var listaPuntosOrdenadas = ListaConPuntos.OrderByDescending(s => s.Value);
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-        }
-    }
-
-    #endregion
-
-    #region Comandos - Operaciones CRUD
-
-    /// <summary>
-    /// Comando para agregar un nuevo gasto
-    /// Valida datos, guarda en BD y actualiza el dashboard
-    /// </summary>
-    [RelayCommand]
-    private async Task AgregarGasto()
-    {
-        // Validar monto
-        if (!EsNumeroValido())
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "Ingrese un monto válido mayor a 0", "OK");
-            return;
-        }
-        // Validar que existan categorías recomendadas
-        if (CategoriasRecomendadas == null || CategoriasRecomendadas.Count == 0)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No hay categorias recomendadas disponibles.", "OK");
-            return;
-        }
-
-        // Validar que se haya seleccionado una categoría
-        if (CategoriaFinal == null)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "Debe seleccionar una categoría", "OK");
-            return;
-        }
-
-        try
-        {
-            // Crear objeto gasto con los datos del formulario
-            var gasto = new Gasto
-            {
-                Descripcion = Descripcion,
-                Categoria = CategoriaFinal.DescripcionCategoriaRecomendada,
-                Monto = decimal.Parse(Monto!),
-                NombreImagen = $"icono_{CategoriaFinal.DescripcionCategoriaRecomendada?.ToLower()}.png",
-                Fecha = Fecha,
-                TarjetaId = TarjetaSeleccionada!.Id
-            };
-
-            // Guardar gasto en la base de datos
-            var resultado = await _gastoService.GuardarGastoAsync(gasto);
-
-            if (resultado == 1)
-            {
-                // Gasto guardado exitosamente
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Éxito", "Gasto agregado correctamente.", "OK");
-
-                // Limpiar formulario
-                Descripcion = string.Empty;
-                CategoriaRecomendadaML = new CategoriasRecomendadas();
-                Monto = string.Empty;
-                ListaResultadoPredicciones?.Clear();
-                CategoriasRecomendadas?.Clear();
-                ListaConPuntos?.Clear();
-                CategoriaFinal = null;
-
-                // Recargar datos del dashboard
-                _ = CargarTransaccionesGastoTotal();
-                _ = CargarGastosPorCategoria();
-                _ = ObtenerUltimos5GastosAsync();
-            }
-            else
-            {
-                // Error al guardar
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "No se pudo agregar el gasto.", "OK");
-            }
-        }
-        catch (NullReferenceException)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", "Por favor, complete todos los campos antes de agregar el gasto.", "OK");
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-        }
-    }
-
-    #endregion
-
-    #region Métodos de Validación
-
-    /// <summary>
-    /// Valida que la descripción tenga al menos 3 caracteres
-    /// </summary>
-    private bool EsDescripcionValida(string? texto)
-        => !string.IsNullOrWhiteSpace(texto) && texto.Length >= 3;
-
-    /// <summary>
-    /// Valida que el monto sea un número positivo
-    /// </summary>
-    private bool EsNumeroValido()
-    {
-        if (Monto == null) return false;
-        if (string.IsNullOrWhiteSpace(Monto)) return false;
-
-        if (decimal.TryParse(Monto, out decimal numero))
-        {
-            return numero > 0;
-        }
-
-        return false;
-    }
-
     #endregion
 
     #region Métodos de Carga de Datos 
@@ -380,113 +102,96 @@ public partial class DashboardViewModel : ObservableObject
         try
         {
             var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
-            GastoTotalMes = consulta.TotalGastado;
-            CantidadTransacciones = consulta.CantidadTransacciones;
-            MostrarMensajeCantidadTransacciones();
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                GastoTotalMes = consulta.TotalGastado;
+                CantidadTransacciones = consulta.CantidadTransacciones;
+                MostrarMensajeCantidadTransacciones();
+            });
         }
         catch (Exception ex)
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                var page = Shell.Current?.CurrentPage ?? Application.Current?.MainPage;
-                if (page != null)
-                    await page.DisplayAlertAsync("Error", ex.Message, "OK");
-                else
-                    System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
             });
         }
     }
 
-    /// <summary>
-    /// Genera mensaje descriptivo basado en la cantidad de transacciones
-    /// </summary>
     private void MostrarMensajeCantidadTransacciones()
     {
-        if (CantidadTransacciones == 0)
+        MensajeCantidadTransacciones = CantidadTransacciones switch
         {
-            MensajeCantidadTransacciones = "No se han registrado transacciones este mes.";
-        }
-        if (CantidadTransacciones == 1)
-        {
-            MensajeCantidadTransacciones = "Basado en 1 transaccion de este mes.";
-        }
-        if (CantidadTransacciones > 1)
-        {
-            MensajeCantidadTransacciones = $"Basado en {CantidadTransacciones} transacciones de este mes.";
-        }
+            0 => "No se han registrado transacciones este mes.",
+            1 => "Basado en 1 transacción de este mes.",
+            _ => $"Basado en {CantidadTransacciones} transacciones de este mes."
+        };
     }
 
-    /// <summary>
-    /// Carga los gastos agrupados por categoría del mes actual
-    /// Para mostrar en gráfico circular
-    /// </summary>
     private async Task CargarGastosPorCategoria()
     {
         try
         {
-            var gastosPorCategoria = await _mediator!.Send(new ObtenerGastosPorCategoriaConsulta(DateTime.Now.Month, DateTime.Now.Year));
-            GastoPorCategoriasMes.Clear();
-            GastoPorCategoriasMes = gastosPorCategoria == null ?
-                new ObservableCollection<GastoPorCategoriaDto>() :
-                new ObservableCollection<GastoPorCategoriaDto>(gastosPorCategoria);
+            var gastosPorCategoria = await _mediator!.Send(
+                new ObtenerGastosPorCategoriaConsulta(DateTime.Now.Month, DateTime.Now.Year));
+
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                GastoPorCategoriasMes.Clear();
+
+                if (gastosPorCategoria != null)
+                {
+                    foreach (var gasto in gastosPorCategoria)
+                    {
+                        GastoPorCategoriasMes.Add(gasto);
+                    }
+                }
+            });
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            });
         }
     }
 
-    /// <summary>
-    /// Obtiene los últimos 5 gastos registrados
-    /// Para mostrar en la sección de movimientos recientes
-    /// </summary>
+
     private async Task ObtenerUltimos5GastosAsync()
     {
         try
         {
             var ultimosCincoGastos = await _mediator!.Send(new ObtenerUltimosTresGastosConsulta());
 
-            // Limpiar y agregar los últimos 5 gastos a la colección observable
-            UltimosCincoMovimientos?.Clear();
-            UltimosCincoMovimientos = ultimosCincoGastos == null ?
-                new ObservableCollection<UltimoCincoGastosDto>() :
-                new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                UltimosCincoMovimientos?.Clear();
+
+                if (ultimosCincoGastos != null)
+                {
+                    UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
+                }
+            });
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            });
         }
     }
-
-    private async Task CargarTarjetasAsync()
-    {
-        try
-        {
-            //realizamos la consulta al servicios de tarjetas
-            var tarjetas = await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
-            //limpiamos la coleccion
-            ListaTarjetasCredito.Clear();
-            //asignamos la nueva coleccion
-            ListaTarjetasCredito = new ObservableCollection<TarjetaCredito>(tarjetas!);
-        }
-        catch(Exception ex)
-        {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-        }
-    }
-
     #endregion
 
-    #region Metodo de limpieza de suprocesos
-    /// <summary>
-    /// Para detener el timer y evitar problemas de rendimiento
-    /// </summary>
+    #region IDisposable
     public void Dispose()
     {
-        _timer?.Stop();
-        _timer?.Dispose();
-        _cts?.Cancel();
-        _cts?.Dispose();
+        if (AgregarGastoVM != null)
+        {
+            AgregarGastoVM.GastoAgregado -= OnGastoAgregado;
+        }
     }
     #endregion
 }

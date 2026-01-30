@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+﻿namespace GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
 
 public class CategoriaPredichaDto()
 {

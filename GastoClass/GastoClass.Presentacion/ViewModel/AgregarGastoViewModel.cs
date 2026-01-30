@@ -9,56 +9,65 @@ using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel;
 
-public partial class AgregarGastoViewModel : ObservableObject
+public partial class AgregarGastoViewModel : ObservableObject, IDisposable
 {
     #region Inyeccion de Dependencias
-    private readonly IMediator _mediator;
-    private readonly IPrediccionCategoriaServicio _prediccionCategoriaServicio;
-
+    private readonly IMediator? _mediator;
+    private readonly IPrediccionCategoriaServicio? _prediccionCategoriaServicio;
     #endregion
 
-    #region Propiedades del Forumlario
+    #region Eventos
+    /// <summary>
+    /// Evento que se dispara cuando se agrega un gasto
+    /// </summary>
+    public event Action? GastoAgregado;
+    #endregion
+
+    #region Propiedades del Formulario
     [ObservableProperty] private string? descripcion;
     [ObservableProperty] private decimal? monto;
     [ObservableProperty] private string? comercio;
     [ObservableProperty] private string? estado;
     [ObservableProperty] private DateTime fecha = DateTime.Now;
-    [ObservableProperty] private TarjetaGastoDto tarjetaSeleccionada;
-
+    [ObservableProperty] private TarjetaGastoDto? tarjetaSeleccionada;
     #endregion
 
     #region Listas Observables
-    [ObservableProperty] private CategoriaPredichaDto categoriaPredicha;
-    [ObservableProperty] private ObservableCollection<CategoriaPredichaDto> listaCategoriasPredichas = new();
-
+    [ObservableProperty] private CategoriaPredichaDto? categoriaPredicha;
+    [ObservableProperty] private ObservableCollection<CategoriaPredichaDto>? listaCategoriasPredichas = new();
     #endregion
 
     #region Propiedades para Control de Predicción ML
-
-    // Timer para retardo de 500ms en predicciones
-    private static System.Timers.Timer? _timer;
     // Token de cancelación para predicciones en curso
     private CancellationTokenSource? _cts;
-
     #endregion
 
-    #region Mensajes de Erro Formulario
+    #region Mensajes de Error Formulario
     [ObservableProperty] private string? errorMonto;
     [ObservableProperty] private string? errorDescripcion;
     [ObservableProperty] private string? errorTarjeta;
     [ObservableProperty] private string? errorEstado;
     [ObservableProperty] private string? errorFecha;
     [ObservableProperty] private string? errorCategoria;
+    #endregion
 
+    #region Constructor
+    public AgregarGastoViewModel(IMediator mediator, IPrediccionCategoriaServicio prediccionCategoriaServicio)
+    {
+        _mediator = mediator;
+        _prediccionCategoriaServicio = prediccionCategoriaServicio;
+    }
     #endregion
 
     #region OnDescripcionChanged
     partial void OnDescripcionChanged(string? value)
     {
-        // Cancelar cualquier predicción en curso
+        // Cancelar predicción anterior
         _cts?.Cancel();
-        // Crear nuevo token de cancelación
+        _cts?.Dispose();
         _cts = new CancellationTokenSource();
+
+        var cancellationToken = _cts.Token;
 
         // Iniciar tarea de predicción con retardo
         _ = Task.Run(async () =>
@@ -66,83 +75,130 @@ public partial class AgregarGastoViewModel : ObservableObject
             try
             {
                 // Esperar 500ms antes de hacer la predicción
-                await Task.Delay(500, _cts.Token);
+                await Task.Delay(500, cancellationToken);
+
+                // Si la tarea fue cancelada, salir
+                if (cancellationToken.IsCancellationRequested)
+                    return;
 
                 // Ejecutar predicción en el hilo principal
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
-                    _ = PredecirCategoriaAsync(value);
+                    await PredecirCategoriaAsync(value);
                 });
             }
-            catch (TaskCanceledException)
+            catch (OperationCanceledException)
             {
-                await Shell.Current.DisplayAlertAsync("Predicción Cancelada", "La predicción de categoría fue cancelada debido a nueva entrada.", "OK");
+                // Esto es normal cuando el usuario sigue escribiendo
+                // No necesitas mostrar un alert aquí
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlertAsync("Error", ex.Message, "OK");
+                await MainThread.InvokeOnMainThreadAsync(async () =>
+                {
+                    await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+                });
             }
-        });
+        }, cancellationToken);
     }
-
     #endregion
 
     #region Predecir Categoria Async
     private async Task PredecirCategoriaAsync(string? descripcion)
     {
-        if (string.IsNullOrWhiteSpace(descripcion) || descripcion.Length < 3)
-            return;
-
-        var prediccion = await _prediccionCategoriaServicio.PredecirAsync(descripcion);
-
-        //Establecer la categoria precha
-        CategoriaPredicha = prediccion;
-
-        //LLenar la lista de categorias predichas
-        ListaCategoriasPredichas.Clear();
-        foreach (var cat in prediccion.ScoreDict!)
+        try
         {
-            ListaCategoriasPredichas.Add(new CategoriaPredichaDto
+            if (string.IsNullOrWhiteSpace(descripcion) || descripcion.Length <= 3)
             {
-                CategoriaPrincipal = cat.Key,
-                Confidencial = cat.Value
-            });
+                // Limpiar predicciones si la descripción es muy corta
+                CategoriaPredicha = null;
+                ListaCategoriasPredichas?.Clear();
+                return;
+            }
+
+            var prediccion = await _prediccionCategoriaServicio!.PredecirAsync(descripcion);
+
+            if (prediccion == null)
+                return;
+
+            // Establecer la categoria predicha
+            CategoriaPredicha = prediccion;
+
+            // Llenar la lista de categorias predichas
+            ListaCategoriasPredichas!.Clear();
+
+            if (prediccion.ScoreDict != null)
+            {
+                foreach (var cat in prediccion.ScoreDict)
+                {
+                    ListaCategoriasPredichas.Add(new CategoriaPredichaDto
+                    {
+                        CategoriaPrincipal = cat.Key,
+                        Confidencial = cat.Value
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", $"Error al predecir categoría: {ex.Message}", "OK");
         }
     }
-
     #endregion
 
     #region Guardar Gasto Command
     [RelayCommand]
     private async Task GuardarGasto()
     {
-        var command = new AgregarGastoCommand
+        try
         {
-            Monto = Monto!.Value,
-            Fecha = Fecha,
-            TarjetaId = TarjetaSeleccionada.Id,
-            Descripcion = Descripcion,
-            Categoria = CategoriaPredicha?.CategoriaPrincipal,
-            Comercio = Comercio,
-            Estado = "Activo",
-            NombreImagen = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
-        };
-        var resultado = await _mediator.Send(command);
+            // Cancelar cualquier predicción en curso
+            _cts?.Cancel();
 
-        if (!resultado.EsValido)
-        {
-            // Mostrar errores de validación
-            ErrorMonto = resultado.Errores.ContainsKey(nameof(Monto)) ? resultado.Errores[nameof(Monto)] : null;
-            ErrorDescripcion = resultado.Errores.ContainsKey(nameof(Descripcion)) ? resultado.Errores[nameof(Descripcion)] : null;
-            ErrorTarjeta = resultado.Errores.ContainsKey(nameof(TarjetaSeleccionada)) ? resultado.Errores[nameof(TarjetaSeleccionada)] : null;
-            ErrorEstado = resultado.Errores.ContainsKey(nameof(Estado)) ? resultado.Errores[nameof(Estado)] : null;
-            ErrorFecha = resultado.Errores.ContainsKey(nameof(Fecha)) ? resultado.Errores[nameof(Fecha)] : null;
-            ErrorCategoria = resultado.Errores.ContainsKey("Categoria") ? resultado.Errores["Categoria"] : null;
+            var command = new AgregarGastoCommand
+            {
+                Monto = Monto!.Value,
+                Fecha = Fecha,
+                TarjetaId = TarjetaSeleccionada!.Id,
+                Descripcion = Descripcion,
+                Categoria = CategoriaPredicha?.CategoriaPrincipal,
+                Comercio = Comercio,
+                Estado = "Activo",
+                NombreImagen = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
+            };
 
+            var resultado = await _mediator!.Send(command);
+
+            if (!resultado.EsValido)
+            {
+                // Mostrar errores de validación
+                ErrorMonto = resultado.Errores.ContainsKey(nameof(Monto))
+                    ? resultado.Errores[nameof(Monto)] : null;
+                ErrorDescripcion = resultado.Errores.ContainsKey(nameof(Descripcion))
+                    ? resultado.Errores[nameof(Descripcion)] : null;
+                ErrorTarjeta = resultado.Errores.ContainsKey(nameof(TarjetaSeleccionada))
+                    ? resultado.Errores[nameof(TarjetaSeleccionada)] : null;
+                ErrorEstado = resultado.Errores.ContainsKey(nameof(Estado))
+                    ? resultado.Errores[nameof(Estado)] : null;
+                ErrorFecha = resultado.Errores.ContainsKey(nameof(Fecha))
+                    ? resultado.Errores[nameof(Fecha)] : null;
+                ErrorCategoria = resultado.Errores.ContainsKey("Categoria")
+                    ? resultado.Errores["Categoria"] : null;
+                return;
+            }
+
+            // Limpiar espacios
+            LimpiarCampos();
+            LimpiarErrores();
+
+            // Disparar evento
+            GastoAgregado?.Invoke();
         }
-        //Borrar espacios
-        LimpiarErrores();
-        LimpiarCampos();
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error",
+                $"Error al guardar el gasto: {ex.Message}", "OK");
+        }
     }
     #endregion
 
@@ -152,14 +208,14 @@ public partial class AgregarGastoViewModel : ObservableObject
         Monto = null;
         Descripcion = null;
         Comercio = null;
+        CategoriaPredicha = null;
+        ListaCategoriasPredichas?.Clear();
     }
-
     #endregion
 
     #region Limpiar Errores
     private void LimpiarErrores()
     {
-        // Limpiar errores
         ErrorMonto = null;
         ErrorDescripcion = null;
         ErrorTarjeta = null;
@@ -167,6 +223,13 @@ public partial class AgregarGastoViewModel : ObservableObject
         ErrorFecha = null;
         ErrorCategoria = null;
     }
+    #endregion
 
+    #region IDisposable
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _cts?.Dispose();
+    }
     #endregion
 }

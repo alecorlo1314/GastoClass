@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Interfaces;
+using GastoClass.Aplicacion.Servicios;
+using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
@@ -65,11 +68,13 @@ namespace GastoClass
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
             builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
+            builder.Services.AddScoped<IRepositorioGasto, RepositorioGasto>();
+            builder.Services.AddSingleton<IPrediccionCategoriaServicio, PrediccionCategoriaServicio>();
+            builder.Services.AddSingleton<PrediccionCategoriaServicio>();
+            builder.Services.AddSingleton<AppContextoDatos>();
             builder.Services.AddSingleton<ServicioGastos>();
             builder.Services.AddSingleton<ServicioTarjetaCredito>();
             builder.Services.AddSingleton<AppDbContext>();
-            builder.Services.AddScoped<IRepositorioGasto, RepositorioGasto>();
-            builder.Services.AddSingleton<AppContextoDatos>();
 
             // Registrar MediatR indicando el assembly donde están tus Handlers
             builder.Services.AddMediatR(cfg =>

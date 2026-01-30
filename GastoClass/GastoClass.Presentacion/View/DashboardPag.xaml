@@ -56,6 +56,7 @@
         <syncfusion:SfPopup
             x:Name="mipopup"
             AnimationMode="None"
+            BindingContext="{Binding AgregarGastoVM}"
             HeaderHeight="97"
             HeightRequest="600"
             OverlayMode="Blur"
@@ -237,18 +238,18 @@
                                     <editors:SfComboBox
                                         x:Name="comboBox"
                                         ClearButtonIconColor="{StaticResource Gray600}"
-                                        DisplayMemberPath="Display"
+                                        DisplayMemberPath="MostrarCategoriaPredicha"
                                         DropDownIconColor="{StaticResource Gray600}"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         HeightRequest="45"
                                         IsEditable="False"
-                                        ItemsSource="{Binding CategoriasRecomendadas}"
+                                        ItemsSource="{Binding ListaCategoriasPredichas}"
                                         Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaFinal, Mode=TwoWay}"
+                                        SelectedItem="{Binding CategoriaPredicha, Mode=TwoWay}"
                                         TextColor="{x:StaticResource Gray950}"
-                                        TextMemberPath="Display" />
+                                        TextMemberPath="MostrarCategoriaPredicha" />
                                 </Border>
                             </VerticalStackLayout>
                         </VerticalStackLayout>

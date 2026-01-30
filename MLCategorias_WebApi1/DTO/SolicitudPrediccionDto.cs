@@ -1,6 +1,6 @@
 ﻿namespace MLCategorias_WebApi.DTO
 {
-    public class PredictionRequestDto
+    public class SolicitudPrediccionDto
     {
         public string Descripcion { get; set; }
     }

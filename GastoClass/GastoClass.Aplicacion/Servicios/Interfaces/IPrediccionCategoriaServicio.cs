@@ -4,5 +4,5 @@ namespace GastoClass.Aplicacion.Interfaces;
 
 public interface IPrediccionCategoriaServicio
 {
-    Task<CategoriaPredichaDto> PredecirAsync(string descripcion);
+    Task<CategoriaPredichaDto?> PredecirAsync(string descripcion);
 }
