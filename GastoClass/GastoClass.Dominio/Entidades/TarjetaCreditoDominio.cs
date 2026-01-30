@@ -13,8 +13,9 @@ public class TarjetaCreditoDominio
     public UltimosCuatroDigitosTarjeta UltimosCuatroDigitos { get; }
     public MesVencimiento MesVencimiento { get; }
     public AnioVencimiento AnioVencimiento { get; }
-    public decimal Balance { get; }
     public LimiteCredito LimiteCredito { get; }
+    public decimal Balance { get; private set; }
+    public decimal CreditoDisponible { get; private set; }
     public TipoMoneda TipoMoneda { get; private set; }
     public DiaCorte DiaCorte { get; }
     public DiaPago DiaPago { get; }
@@ -55,5 +56,23 @@ public class TarjetaCreditoDominio
         NombreTarjeta = nombreTarjeta;
         TipoMoneda = tipoMoneda;
         NombreBanco = nombreBanco;
+    }
+
+    public void RevertirGasto(decimal montoGasto)
+    {
+        if(montoGasto <= 0)
+            throw new ArgumentException("El monto del gasto debe ser mayor a cero.");
+
+            //Aumentar creadito disponible
+            CreditoDisponible += montoGasto;
+
+            //Reducir balance
+            Balance -= montoGasto;
+
+            // Validaciones de consistencia
+            if (CreditoDisponible > LimiteCredito.Valor) 
+                CreditoDisponible = LimiteCredito.Valor.Value; // nunca debe superar el límite
+
+            if (Balance < 0) Balance = 0; // nunca debe quedar negativo
     }
 }

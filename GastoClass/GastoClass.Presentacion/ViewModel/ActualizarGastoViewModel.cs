@@ -1,28 +1,31 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GastoClass.Aplicacion.Common;
 using GastoClass.Aplicacion.Interfaces;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.ActualizarGasto;
-using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Gasto.DTOs;
+using GastoClass.GastoClass.Aplicacion.HistorialGasto.DTOs;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using System.Collections.ObjectModel;
 
-namespace GastoClass.GastoClass.Presentacion.ViewModel;
+namespace GastoClass.Presentacion.ViewModel;
 
+/// <summary>
+/// ViewModel responsable ÚNICAMENTE de actualizar gastos existentes
+/// </summary>
 public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
 {
-    #region Inyeccion de Dependencias
+    #region Inyección de Dependencias
     private readonly IMediator? _mediator;
     private readonly IPrediccionCategoriaServicio? _prediccionCategoriaServicio;
     #endregion
 
     #region Eventos
     /// <summary>
-    /// Evento que se dispara cuando se agrega un gasto
+    /// Evento que se dispara cuando se actualiza un gasto exitosamente
     /// </summary>
-    public event Action? ActualizarAgregado;
+    public event Action? GastoActualizado;
     #endregion
 
     #region Propiedades del Formulario
@@ -40,12 +43,12 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
     [ObservableProperty] private ObservableCollection<CategoriaPredichaDto>? listaCategoriasPredichas = new();
     #endregion
 
-    #region Propiedades de procesos
-    // Token de cancelación para predicciones en curso
+    #region Propiedades de Control
+    [ObservableProperty] private bool popupVisible;
     private CancellationTokenSource? _cts;
     #endregion
 
-    #region Mensajes de Error Formulario
+    #region Mensajes de Error
     [ObservableProperty] private string? mensajeErrorMonto;
     [ObservableProperty] private string? mensajeErrorDescripcion;
     [ObservableProperty] private string? mensajeErrorTarjeta;
@@ -53,6 +56,7 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string? mensajeErrorComercio;
     [ObservableProperty] private string? mensajeErrorFecha;
     [ObservableProperty] private string? mensajeErrorCategoria;
+
     public bool MostrarErrorMonto => !string.IsNullOrWhiteSpace(MensajeErrorMonto);
     public bool MostrarErrorDescripcion => !string.IsNullOrWhiteSpace(MensajeErrorDescripcion);
     public bool MostrarErrorTarjeta => !string.IsNullOrWhiteSpace(MensajeErrorTarjeta);
@@ -60,136 +64,165 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
     public bool MostrarErrorComercio => !string.IsNullOrWhiteSpace(MensajeErrorComercio);
     public bool MostrarErrorFecha => !string.IsNullOrWhiteSpace(MensajeErrorFecha);
     public bool MostrarErrorCategoria => !string.IsNullOrWhiteSpace(MensajeErrorCategoria);
-
-    #endregion
-
-    #region Validaciones Descripcion
-    private void ValidarDescripcion(string? descripcion)
-    {
-        if (string.IsNullOrWhiteSpace(descripcion) || string.IsNullOrEmpty(descripcion)) MensajeErrorDescripcion = "Descripcion es requerida";
-        else if (descripcion.Length > 200) MensajeErrorDescripcion = "No puede ser mayor a 200 caracteres";
-        else if (descripcion!.Length < 3) MensajeErrorDescripcion = "No puede ser menor a 3 caracteres";
-        else MensajeErrorDescripcion = null;
-
-        OnPropertyChanged(nameof(MostrarErrorDescripcion));
-    }
-
-    #endregion
-
-    #region Validaciones Monto
-    partial void OnMontoSeleccionadoChanged(decimal? value) => ValidarMonto(value);
-
-    private void ValidarMonto(decimal? monto)
-    {
-        if (string.IsNullOrWhiteSpace(monto.ToString()) || string.IsNullOrEmpty(monto.ToString())) MensajeErrorMonto = "Monto es requerido";
-        else if (monto < 0) MensajeErrorMonto = "No puede ser menor a 0";
-        else MensajeErrorMonto = null;
-
-        OnPropertyChanged(nameof(MostrarErrorMonto));
-    }
-
-    #endregion
-
-    #region Validaciones Categoria
-    partial void OnCategoriaPredichaChanged(CategoriaPredichaDto? value) => ValidacionCategoria(value);
-    private void ValidacionCategoria(CategoriaPredichaDto? categoria)
-    {
-        if (categoria == null) MensajeErrorCategoria = "Categoria es requerida";
-        else MensajeErrorCategoria = null;
-
-        OnPropertyChanged(nameof(MostrarErrorCategoria));
-    }
-    #endregion
-
-    #region Valdaciones Comercio
-    partial void OnComercioSeleccionadoChanged(string? value) => ValidarComercio(value);
-    private void ValidarComercio(string? comercio)
-    {
-        if (string.IsNullOrWhiteSpace(comercio) || string.IsNullOrEmpty(comercio)) MensajeErrorComercio = "Comercio es requerido";
-        else if (comercio!.Length > 100) MensajeErrorComercio = "No puede ser mayor a 100 caracteres";
-        else if (comercio.Length < 3) MensajeErrorComercio = "No puede ser menor a 3 caracteres";
-        else MensajeErrorComercio = null;
-
-        OnPropertyChanged(nameof(MostrarErrorComercio));
-    }
-    #endregion
-
-    #region Validaciones Estado
-    partial void OnEstadoSeleccionadoChanged(string? value) => ValidarEstado(value);
-    private void ValidarEstado(string? estado)
-    {
-        if (string.IsNullOrWhiteSpace(estado) || string.IsNullOrEmpty(estado)) MensajeErrorEstado = "Estado es requerido";
-        else MensajeErrorEstado = null;
-
-        OnPropertyChanged(nameof(MostrarErrorEstado));
-    }
-
-    #endregion
-
-    #region Validaciones Fecha
-    partial void OnFechaSeleccionadaChanged(DateTime value) => ValidarFecha(value);
-    private void ValidarFecha(DateTime fecha)
-    {
-        if (fecha!.Year < 2024) MensajeErrorFecha = "No puede ser menor al 2024";
-        else if (fecha > DateTime.Now) MensajeErrorFecha = "No puede ser mayor a la fecha actual";
-        else MensajeErrorFecha = null;
-
-        OnPropertyChanged(nameof(MostrarErrorFecha));
-    }
-
-    #endregion
-
-    #region Validaciones Tarjeta
-    partial void OnTarjetaSeleccionadaChanged(TarjetaGastoDto? value) => ValidarTarjeta(value);
-    private void ValidarTarjeta(TarjetaGastoDto? tarjeta)
-    {
-        if (tarjeta == null) MensajeErrorTarjeta = "Tarjeta es requerida";
-        else MensajeErrorTarjeta = null;
-
-        OnPropertyChanged(nameof(MostrarErrorTarjeta));
-    }
     #endregion
 
     #region Constructor
-    public ActualizarGastoViewModel(IMediator mediator, IPrediccionCategoriaServicio prediccionCategoriaServicio)
+    public ActualizarGastoViewModel(
+        IMediator mediator,
+        IPrediccionCategoriaServicio prediccionCategoriaServicio)
     {
         _mediator = mediator;
         _prediccionCategoriaServicio = prediccionCategoriaServicio;
     }
     #endregion
 
-    #region OnDescripcionChanged
+    #region Cargar Gasto para Edición
+    /// <summary>
+    /// Carga los datos del gasto seleccionado en el formulario
+    /// </summary>
+    public void CargarGastoParaEdicion(GastoHistorialDto gasto)
+    {
+        IdSeleccionado = gasto.Id;
+        MontoSeleccionado = gasto.Monto;
+        DescripcionSeleccionada = gasto.Descripcion;
+        FechaSeleccionada = gasto.Fecha;
+        CategoriaPredicha = new CategoriaPredichaDto
+        {
+            CategoriaPrincipal = gasto.Categoria
+        };
+
+        // Limpiar errores y predicciones
+        LimpiarErrores();
+        ListaCategoriasPredichas?.Clear();
+
+        // Mostrar popup
+        PopupVisible = true;
+    }
+    #endregion
+
+    #region Validaciones en Tiempo Real
     partial void OnDescripcionSeleccionadaChanged(string? value)
     {
         ValidarDescripcion(value);
-        // Cancelar predicción anterior
+        DispararPrediccionML(value);
+    }
+
+    partial void OnMontoSeleccionadoChanged(decimal? value) => ValidarMonto(value);
+    partial void OnCategoriaPredichaChanged(CategoriaPredichaDto? value) => ValidacionCategoria(value);
+    partial void OnComercioSeleccionadoChanged(string? value) => ValidarComercio(value);
+    partial void OnEstadoSeleccionadoChanged(string? value) => ValidarEstado(value);
+    partial void OnFechaSeleccionadaChanged(DateTime value) => ValidarFecha(value);
+    partial void OnTarjetaSeleccionadaChanged(TarjetaGastoDto? value) => ValidarTarjeta(value);
+
+    private void ValidarDescripcion(string? descripcion)
+    {
+        if (string.IsNullOrWhiteSpace(descripcion))
+            MensajeErrorDescripcion = "La descripción es requerida";
+        else if (descripcion.Length < 3)
+            MensajeErrorDescripcion = "La descripción debe tener al menos 3 caracteres";
+        else if (descripcion.Length > 200)
+            MensajeErrorDescripcion = "La descripción no puede exceder 200 caracteres";
+        else
+            MensajeErrorDescripcion = null;
+
+        OnPropertyChanged(nameof(MostrarErrorDescripcion));
+    }
+
+    private void ValidarMonto(decimal? monto)
+    {
+        if (monto == null)
+            MensajeErrorMonto = "El monto es requerido";
+        else if (monto <= 0)
+            MensajeErrorMonto = "El monto debe ser mayor a cero";
+        else if (monto > 1000000)
+            MensajeErrorMonto = "El monto no puede exceder 1,000,000";
+        else
+            MensajeErrorMonto = null;
+
+        OnPropertyChanged(nameof(MostrarErrorMonto));
+    }
+
+    private void ValidacionCategoria(CategoriaPredichaDto? categoria)
+    {
+        if (categoria == null)
+            MensajeErrorCategoria = "La categoría es requerida";
+        else
+            MensajeErrorCategoria = null;
+
+        OnPropertyChanged(nameof(MostrarErrorCategoria));
+    }
+
+    private void ValidarComercio(string? comercio)
+    {
+        if (string.IsNullOrWhiteSpace(comercio))
+            MensajeErrorComercio = "El comercio es requerido";
+        else if (comercio.Length < 3)
+            MensajeErrorComercio = "El comercio debe tener al menos 3 caracteres";
+        else if (comercio.Length > 100)
+            MensajeErrorComercio = "El comercio no puede exceder 100 caracteres";
+        else
+            MensajeErrorComercio = null;
+
+        OnPropertyChanged(nameof(MostrarErrorComercio));
+    }
+
+    private void ValidarEstado(string? estado)
+    {
+        if (string.IsNullOrWhiteSpace(estado))
+            MensajeErrorEstado = "El estado es requerido";
+        else
+            MensajeErrorEstado = null;
+
+        OnPropertyChanged(nameof(MostrarErrorEstado));
+    }
+
+    private void ValidarFecha(DateTime fecha)
+    {
+        if (fecha.Year < 2024)
+            MensajeErrorFecha = "La fecha no puede ser anterior al año 2024";
+        else if (fecha > DateTime.Now)
+            MensajeErrorFecha = "La fecha del gasto no puede ser mayor a la fecha actual";
+        else
+            MensajeErrorFecha = null;
+
+        OnPropertyChanged(nameof(MostrarErrorFecha));
+    }
+
+    private void ValidarTarjeta(TarjetaGastoDto? tarjeta)
+    {
+        if (tarjeta == null)
+            MensajeErrorTarjeta = "Debe seleccionar una tarjeta";
+        else
+            MensajeErrorTarjeta = null;
+
+        OnPropertyChanged(nameof(MostrarErrorTarjeta));
+    }
+    #endregion
+
+    #region Predicción ML
+    private void DispararPrediccionML(string? value)
+    {
         _cts?.Cancel();
         _cts?.Dispose();
         _cts = new CancellationTokenSource();
 
         var cancellationToken = _cts.Token;
 
-        // Iniciar tarea de predicción con retardo
         _ = Task.Run(async () =>
         {
             try
             {
-                // Esperar 500ms antes de hacer la predicción
                 await Task.Delay(500, cancellationToken);
 
-                // Si la tarea fue cancelada, salir
                 if (cancellationToken.IsCancellationRequested)
                     return;
 
-                // Ejecutar predicción en el hilo principal
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     await PredecirCategoriaAsync(value);
                 });
             }
-            catch (OperationCanceledException)
-            {
-            }
+            catch (OperationCanceledException) { }
             catch (Exception ex)
             {
                 await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -199,16 +232,13 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
             }
         }, cancellationToken);
     }
-    #endregion
 
-    #region Predecir Categoria Async
     private async Task PredecirCategoriaAsync(string? descripcion)
     {
         try
         {
             if (string.IsNullOrWhiteSpace(descripcion) || descripcion.Length <= 3)
             {
-                // Limpiar predicciones si la descripción es muy corta
                 CategoriaPredicha = null;
                 ListaCategoriasPredichas?.Clear();
                 return;
@@ -219,10 +249,8 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
             if (prediccion == null)
                 return;
 
-            // Establecer la categoria predicha
             CategoriaPredicha = prediccion;
 
-            // Llenar la lista de categorias predichas
             ListaCategoriasPredichas!.Clear();
 
             if (prediccion.ScoreDict != null)
@@ -239,24 +267,23 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", $"Error al predecir categoría: {ex.Message}", "OK");
+            await Shell.Current.CurrentPage.DisplayAlertAsync(
+                "Error",
+                $"Error al predecir categoría: {ex.Message}",
+                "OK");
         }
     }
     #endregion
 
-    #region Guardar Gasto Command
+    #region Actualizar Gasto Command
     [RelayCommand]
     private async Task ActualizarGasto()
     {
         try
         {
-            // Cancelar cualquier predicción en curso
             _cts?.Cancel();
 
-            //validar antes de guardar
-            bool hayErrores = false;
-
-
+            // Validar todos los campos
             ValidarFecha(FechaSeleccionada);
             ValidarMonto(MontoSeleccionado);
             ValidarDescripcion(DescripcionSeleccionada);
@@ -264,15 +291,14 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
             ValidarComercio(ComercioSeleccionado);
             ValidarEstado(EstadoSeleccionado);
             ValidarTarjeta(TarjetaSeleccionada);
-            hayErrores = MostrarErrorFecha || MostrarErrorMonto || MostrarErrorDescripcion ||
-                         MostrarErrorCategoria || MostrarErrorComercio || MostrarErrorEstado ||
-                         MostrarErrorTarjeta;
+
+            bool hayErrores = MostrarErrorFecha || MostrarErrorMonto ||
+                            MostrarErrorDescripcion || MostrarErrorCategoria ||
+                            MostrarErrorComercio || MostrarErrorEstado ||
+                            MostrarErrorTarjeta;
 
             if (hayErrores)
-            {
-                //Retornar si hay errores de validación
                 return;
-            }
 
             var command = new ActualizarGastoCommand
             {
@@ -282,8 +308,8 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
                 TarjetaIdCommand = TarjetaSeleccionada!.Id,
                 DescripcionCommand = DescripcionSeleccionada,
                 CategoriaCommand = CategoriaPredicha?.CategoriaPrincipal,
-                ComercioCommand = "Comercio",
-                EstadoCommand = "Activo",
+                ComercioCommand = ComercioSeleccionado,
+                EstadoCommand = EstadoSeleccionado ?? "Activo",
                 NombreImagenCommand = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
             };
 
@@ -291,65 +317,86 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
 
             if (!resultado.EsValido)
             {
-                // Mostrar errores de validación
-                MensajeErrorMonto = resultado.Errores.ContainsKey("monto")
-                    ? resultado.Errores["monto"] : null;
-                MensajeErrorDescripcion = resultado.Errores.ContainsKey("descripcion")
-                    ? resultado.Errores["descripcion"] : null;
-                MensajeErrorTarjeta = resultado.Errores.ContainsKey("tarjetaId")
-                    ? resultado.Errores["tarjetaId"] : null;
-                MensajeErrorEstado = resultado.Errores.ContainsKey("estado")
-                    ? resultado.Errores["estado"] : null;
-                MensajeErrorFecha = resultado.Errores.ContainsKey("fecha")
-                    ? resultado.Errores["fecha"] : null;
-                MensajeErrorCategoria = resultado.Errores.ContainsKey("categoria")
-                    ? resultado.Errores["categoria"] : null;
-                MensajeErrorComercio = resultado.Errores.ContainsKey("comercio")
-                    ? resultado.Errores["comercio"] : null;
-
-                // Notificar cambios en visibilidad
-                OnPropertyChanged(nameof(MostrarErrorMonto));
-                OnPropertyChanged(nameof(MostrarErrorDescripcion));
-                OnPropertyChanged(nameof(MostrarErrorTarjeta));
-                OnPropertyChanged(nameof(MostrarErrorEstado));
-                OnPropertyChanged(nameof(MostrarErrorFecha));
-                OnPropertyChanged(nameof(MostrarErrorCategoria));
-                OnPropertyChanged(nameof(MostrarErrorComercio));
-
+                MostrarErroresDelDominio(resultado);
                 return;
             }
 
-            // Mostrar mensaje de exito
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Exito", "Gasto guardado con exito", "OK");
+            await Shell.Current.CurrentPage.DisplayAlertAsync(
+                "Éxito",
+                "El gasto se actualizó correctamente",
+                "OK");
 
-            // Limpiar espacios
             LimpiarCampos();
             LimpiarErrores();
+            PopupVisible = false;
 
-            // Disparar evento
-            ActualizarAgregado?.Invoke();
+            GastoActualizado?.Invoke();
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error",
-                $"Error al guardar el gasto: {ex.Message}", "OK");
+            await Shell.Current.CurrentPage.DisplayAlertAsync(
+                "Error",
+                $"Error al actualizar el gasto: {ex.Message}",
+                "OK");
         }
+    }
+
+    private void MostrarErroresDelDominio(ResultadosValidacion resultado)
+    {
+        MensajeErrorMonto = resultado.Errores.ContainsKey("Monto")
+            ? resultado.Errores["Monto"] : MensajeErrorMonto;
+        MensajeErrorDescripcion = resultado.Errores.ContainsKey("Descripcion")
+            ? resultado.Errores["Descripcion"] : MensajeErrorDescripcion;
+        MensajeErrorTarjeta = resultado.Errores.ContainsKey("TarjetaSeleccionada")
+            ? resultado.Errores["TarjetaSeleccionada"] : MensajeErrorTarjeta;
+        MensajeErrorEstado = resultado.Errores.ContainsKey("Estado")
+            ? resultado.Errores["Estado"] : MensajeErrorEstado;
+        MensajeErrorFecha = resultado.Errores.ContainsKey("Fecha")
+            ? resultado.Errores["Fecha"] : MensajeErrorFecha;
+        MensajeErrorCategoria = resultado.Errores.ContainsKey("Categoria")
+            ? resultado.Errores["Categoria"] : MensajeErrorCategoria;
+        MensajeErrorComercio = resultado.Errores.ContainsKey("Comercio")
+            ? resultado.Errores["Comercio"] : MensajeErrorComercio;
+
+        NotificarCambiosEnErrores();
+    }
+
+    private void NotificarCambiosEnErrores()
+    {
+        OnPropertyChanged(nameof(MostrarErrorMonto));
+        OnPropertyChanged(nameof(MostrarErrorDescripcion));
+        OnPropertyChanged(nameof(MostrarErrorTarjeta));
+        OnPropertyChanged(nameof(MostrarErrorEstado));
+        OnPropertyChanged(nameof(MostrarErrorFecha));
+        OnPropertyChanged(nameof(MostrarErrorCategoria));
+        OnPropertyChanged(nameof(MostrarErrorComercio));
     }
     #endregion
 
-    #region Limpiar Campos
+    #region Cancelar
+    [RelayCommand]
+    private void Cancelar()
+    {
+        LimpiarCampos();
+        LimpiarErrores();
+        PopupVisible = false;
+    }
+    #endregion
+
+    #region Limpiar
     private void LimpiarCampos()
     {
+        IdSeleccionado = null;
         MontoSeleccionado = null;
         DescripcionSeleccionada = null;
         ComercioSeleccionado = null;
+        EstadoSeleccionado = null;
         FechaSeleccionada = DateTime.Now;
+        TarjetaSeleccionada = null;
         CategoriaPredicha = null;
         ListaCategoriasPredichas?.Clear();
     }
-    #endregion
 
-    #region Limpiar Errores
     private void LimpiarErrores()
     {
         MensajeErrorMonto = null;
@@ -358,13 +405,9 @@ public partial class ActualizarGastoViewModel : ObservableObject, IDisposable
         MensajeErrorEstado = null;
         MensajeErrorFecha = null;
         MensajeErrorCategoria = null;
+        MensajeErrorComercio = null;
 
-        OnPropertyChanged(nameof(MostrarErrorMonto));
-        OnPropertyChanged(nameof(MostrarErrorDescripcion));
-        OnPropertyChanged(nameof(MostrarErrorTarjeta));
-        OnPropertyChanged(nameof(MostrarErrorEstado));
-        OnPropertyChanged(nameof(MostrarErrorFecha));
-        OnPropertyChanged(nameof(MostrarErrorCategoria));
+        NotificarCambiosEnErrores();
     }
     #endregion
 
