@@ -6,12 +6,12 @@ namespace GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 public class AgregarGastoCommand
     : IRequest<ResultadosValidacion>
 {
-    public decimal Monto { get; init; }
-    public DateTime Fecha { get; init; }
-    public int TarjetaId { get; init; }
-    public string? Descripcion { get; init; }
-    public string? Categoria { get; init; }
-    public string? Comercio { get; init; }
-    public string? Estado { get; init; }
-    public string? NombreImagen { get; init; }
+    public decimal? MontoCommand { get; init; }
+    public DateTime? FechaCommand { get; init; }
+    public int? TarjetaIdCommand { get; init; }
+    public string? DescripcionCommand { get; init; }
+    public string? CategoriaCommand { get; init; }
+    public string? ComercioCommand { get; init; }
+    public string? EstadoCommand { get; init; }
+    public string? NombreImagenCommand { get; init; }
 }

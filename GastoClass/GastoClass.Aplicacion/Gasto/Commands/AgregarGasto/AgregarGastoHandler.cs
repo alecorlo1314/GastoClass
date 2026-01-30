@@ -17,14 +17,14 @@ public class AgregarGastoHandler(IRepositorioGasto repositorioGasto)
         {
             // 1️⃣ Crear dominio (aquí se valida el negocio)
             var gastoDominio = GastoDominio.Crear(
-                monto: request.Monto,
-                fecha: request.Fecha,
-                tarjetaId: request.TarjetaId,
-                descripcion: request.Descripcion,
-                categoria: request.Categoria,
-                comercio: request.Comercio,
-                estado: request.Estado,
-                nombreImagen: request.NombreImagen
+                monto: request.MontoCommand!.Value,
+                fecha: request.FechaCommand!.Value,
+                tarjetaId: request.TarjetaIdCommand!.Value,
+                descripcion: request.DescripcionCommand,
+                categoria: request.CategoriaCommand,
+                comercio: request.ComercioCommand,
+                estado: request.EstadoCommand,
+                nombreImagen: request.NombreImagenCommand
             );
 
             //Agregar al repositorio

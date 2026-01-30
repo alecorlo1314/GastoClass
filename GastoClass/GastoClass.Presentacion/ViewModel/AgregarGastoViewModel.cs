@@ -157,14 +157,15 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
 
             var command = new AgregarGastoCommand
             {
-                Monto = Monto!.Value,
-                Fecha = Fecha,
-                TarjetaId = TarjetaSeleccionada!.Id,
-                Descripcion = Descripcion,
-                Categoria = CategoriaPredicha?.CategoriaPrincipal,
-                Comercio = Comercio,
-                Estado = "Activo",
-                NombreImagen = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
+                MontoCommand = Monto!.Value,
+                FechaCommand = Fecha,
+                TarjetaIdCommand = 1,
+                //TarjetaIdCommand = TarjetaSeleccionada!.Id,
+                DescripcionCommand = Descripcion,
+                CategoriaCommand = CategoriaPredicha?.CategoriaPrincipal,
+                ComercioCommand = "Comercio",
+                EstadoCommand = "Activo",
+                NombreImagenCommand = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
             };
 
             var resultado = await _mediator!.Send(command);
@@ -180,12 +181,15 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                     ? resultado.Errores[nameof(TarjetaSeleccionada)] : null;
                 ErrorEstado = resultado.Errores.ContainsKey(nameof(Estado))
                     ? resultado.Errores[nameof(Estado)] : null;
-                ErrorFecha = resultado.Errores.ContainsKey(nameof(Fecha))
-                    ? resultado.Errores[nameof(Fecha)] : null;
+                ErrorFecha = resultado.Errores.ContainsKey("fecha")
+                    ? resultado.Errores["fecha"] : null;
                 ErrorCategoria = resultado.Errores.ContainsKey("Categoria")
                     ? resultado.Errores["Categoria"] : null;
                 return;
             }
+
+            // Mostrar mensaje de exito
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Exito", "Gasto guardado con exito", "OK");
 
             // Limpiar espacios
             LimpiarCampos();
