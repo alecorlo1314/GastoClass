@@ -9,6 +9,7 @@ using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 using GastoClass.GastoClass.Aplicacion.HistorialGasto.Consultas;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using GastoClass.Infraestructura.Repositorios;
 using GastoClass.Presentacion.View;
@@ -72,7 +73,8 @@ namespace GastoClass
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
             builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
-            builder.Services.AddScoped<IRepositorioGasto, RepositorioGasto>();
+
+            builder.Services.AddSingleton<IRepositorioGasto, RepositorioGasto>();
             builder.Services.AddSingleton<IPrediccionCategoriaServicio, PrediccionCategoriaServicio>();
             builder.Services.AddSingleton<IRepositorioTarjetaCredito, RepositorioTarjetaCredito>();
             builder.Services.AddSingleton<IRepositorioPreferenciaTarjeta, RepositorioPreferenciasTarjetaCredito>();
@@ -89,6 +91,8 @@ namespace GastoClass
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosPorCategoriaConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerUltimosTresGastosConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerGastoPorTarjetaCreditoConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerTarjetaCreditoConsulta).Assembly);
             });
 
             // HTTP Client para el servicio de predicción

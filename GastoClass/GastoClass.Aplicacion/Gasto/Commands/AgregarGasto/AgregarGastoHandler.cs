@@ -15,7 +15,6 @@ public class AgregarGastoHandler(IRepositorioGasto repositorioGasto)
         var resultados = new ResultadosValidacion();
         try
         {
-            // 1️⃣ Crear dominio (aquí se valida el negocio)
             var gastoDominio = GastoDominio.Crear(
                 monto: request.MontoCommand!.Value,
                 fecha: request.FechaCommand!.Value,
@@ -26,8 +25,6 @@ public class AgregarGastoHandler(IRepositorioGasto repositorioGasto)
                 estado: request.EstadoCommand,
                 nombreImagen: request.NombreImagenCommand
             );
-
-            //Agregar al repositorio
             await repositorioGasto.AgregarAsync(gastoDominio);
         }
         catch (ExcepcionDominio ex)

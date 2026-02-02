@@ -34,6 +34,22 @@ public class RepositorioPreferenciasTarjetaCredito(AppContextoDatos contextoDato
         //obtener proferencias por id
         var preferencia = await conexion.FindAsync<PreferenciasTarjetaEntidad>(idPreferencia);
         //Mapear el resultado a dominio y retornar
-        return PrefereciasTarjetaMapper.ToDomain(preferencia);
+        return PrefereciasTarjetaMapper.ToDominio(preferencia);
+    }
+
+    public async Task<List<PreferenciaTarjetaDominio>?> ObtenerTodosAsync()
+    {
+        //Establecer conexion 
+        var conexion = await contextoDatos.ObtenerConexionAsync();
+        //obtener proferencias por id
+        var preferencias = await conexion.Table<PreferenciasTarjetaEntidad>().ToListAsync();
+        if (preferencias == null) return null;
+        List<PreferenciaTarjetaDominio> preferenciasDominio = new();
+        foreach (var preferencia in preferencias)
+        {
+            //Mapear el resultado a dominio
+            preferenciasDominio.Add(PrefereciasTarjetaMapper.ToDominio(preferencia));
+        }
+        return preferenciasDominio;
     }
 }

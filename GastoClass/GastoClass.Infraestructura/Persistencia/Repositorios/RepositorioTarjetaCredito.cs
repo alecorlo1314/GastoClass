@@ -1,5 +1,8 @@
 ﻿using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Interfaces;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+using GastoClass.GastoClass.Infraestructura.Mapper;
+using Infraestructura.Mapper;
 using Infraestructura.Persistencia.ContextoDB;
 using Infraestructura.Persistencia.Entidades;
 
@@ -32,33 +35,14 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
     {
         var conexion = await _conexion.ObtenerConexionAsync();
 
-        //Mapear el objeto Dominio a la Entidad
-        var tarjetaCreditoEntidad = new TarjetaCreditoEntidad
-        {
-            Id = tarjetaCredito.Id,
-            TipoTarjeta = tarjetaCredito.Tipo.Valor,
-            NombreTarjeta = tarjetaCredito.NombreTarjeta.Valor,
-            UltimosCuatroDigitos = tarjetaCredito.UltimosCuatroDigitos.Valor,
-            MesVencimiento = tarjetaCredito.MesVencimiento.Mes,
-            AnioVencimiento = tarjetaCredito.AnioVencimiento.Anio,
-            LimiteCredito = tarjetaCredito.LimiteCredito.Valor,
-            Balance = 0,
-            CreditoDisponible = tarjetaCredito.LimiteCredito.Valor,
-            Moneda = tarjetaCredito.TipoMoneda.Tipo,
-            DiaCorte = tarjetaCredito.DiaCorte.Dia,
-            DiaPago = tarjetaCredito.DiaPago.Dia,
-            NombreBanco = tarjetaCredito.NombreBanco.Valor,
-            IdPreferenciaTarjeta = tarjetaCredito.Id,
-        };
+        var preferenciaEntidad = tarjetaCredito.Preferencia.ToEntidad();
 
-        if (tarjetaCredito.Id == 0)
-        {
-            await conexion.UpdateAsync(tarjetaCreditoEntidad);
-        }
-        else
-        {
-            await conexion.InsertAsync(tarjetaCreditoEntidad);
-        }
+        await conexion.InsertAsync(preferenciaEntidad);
+
+        tarjetaCredito.Preferencia.SetId(preferenciaEntidad.Id);
+
+        var tarjetaEntidad = TarjetaCreditoMapper.ToEntidad(tarjetaCredito);
+        await conexion.InsertAsync(tarjetaEntidad);
     }
 
     public async Task EliminarAsync(int idTarjetaCredito)
@@ -72,8 +56,14 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
         throw new NotImplementedException();
     }
 
-    public Task<List<TarjetaCreditoDominio>?> ObtenerTodosAsync()
+    public async Task<List<TarjetaCreditoDominio>?> ObtenerTodosAsync()
     {
-        throw new NotImplementedException();
+        var conexion = await _conexion.ObtenerConexionAsync();
+        var entidades = await conexion.Table<TarjetaCreditoEntidad>().ToListAsync();
+
+        return entidades == null ? null :
+               entidades
+               .Select(t => TarjetaCreditoMapper.ToDominio(t))
+               .ToList();
     }
 }

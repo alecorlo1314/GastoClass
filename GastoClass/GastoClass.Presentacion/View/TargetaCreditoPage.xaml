@@ -343,13 +343,13 @@
                         <Border
                             Padding="24"
                             HeightRequest="225"
-                            Stroke="{Binding PreferenciaTarjeta.ColorBorde}"
+                            Stroke="{Binding ColorBorde}"
                             StrokeShape="RoundRectangle 25"
                             WidthRequest="350">
                             <Border.Background>
                                 <LinearGradientBrush EndPoint="0,1">
-                                    <GradientStop Offset="0.1" Color="{Binding PreferenciaTarjeta.ColorHex1}" />
-                                    <GradientStop Offset="1.0" Color="{Binding PreferenciaTarjeta.ColorHex2}" />
+                                    <GradientStop Offset="0.1" Color="{Binding ColorHex1}" />
+                                    <GradientStop Offset="1.0" Color="{Binding ColorHex2}" />
                                 </LinearGradientBrush>
                             </Border.Background>
                             <Border.GestureRecognizers>
@@ -368,12 +368,12 @@
                                             FontFamily="PoppinsRegular"
                                             FontSize="12"
                                             Text="Balance"
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="20"
                                             Text="{Binding Balance, StringFormat='{0:C2}'}"
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                     </StackLayout>
                                     <!--  ICONO CHIP  -->
                                     <Image
@@ -381,7 +381,7 @@
                                         Aspect="AspectFit"
                                         HeightRequest="32"
                                         HorizontalOptions="End"
-                                        Source="{Binding PreferenciaTarjeta.IconoChip}"
+                                        Source="{Binding IconoChip}"
                                         VerticalOptions="Center"
                                         WidthRequest="32" />
                                 </Grid>
@@ -397,12 +397,12 @@
                                             FontFamily="PoppinsRegular"
                                             FontSize="12"
                                             Text="NOMBRE TARJETA"
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                         <Label
                                             FontFamily="PoppinsSemiBold"
                                             FontSize="14"
                                             Text="{Binding NombreTarjeta}"
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                     </StackLayout>
                                     <!--  FECHA DE VENCIMIENTO  -->
                                     <StackLayout
@@ -415,23 +415,23 @@
                                             FontFamily="PoppinsRegular"
                                             FontSize="12"
                                             Text="FECHA VENCIMIENTO"
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                         <HorizontalStackLayout>
                                             <Label
                                                 FontFamily="PoppinsSemiBold"
                                                 FontSize="14"
                                                 Text="{Binding MesVencimiento}"
-                                                TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                                TextColor="{Binding ColorTexto}" />
                                             <Label
                                                 FontFamily="PoppinsSemiBold"
                                                 FontSize="14"
                                                 Text="/"
-                                                TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                                TextColor="{Binding ColorTexto}" />
                                             <Label
                                                 FontFamily="PoppinsSemiBold"
                                                 FontSize="14"
                                                 Text="{Binding AnioVencimiento}"
-                                                TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                                TextColor="{Binding ColorTexto}" />
                                         </HorizontalStackLayout>
                                     </StackLayout>
                                 </Grid>
@@ -439,24 +439,24 @@
                                 <Grid Grid.Row="2" ColumnDefinitions="7*,3*">
                                     <!--  NUMERO DE TARJETA  -->
                                     <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                        <Border HeightRequest="1" Stroke="{Binding PreferenciaTarjeta.ColorBorde}" />
+                                        <Border HeightRequest="1" Stroke="{Binding ColorBorde}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="22"
                                             Text="**** **** **** "
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                         <Label
                                             FontFamily="PoppinsRegular"
                                             FontSize="22"
                                             Text="{Binding UltimosCuatroDigitos}"
-                                            TextColor="{Binding PreferenciaTarjeta.ColorTexto}" />
+                                            TextColor="{Binding ColorTexto}" />
                                     </HorizontalStackLayout>
                                     <Image
                                         Grid.Column="1"
                                         Aspect="AspectFit"
                                         HeightRequest="30"
                                         HorizontalOptions="End"
-                                        Source="{Binding PreferenciaTarjeta.IconoTipoTarjeta}"
+                                        Source="{Binding IconoTipoTarjeta}"
                                         VerticalOptions="Center"
                                         WidthRequest="44" />
                                 </Grid>
