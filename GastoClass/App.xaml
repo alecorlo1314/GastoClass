@@ -3,7 +3,6 @@
     x:Class="GastoClass.App"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converter="clr-namespace:GastoClass.Presentacion.Converters"
     xmlns:local="clr-namespace:GastoClass"
     xmlns:views="clr-namespace:GastoClass.Presentacion.View">
     <Application.Resources>
@@ -12,10 +11,6 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <ResourceDictionary>
-                <converter:EstadoToBoolConverter x:Key="EstadoToBoolConverter" />
-            </ResourceDictionary>
 
             <!--  ESTILO PARA EL BORDER DE LOS ITEMS DEL MENU LATERAL  -->
             <Style

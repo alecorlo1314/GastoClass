@@ -3,6 +3,7 @@
     x:Class="GastoClass.Presentacion.View.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
@@ -326,19 +327,18 @@
                                     Text="Estado"
                                     TextColor="#333" />
 
-                                <HorizontalStackLayout Spacing="20">
-                                    <RadioButton
-                                        Content="Pendiente"
-                                        GroupName="EstadoGroup"
-                                        IsChecked="{Binding Estado, Converter={StaticResource EstadoToBoolConverter}, ConverterParameter=Pendiente, Mode=TwoWay}"
+                                <buttons:SfRadioGroup Orientation="Horizontal" SelectedValue="{Binding EstadoSeleccionado, Mode=TwoWay}">
+                                    <buttons:SfRadioButton
+                                        CheckedColor="{StaticResource Azul Principal}"
+                                        Text="Pendiente"
                                         Value="Pendiente" />
 
-                                    <RadioButton
-                                        Content="Pagado"
-                                        GroupName="EstadoGroup"
-                                        IsChecked="{Binding Estado, Converter={StaticResource EstadoToBoolConverter}, ConverterParameter=Pagado, Mode=TwoWay}"
+                                    <buttons:SfRadioButton
+                                        Text="Pagado"
+                                        UncheckedColor="{StaticResource Gray500}"
                                         Value="Pagado" />
-                                </HorizontalStackLayout>
+                                </buttons:SfRadioGroup>
+
                             </VerticalStackLayout>
                         </VerticalStackLayout>
                     </ScrollView>

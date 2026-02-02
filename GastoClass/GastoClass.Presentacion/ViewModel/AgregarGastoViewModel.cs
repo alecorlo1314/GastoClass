@@ -5,6 +5,7 @@ using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboB
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -28,11 +29,11 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string? descripcion;
     [ObservableProperty] private decimal? monto;
     [ObservableProperty] private string? comercio;
-    [ObservableProperty] private string? estado;
     [ObservableProperty] private DateTime fecha = DateTime.Now;
     [ObservableProperty] private TarjetaCreditoComboBoxDto? tarjetaSeleccionada;
     [ObservableProperty] private string? nombreTarjeta;
     [ObservableProperty] private string? numeroTarjeta;
+    [ObservableProperty] private string? estadoSeleccionado = "Pendiente";
     #endregion
 
     #region Listas Observables
@@ -141,18 +142,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     }
     #endregion
 
-    #region Validaciones Estado
-    partial void OnEstadoChanged(string? value) => ValidarEstado(value);
-    private void ValidarEstado(string? estado)
-    {
-        if (string.IsNullOrWhiteSpace(estado) || string.IsNullOrEmpty(estado)) MensajeErrorEstado = "Estado es requerido";
-        else MensajeErrorEstado = null;
-
-        OnPropertyChanged(nameof(MostrarErrorEstado));
-    }
-
-    #endregion
-
     #region Validaciones Fecha
     partial void OnFechaChanged(DateTime value) => ValidarFecha(value);
     private void ValidarFecha(DateTime fecha)
@@ -220,6 +209,21 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     }
     #endregion
 
+    #region Validaciones Estado
+    partial void OnEstadoSeleccionadoChanged(string? value)
+    {
+        ValidarEstadoSeleccionado(value);
+        EstadoSeleccionado = value;
+    }
+    private void ValidarEstadoSeleccionado(string? estado)
+    {
+        if (string.IsNullOrWhiteSpace(estado) || string.IsNullOrEmpty(estado)) MensajeErrorEstado = "Estado es requerido";
+        else MensajeErrorEstado = null;
+
+        OnPropertyChanged(nameof(MostrarErrorEstado));
+    }
+    #endregion
+
     #region Predecir Categoria Async
     private async Task PredecirCategoriaAsync(string? descripcion)
     {
@@ -281,7 +285,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             ValidarDescripcion(Descripcion);
             ValidacionCategoria(CategoriaPredicha);
             ValidarComercio(Comercio);
-            ValidarEstado(Estado);
+            ValidarEstadoSeleccionado(EstadoSeleccionado);
             ValidarTarjeta(TarjetaSeleccionada);
             hayErrores = MostrarErrorFecha || MostrarErrorMonto || MostrarErrorDescripcion ||
                          MostrarErrorCategoria || MostrarErrorComercio || MostrarErrorEstado ||
