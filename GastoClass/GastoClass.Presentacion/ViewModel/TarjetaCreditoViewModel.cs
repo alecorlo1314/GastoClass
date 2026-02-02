@@ -16,9 +16,8 @@ namespace GastoClass.Presentacion.ViewModel
     public partial class TarjetaCreditoViewModel : ObservableObject
     {
         #region Inyeccion de Dependencias
-        private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
-
         private readonly IMediator _mediator;
+
         #endregion
 
         #region Propiedades UI
@@ -220,10 +219,8 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Constructor
-        public TarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito, IMediator mediator)
+        public TarjetaCreditoViewModel(IMediator mediator)
         {
-            //Inyeccion de dependencias
-            _servicioTarjetaCredito = servicioTarjetaCredito;
             _mediator = mediator;
         }
         #endregion

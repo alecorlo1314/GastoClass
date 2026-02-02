@@ -528,7 +528,7 @@
                 </CollectionView.EmptyView>
             </CollectionView>
         </StackLayout>
-        <!--  ESTADISTICAS Y LISTA DE TARJETAS 3  -->
+        <!--  ESTADISTICAS Y  FORMULARIO INICIAL  -->
         <Grid
             Grid.Row="1"
             ColumnDefinitions="Auto,Auto"
