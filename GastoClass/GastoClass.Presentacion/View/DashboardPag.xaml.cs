@@ -9,7 +9,11 @@ public partial class DashboardPage : ContentPage
 		InitializeComponent();
         BindingContext = dashboardViewModel;
 	}
-
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await ((DashboardViewModel)BindingContext).InicializarDatosAsync();
+    }
     private void Button_Clicked(object sender, EventArgs e)
     {
         mipopup.Show();
