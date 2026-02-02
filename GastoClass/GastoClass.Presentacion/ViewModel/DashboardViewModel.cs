@@ -102,7 +102,7 @@ public partial class DashboardViewModel : ObservableObject
 
     #endregion
 
-    #region Métodos de Carga de Datos 
+    #region Metodo cargar el resumen del mes
     private async Task CargarResumenMesAsync()
     {
         try
@@ -121,6 +121,9 @@ public partial class DashboardViewModel : ObservableObject
         }
     }
 
+    #endregion
+
+    #region Metodo para mostrar el mensaje de cantidad de transacciones
     private void MostrarMensajeCantidadTransacciones()
     {
         MensajeCantidadTransacciones = CantidadTransacciones switch
@@ -131,6 +134,9 @@ public partial class DashboardViewModel : ObservableObject
         };
     }
 
+    #endregion
+
+    #region Metodo para cargar los gastos por categoria
     private async Task CargarGastosPorCategoria()
     {
         try
@@ -156,7 +162,9 @@ public partial class DashboardViewModel : ObservableObject
         }
     }
 
+    #endregion
 
+    #region Metodo para cargar los ultimos 5 gastos
     private async Task ObtenerUltimos5GastosAsync()
     {
         try
@@ -177,6 +185,7 @@ public partial class DashboardViewModel : ObservableObject
         {
         }
     }
+
     #endregion
 
     #region IDisposable
