@@ -19,10 +19,6 @@ public readonly record struct Fecha
         {
             throw new ExcepcionFechaInvalida(nameof(fecha), "No puede ser nulo");
         }
-        if (fecha < DateTime.MinValue)
-        {
-            throw new ExcepcionFechaInvalida(nameof(fecha), "No puede ser menor a la fecha minima");
-        }
         Valor = fecha;
     }
 }

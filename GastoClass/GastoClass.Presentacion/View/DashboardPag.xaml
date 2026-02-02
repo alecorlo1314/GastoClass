@@ -559,7 +559,7 @@
                                     Grid.Column="0"
                                     Aspect="AspectFill"
                                     HeightRequest="55"
-                                    Source="{Binding NombreImagen}"
+                                    Source="{Binding Icono}"
                                     WidthRequest="55" />
 
                                 <StackLayout

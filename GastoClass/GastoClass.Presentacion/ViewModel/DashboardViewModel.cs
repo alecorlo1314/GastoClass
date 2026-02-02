@@ -171,17 +171,14 @@ public partial class DashboardViewModel : ObservableObject
         {
             var ultimosCincoGastos = await _mediator!.Send(new ObtenerUltimosTresGastosConsulta());
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                UltimosCincoMovimientos?.Clear();
+            UltimosCincoMovimientos?.Clear();
 
-                if (ultimosCincoGastos != null)
-                {
-                    UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
-                }
-            });
+            if (ultimosCincoGastos != null)
+            {
+                UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
+            }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
         }
     }
