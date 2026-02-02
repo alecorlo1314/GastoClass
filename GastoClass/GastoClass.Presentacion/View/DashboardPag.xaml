@@ -95,7 +95,7 @@
             </syncfusion:SfPopup.HeaderTemplate>
             <!--  CONTENIDO DEL POPUP  -->
             <syncfusion:SfPopup.ContentTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewmodel:AgregarGastoViewModel">
                     <!--  FORMULARIO  -->
                     <ScrollView Grid.Row="1" Padding="24">
                         <VerticalStackLayout Spacing="12">
@@ -179,19 +179,22 @@
                                             Placeholder="Selecciona una tarjeta"
                                             PlaceholderColor="{StaticResource Gray500}"
                                             SelectedItem="{Binding TarjetaSeleccionada, Mode=TwoWay}"
-                                            TextColor="{StaticResource Gray950}">
-                                            <editors:SfComboBox.ItemTemplate>
-                                                <DataTemplate>
+                                            TextColor="{StaticResource Gray950}"
+                                            TextMemberPath="NombreTarjeta">
+                                            <!--<editors:SfComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="viewmodel:AgregarGastoViewModel">
                                                     <Grid
                                                         Padding="16,0"
                                                         ColumnDefinitions="Auto,Auto"
                                                         ColumnSpacing="16">
-                                                        <!--<Image
+                                            -->
+                                            <!--<Image
                                                             Grid.Column="0"
                                                             Aspect="AspectFill"
                                                             HorizontalOptions="Center"
                                                             Source="{Binding PreferenciaTarjeta.IconoTipoTarjeta}"
                                                             VerticalOptions="Center" />-->
+                                            <!--
                                                         <Label
                                                             Grid.Column="0"
                                                             FontFamily="PoppinsMedium"
@@ -208,7 +211,7 @@
                                                             VerticalOptions="Center" />
                                                     </Grid>
                                                 </DataTemplate>
-                                            </editors:SfComboBox.ItemTemplate>
+                                            </editors:SfComboBox.ItemTemplate>-->
                                         </editors:SfComboBox>
                                     </Border>
                                     <!--  MENSAJE ERROR  -->
@@ -222,7 +225,32 @@
                                         VerticalOptions="Start" />
                                 </VerticalStackLayout>
                             </Grid>
-
+                            <!--  COMERCIO  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Comercio"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <Entry
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Placeholder="Ej: Walmart, Pali"
+                                        Text="{Binding Comercio, Mode=TwoWay}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                                <!--  MENSAJE ERROR  -->
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorComercio}"
+                                    Text="{Binding MensajeErrorComercio}"
+                                    TextColor="{StaticResource RojoError}" />
+                            </VerticalStackLayout>
                             <!--  FECHA  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label

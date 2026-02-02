@@ -4,7 +4,6 @@ using GastoClass.Aplicacion.Interfaces;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
-using GastoClass.GastoClass.Aplicacion.Gasto.DTOs;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
 using MediatR;
 using System.Collections.ObjectModel;
@@ -32,6 +31,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string? estado;
     [ObservableProperty] private DateTime fecha = DateTime.Now;
     [ObservableProperty] private TarjetaCreditoComboBoxDto? tarjetaSeleccionada;
+    [ObservableProperty] private string? nombreTarjeta;
+    [ObservableProperty] private string? numeroTarjeta;
     #endregion
 
     #region Listas Observables
