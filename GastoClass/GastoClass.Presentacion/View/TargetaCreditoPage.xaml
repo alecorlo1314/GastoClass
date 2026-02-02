@@ -61,24 +61,90 @@
             <!--  CONTENIDO DEL POPUP  -->
             <syncfusion:SfPopup.ContentTemplate>
                 <DataTemplate>
-                    <!--  FORMULARIO  -->
-                    <Grid
-                        Padding="24"
-                        RowDefinitions="*,*,*,*"
-                        RowSpacing="16">
-                        <!--  LIMITE DE CREDITO Y TIPO DE MONEDA  -->
+                    <Grid>
+                        <!--  FORMULARIO  -->
                         <Grid
-                            Grid.Row="0"
-                            ColumnDefinitions="*,*"
-                            ColumnSpacing="32">
-                            <!--  LIMITE DE CREDITO  -->
-                            <VerticalStackLayout Grid.Column="0" Spacing="8">
-                                <Label
-                                    FontFamily="PoppinsMedium"
-                                    FontSize="14"
-                                    Text="Limite de Credito"
-                                    TextColor="#333" />
-                                <VerticalStackLayout Spacing="4">
+                            Padding="24"
+                            RowDefinitions="*,*,*,*"
+                            RowSpacing="16">
+                            <!--  LIMITE DE CREDITO Y TIPO DE MONEDA  -->
+                            <Grid
+                                Grid.Row="0"
+                                ColumnDefinitions="*,*"
+                                ColumnSpacing="32">
+                                <!--  LIMITE DE CREDITO  -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="14"
+                                        Text="Limite de Credito"
+                                        TextColor="#333" />
+                                    <VerticalStackLayout Spacing="4">
+                                        <Border
+                                            BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                            Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                            StrokeShape="RoundRectangle 4">
+                                            <Entry
+                                                FontFamily="PoppinsRegular"
+                                                FontSize="16"
+                                                Placeholder="₡0.00"
+                                                Text="{Binding LimiteCredito}"
+                                                TextColor="{StaticResource Gray950}" />
+                                        </Border>
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="12"
+                                            Text="{Binding MensajeRequerimientoLimiteCredito, Mode=TwoWay}"
+                                            TextColor="Red" />
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                                <!--  TIPO DE MONEDA  -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="14"
+                                        Text="Tipo de Moneda"
+                                        TextColor="{StaticResource Gray600}" />
+                                    <Border
+                                        BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                        Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                        StrokeShape="RoundRectangle 4">
+                                        <editors:SfComboBox
+                                            BackgroundColor="Transparent"
+                                            ClearButtonIconColor="{StaticResource Gray600}"
+                                            DisplayMemberPath="Moneda"
+                                            DropDownBackground="{StaticResource FondoBlanco}"
+                                            DropDownIconColor="{StaticResource Gray400}"
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            HeightRequest="45"
+                                            IsEditable="False"
+                                            ItemsSource="{Binding ListaTipoMoneda}"
+                                            Placeholder="Selecciona una moneda"
+                                            PlaceholderColor="{StaticResource Gray500}"
+                                            SelectedItem="{Binding TipoMoneda}"
+                                            TextColor="{StaticResource Gray950}"
+                                            TextMemberPath="Moneda" />
+                                    </Border>
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="12"
+                                        Text="{Binding MensajeRequerimientoTipoMoneda, Mode=TwoWay}"
+                                        TextColor="Red" />
+                                </VerticalStackLayout>
+                            </Grid>
+                            <!--  DIA DE CORTE Y DIA DE PAGO  -->
+                            <Grid
+                                Grid.Row="1"
+                                ColumnDefinitions="*,*"
+                                ColumnSpacing="32">
+                                <!--  DIA DE CORTE  -->
+                                <VerticalStackLayout Grid.Column="0" Spacing="8">
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="14"
+                                        Text="Dia de Corte"
+                                        TextColor="#333" />
                                     <Border
                                         BackgroundColor="{StaticResource FondoMenosBlanco}"
                                         Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
@@ -86,206 +152,172 @@
                                         <Entry
                                             FontFamily="PoppinsRegular"
                                             FontSize="16"
-                                            Placeholder="₡0.00"
-                                            Text="{Binding LimiteCredito}"
+                                            Keyboard="Numeric"
+                                            Placeholder="Dia del mes del (1-31)"
+                                            Text="{Binding DiaCorte}"
                                             TextColor="{StaticResource Gray950}" />
                                     </Border>
                                     <Label
                                         FontFamily="PoppinsRegular"
                                         FontSize="12"
-                                        Text="{Binding MensajeRequerimientoLimiteCredito, Mode=TwoWay}"
+                                        Text="{Binding MensajeRequerimientoDiaCorte, Mode=TwoWay}"
                                         TextColor="Red" />
                                 </VerticalStackLayout>
-                            </VerticalStackLayout>
-                            <!--  TIPO DE MONEDA  -->
-                            <VerticalStackLayout Grid.Column="1" Spacing="8">
-                                <Label
-                                    FontFamily="PoppinsMedium"
-                                    FontSize="14"
-                                    Text="Tipo de Moneda"
-                                    TextColor="{StaticResource Gray600}" />
-                                <Border
-                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
-                                    StrokeShape="RoundRectangle 4">
-                                    <editors:SfComboBox
-                                        BackgroundColor="Transparent"
-                                        ClearButtonIconColor="{StaticResource Gray600}"
-                                        DisplayMemberPath="Moneda"
-                                        DropDownBackground="{StaticResource FondoBlanco}"
-                                        DropDownIconColor="{StaticResource Gray400}"
+                                <!--  DIA DE PAGO  -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="14"
+                                        Text="Dia de Pago"
+                                        TextColor="#333" />
+                                    <Border
+                                        BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                        Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                        StrokeShape="RoundRectangle 4">
+                                        <Entry
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            Keyboard="Numeric"
+                                            Placeholder="Dia del mes del (1-31)"
+                                            Text="{Binding DiaPago}"
+                                            TextColor="{StaticResource Gray950}" />
+                                    </Border>
+                                    <Label
                                         FontFamily="PoppinsRegular"
-                                        FontSize="16"
-                                        HeightRequest="45"
-                                        IsEditable="False"
-                                        ItemsSource="{Binding ListaTipoMoneda}"
-                                        Placeholder="Selecciona una moneda"
-                                        PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding TipoMoneda}"
-                                        TextColor="{StaticResource Gray950}"
-                                        TextMemberPath="Moneda" />
-                                </Border>
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="12"
-                                    Text="{Binding MensajeRequerimientoTipoMoneda, Mode=TwoWay}"
-                                    TextColor="Red" />
-                            </VerticalStackLayout>
-                        </Grid>
-                        <!--  DIA DE CORTE Y DIA DE PAGO  -->
-                        <Grid
-                            Grid.Row="1"
-                            ColumnDefinitions="*,*"
-                            ColumnSpacing="32">
-                            <!--  DIA DE CORTE  -->
-                            <VerticalStackLayout Grid.Column="0" Spacing="8">
-                                <Label
-                                    FontFamily="PoppinsMedium"
-                                    FontSize="14"
-                                    Text="Dia de Corte"
-                                    TextColor="#333" />
-                                <Border
-                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
-                                    StrokeShape="RoundRectangle 4">
-                                    <Entry
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="16"
-                                        Keyboard="Numeric"
-                                        Placeholder="Dia del mes del (1-31)"
-                                        Text="{Binding DiaCorte}"
-                                        TextColor="{StaticResource Gray950}" />
-                                </Border>
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="12"
-                                    Text="{Binding MensajeRequerimientoDiaCorte, Mode=TwoWay}"
-                                    TextColor="Red" />
-                            </VerticalStackLayout>
-                            <!--  DIA DE PAGO  -->
-                            <VerticalStackLayout Grid.Column="1" Spacing="8">
-                                <Label
-                                    FontFamily="PoppinsMedium"
-                                    FontSize="14"
-                                    Text="Dia de Pago"
-                                    TextColor="#333" />
-                                <Border
-                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
-                                    StrokeShape="RoundRectangle 4">
-                                    <Entry
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="16"
-                                        Keyboard="Numeric"
-                                        Placeholder="Dia del mes del (1-31)"
-                                        Text="{Binding DiaPago}"
-                                        TextColor="{StaticResource Gray950}" />
-                                </Border>
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="12"
-                                    Text="{Binding MensajeRequerimientoDiaPago, Mode=TwoWay}"
-                                    TextColor="Red" />
-                            </VerticalStackLayout>
-                        </Grid>
-                        <!--  NOMBRE DEL BANCO  -->
-                        <VerticalStackLayout Grid.Row="2" Spacing="8">
-                            <Label
-                                FontFamily="PoppinsMedium"
-                                FontSize="14"
-                                Text="Nombre del Banco"
-                                TextColor="#333" />
-                            <Border
-                                BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
-                                StrokeShape="RoundRectangle 4">
-                                <Entry
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Placeholder="Eje. Banco de Costa Rica, BAC"
-                                    Text="{Binding NombreBanco}"
-                                    TextColor="{StaticResource Gray950}" />
-                            </Border>
-                            <Label
-                                FontFamily="PoppinsRegular"
-                                FontSize="12"
-                                Text="{Binding MensajeRequerimientoNombreBanco, Mode=TwoWay}"
-                                TextColor="Red" />
-                        </VerticalStackLayout>
-                        <!--  SELECCION DE BOTONES  -->
-                        <StackLayout Grid.Row="3" Spacing="12">
-                            <Label
-                                FontFamily="PoppinsMedium"
-                                FontSize="14"
-                                Text="Color de la Tarjeta"
-                                TextColor="#333" />
-                            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="20">
-                                <Border
-                                    x:Name="ColorBorder1"
-                                    Grid.Column="0"
-                                    HeightRequest="54"
-                                    Stroke="#488AFF"
-                                    StrokeShape="RoundRectangle 8">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#2E62FF" />
-                                            <GradientStop Offset="1.0" Color="#4E93FF" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder1}" />
-                                    </Border.GestureRecognizers>
-                                </Border>
-                                <Border
-                                    x:Name="ColorBorder2"
-                                    Grid.Column="1"
-                                    HeightRequest="54"
-                                    Stroke="#4844EA"
-                                    StrokeShape="RoundRectangle 8">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#130FF4" />
-                                            <GradientStop Offset="1.0" Color="#4B48ED" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder2}" />
-                                    </Border.GestureRecognizers>
-                                </Border>
-                                <Border
-                                    x:Name="ColorBorder3"
-                                    Grid.Column="2"
-                                    HeightRequest="54"
-                                    Stroke="#DFEAF2"
-                                    StrokeShape="RoundRectangle 8">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#FFFFFF" />
-                                            <GradientStop Offset="1.0" Color="#FFFFFF" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder3}" />
-                                    </Border.GestureRecognizers>
-                                </Border>
-                                <Border
-                                    x:Name="ColorBorder4"
-                                    Grid.Column="3"
-                                    HeightRequest="54"
-                                    Stroke="#303030"
-                                    StrokeShape="RoundRectangle 8">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0.0" Color="#000000" />
-                                            <GradientStop Offset="1.0" Color="#353535" />
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <Border.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder4}" />
-                                    </Border.GestureRecognizers>
-                                </Border>
+                                        FontSize="12"
+                                        Text="{Binding MensajeRequerimientoDiaPago, Mode=TwoWay}"
+                                        TextColor="Red" />
+                                </VerticalStackLayout>
                             </Grid>
-                        </StackLayout>
+                            <!--  NOMBRE DEL BANCO  -->
+                            <VerticalStackLayout Grid.Row="2" Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Nombre del Banco"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <Entry
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Placeholder="Eje. Banco de Costa Rica, BAC"
+                                        Text="{Binding NombreBanco}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    Text="{Binding MensajeRequerimientoNombreBanco, Mode=TwoWay}"
+                                    TextColor="Red" />
+                            </VerticalStackLayout>
+                            <!--  SELECCION DE BOTONES  -->
+                            <StackLayout Grid.Row="3" Spacing="12">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Color de la Tarjeta"
+                                    TextColor="#333" />
+                                <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="20">
+                                    <Border
+                                        x:Name="ColorBorder1"
+                                        Grid.Column="0"
+                                        HeightRequest="54"
+                                        Stroke="#488AFF"
+                                        StrokeShape="RoundRectangle 8">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Offset="0.0" Color="#2E62FF" />
+                                                <GradientStop Offset="1.0" Color="#4E93FF" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder1}" />
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                    <Border
+                                        x:Name="ColorBorder2"
+                                        Grid.Column="1"
+                                        HeightRequest="54"
+                                        Stroke="#4844EA"
+                                        StrokeShape="RoundRectangle 8">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Offset="0.0" Color="#130FF4" />
+                                                <GradientStop Offset="1.0" Color="#4B48ED" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder2}" />
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                    <Border
+                                        x:Name="ColorBorder3"
+                                        Grid.Column="2"
+                                        HeightRequest="54"
+                                        Stroke="#DFEAF2"
+                                        StrokeShape="RoundRectangle 8">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF" />
+                                                <GradientStop Offset="1.0" Color="#FFFFFF" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder3}" />
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                    <Border
+                                        x:Name="ColorBorder4"
+                                        Grid.Column="3"
+                                        HeightRequest="54"
+                                        Stroke="#303030"
+                                        StrokeShape="RoundRectangle 8">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Offset="0.0" Color="#000000" />
+                                                <GradientStop Offset="1.0" Color="#353535" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ColorTarjetaCommand}" CommandParameter="{x:Reference ColorBorder4}" />
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </Grid>
+                            </StackLayout>
+                        </Grid>
+                        <!--  Overlay de carga  -->
+                        <Grid BackgroundColor="#80000000" IsVisible="{Binding EstaOcupado}">
+                            <Border
+                                Padding="32"
+                                BackgroundColor="{StaticResource FondoBlanco}"
+                                HeightRequest="150"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                WidthRequest="200">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="15" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout
+                                    HorizontalOptions="Center"
+                                    Spacing="16"
+                                    VerticalOptions="Center">
+                                    <ActivityIndicator
+                                        HeightRequest="40"
+                                        IsRunning="{Binding EstaOcupado}"
+                                        WidthRequest="40"
+                                        Color="{StaticResource Azul Principal}" />
+                                    <Label
+                                        FontFamily="PoppinsMedium"
+                                        FontSize="16"
+                                        HorizontalOptions="Center"
+                                        Text="Guardando tarjeta..."
+                                        TextColor="{StaticResource Gray900}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </syncfusion:SfPopup.ContentTemplate>
@@ -314,10 +346,6 @@
                             HeightRequest="48"
                             Text="Finalizar Registros "
                             TextColor="{StaticResource FondoBlanco}" />
-                        <ActivityIndicator
-                            IsRunning="{Binding EstaOcupado}"
-                            IsVisible="{Binding EstaOcupado}"
-                            Color="{StaticResource Azul Principal}" />
                     </StackLayout>
                 </DataTemplate>
             </syncfusion:SfPopup.FooterTemplate>

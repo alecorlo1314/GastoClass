@@ -144,7 +144,7 @@ namespace GastoClass.Presentacion.ViewModel
 
         #region Estados de carga
         [ObservableProperty]
-        private bool? estaOcupado;
+        private bool? estaOcupado = false;
 
         #endregion
 
