@@ -5,7 +5,6 @@ using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboB
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -198,13 +197,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             catch (OperationCanceledException)
             {
             }
-            catch (Exception ex)
-            {
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-                });
-            }
         }, cancellationToken);
     }
     #endregion
@@ -260,9 +252,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", $"Error al predecir categoría: {ex.Message}", "OK");
         }
     }
     #endregion
@@ -341,9 +332,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 return;
             }
 
-            // Mostrar mensaje de exito
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Exito", "Gasto guardado con exito", "OK");
-
             // Limpiar espacios
             LimpiarCampos();
             LimpiarErrores();
@@ -353,8 +341,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error",
-                $"Error al guardar el gasto: {ex.Message}", "OK");
         }
     }
     #endregion

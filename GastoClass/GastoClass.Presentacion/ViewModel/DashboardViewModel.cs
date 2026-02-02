@@ -118,10 +118,6 @@ public partial class DashboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-            });
         }
     }
 
@@ -157,10 +153,6 @@ public partial class DashboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-            });
         }
     }
 
@@ -183,10 +175,6 @@ public partial class DashboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-            });
         }
     }
     #endregion

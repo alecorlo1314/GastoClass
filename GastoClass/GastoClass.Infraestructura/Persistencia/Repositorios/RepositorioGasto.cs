@@ -18,19 +18,13 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
 
     public async Task AgregarAsync(GastoDominio gasto)
     {
-        var conexion =  await _conexion.ObtenerConexionAsync();
+        var conexion = await _conexion.ObtenerConexionAsync();
         var entidadGasto = GastoMapper.ToEntidad(gasto);
-        if(entidadGasto.Id == 0)
-        {
-            await conexion.UpdateAsync(entidadGasto);
-            gasto.SetId(entidadGasto.Id);
-        }
-        else
-        {
-            await conexion.InsertAsync(entidadGasto);
-            gasto.SetId(entidadGasto.Id);
-        }
+
+        await conexion.InsertAsync(entidadGasto);
+        gasto.SetId(entidadGasto.Id);
     }
+
 
     public async Task<int> EliminarPorIdAsync(int id)
     {
