@@ -269,28 +269,35 @@ namespace GastoClass.Presentacion.ViewModel
             //Inyeccion de dependencias
             _servicioTarjetaCredito = servicioTarjetaCredito;
             _mediator = mediator;
-
-
-            _ = CargarTarjetasCreditoAsync();
-            _ = CargarGastosPorTarjetaCreditoAsync();
-            //Inicializamos la lista de tipos de tarjetas
-            ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
-            {
-                new(){ Tipo = "MasterCard"},
-                new(){ Tipo = "Visa"},
-                new() { Tipo = "Amex"}
-            };
-            //Inicializamos la lista de tipos de moneda
-            ListaTipoMoneda = new ObservableCollection<TipoMoneda>
-            {
-                new(){ Moneda = "CRC"},
-                new(){ Moneda = "USD"}
-            };
         }
         #endregion
 
+        #region Inicializar Datos
+        public async Task InicializarAsync()
+        {
+            try
+            {
+                //Importante
+                _ = CargarTarjetasCreditoAsync();
+                _ = CargarGastosPorTarjetaCreditoAsync();
+
+                //No tan Importante
+                _ = CargarListaTiposTarjetasCredito();
+                _ = InicializarTiposMonedas();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync
+                ("Error",
+                "No se pudo inicializar la cargar" + ex.Message,
+                "Ok");
+            }
+        }
+
+        #endregion
+
         #region Carga inicial de tarjetas de crédito
-        private async Task CargarTarjetasCreditoAsync()
+        public async Task CargarTarjetasCreditoAsync()
         {
             try
             {
@@ -322,6 +329,33 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
             }
         }
+        #endregion
+
+        #region Inicializar Tipos de Tarjetas de Credito
+        private async Task CargarListaTiposTarjetasCredito()
+        {
+            //Inicializamos la lista de tipos de tarjetas
+            ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
+            {
+                new(){ Tipo = "MasterCard"},
+                new(){ Tipo = "Visa"},
+                new() { Tipo = "Amex"}
+            };
+        }
+
+        #endregion
+
+        #region Inicializar Tipos de Monedas
+
+        private async Task InicializarTiposMonedas()
+        {
+            ListaTipoMoneda = new ObservableCollection<TipoMoneda>
+            {
+                new(){ Moneda = "CRC"},
+                new(){ Moneda = "USD"}
+            };
+        }
+
         #endregion
 
         #region Commando Seleccionar Color Tarjeta
@@ -358,7 +392,7 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
-        #region Commando Finalizar Registro
+        #region Comando Finalizar Registro
         [RelayCommand(CanExecute = nameof(FinalizarRegistroAccesible))]
         private async Task FinalizarRegistroTarjetaCredito()
         {

@@ -10,6 +10,12 @@ public partial class TargetaCreditoPage : ContentPage
         BindingContext = targetaCreditoViewModel;
 	}
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await ((TarjetaCreditoViewModel)BindingContext).InicializarAsync();
+    }
+
     private void Button_Clicked(object sender, EventArgs e)
     {
 		mipopup.IsOpen = true;
