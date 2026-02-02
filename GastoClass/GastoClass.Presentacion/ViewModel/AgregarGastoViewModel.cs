@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.Interfaces;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Gasto.DTOs;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
@@ -29,12 +31,13 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string? comercio;
     [ObservableProperty] private string? estado;
     [ObservableProperty] private DateTime fecha = DateTime.Now;
-    [ObservableProperty] private TarjetaGastoDto? tarjetaSeleccionada;
+    [ObservableProperty] private TarjetaCreditoComboBoxDto? tarjetaSeleccionada;
     #endregion
 
     #region Listas Observables
     [ObservableProperty] private CategoriaPredichaDto? categoriaPredicha;
     [ObservableProperty] private ObservableCollection<CategoriaPredichaDto>? listaCategoriasPredichas = new();
+    [ObservableProperty] private ObservableCollection<TarjetaCreditoComboBoxDto>? listaTarjetasCredito = new();
     #endregion
 
     #region Propiedades de procesos
@@ -57,6 +60,32 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     public bool MostrarErrorComercio => !string.IsNullOrWhiteSpace(MensajeErrorComercio);
     public bool MostrarErrorFecha => !string.IsNullOrWhiteSpace(MensajeErrorFecha);
     public bool MostrarErrorCategoria => !string.IsNullOrWhiteSpace(MensajeErrorCategoria);
+
+    #endregion
+
+    #region Constructor
+    public AgregarGastoViewModel(IMediator mediator, IPrediccionCategoriaServicio prediccionCategoriaServicio)
+    {
+        _mediator = mediator;
+        _prediccionCategoriaServicio = prediccionCategoriaServicio;
+
+        // Inicializar Datos
+        //_ = InicializarDatosAsync();
+    }
+    #endregion
+
+    #region Inicializar Datos 
+    public async Task InicializarDatosAsync()
+    {
+        await CargarDatosTarjetasComboBoxAsync();
+    }
+
+    private async Task CargarDatosTarjetasComboBoxAsync()
+    {
+        //Se necesita icono, nombre y ultimos 4 digitos
+        var tarjetas = await _mediator!.Send(new ObtenerTarjetasCreditoComboBoxConsulta());
+        ListaTarjetasCredito = new ObservableCollection<TarjetaCreditoComboBoxDto>(tarjetas);
+    }
 
     #endregion
 
@@ -137,21 +166,13 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     #endregion
 
     #region Validaciones Tarjeta
-    partial void OnTarjetaSeleccionadaChanged(TarjetaGastoDto? value) => ValidarTarjeta(value);
-    private void ValidarTarjeta(TarjetaGastoDto? tarjeta)
+    partial void OnTarjetaSeleccionadaChanged(TarjetaCreditoComboBoxDto? value) => ValidarTarjeta(value);
+    private void ValidarTarjeta(TarjetaCreditoComboBoxDto? tarjeta)
     {
         if (tarjeta == null) MensajeErrorTarjeta = "Tarjeta es requerida";
         else MensajeErrorTarjeta = null;
 
         OnPropertyChanged(nameof(MostrarErrorTarjeta));
-    }
-    #endregion
-
-    #region Constructor
-    public AgregarGastoViewModel(IMediator mediator, IPrediccionCategoriaServicio prediccionCategoriaServicio)
-    {
-        _mediator = mediator;
-        _prediccionCategoriaServicio = prediccionCategoriaServicio;
     }
     #endregion
 

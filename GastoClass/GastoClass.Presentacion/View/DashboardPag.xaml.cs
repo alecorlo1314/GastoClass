@@ -4,7 +4,7 @@ namespace GastoClass.Presentacion.View;
 
 public partial class DashboardPage : ContentPage
 {
-	public DashboardPage(DashboardViewModel dashboardViewModel)
+    public DashboardPage(DashboardViewModel dashboardViewModel)
 	{
 		InitializeComponent();
         BindingContext = dashboardViewModel;

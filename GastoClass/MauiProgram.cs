@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Maui;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.Interfaces;
-using GastoClass.Aplicacion.Servicios;
 using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 using GastoClass.GastoClass.Aplicacion.HistorialGasto.Consultas;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
@@ -93,6 +93,7 @@ namespace GastoClass
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastoPorTarjetaCreditoConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerTarjetaCreditoConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerTarjetasCreditoComboBoxConsulta).Assembly);
             });
 
             // HTTP Client para el servicio de predicción

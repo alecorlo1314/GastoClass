@@ -203,7 +203,7 @@
                                                             Grid.Column="1"
                                                             FontFamily="PoppinsMedium"
                                                             FontSize="16"
-                                                            Text="{Binding UltimosCuatroDigitos}"
+                                                            Text="{Binding NumeroTarjeta}"
                                                             TextColor="{StaticResource Gray900}"
                                                             VerticalOptions="Center" />
                                                     </Grid>

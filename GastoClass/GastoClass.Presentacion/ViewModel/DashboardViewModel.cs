@@ -84,7 +84,7 @@ public partial class DashboardViewModel : ObservableObject
     public async Task RefrescarDashboardAsync()
     {
         await Task.WhenAll(
-            CargarTransaccionesGastoTotal(),
+            CargarResumenMesAsync(),
             CargarGastosPorCategoria(),
             ObtenerUltimos5GastosAsync()
         );
@@ -95,7 +95,7 @@ public partial class DashboardViewModel : ObservableObject
     public async Task InicializarDatosAsync()
     {
         await Task.WhenAll(
-            CargarTransaccionesGastoTotal(),
+            CargarResumenMesAsync(),
             CargarGastosPorCategoria(),
             ObtenerUltimos5GastosAsync());
     }
@@ -103,7 +103,7 @@ public partial class DashboardViewModel : ObservableObject
     #endregion
 
     #region Métodos de Carga de Datos 
-    private async Task CargarTransaccionesGastoTotal()
+    private async Task CargarResumenMesAsync()
     {
         try
         {
