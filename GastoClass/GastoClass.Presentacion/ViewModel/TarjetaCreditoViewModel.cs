@@ -142,6 +142,12 @@ namespace GastoClass.Presentacion.ViewModel
         private ObservableCollection<TipoMoneda>? listaTipoMoneda = new();
         #endregion
 
+        #region Estados de carga
+        [ObservableProperty]
+        private bool? estaOcupado;
+
+        #endregion
+
         #region Propiedades Logicas
         /// <summary>
         /// Indica si el botón de ver más detalles es accesible
@@ -348,61 +354,75 @@ namespace GastoClass.Presentacion.ViewModel
         {
             if(BorderFueSeleccionado!.Value) return;
 
-            if(ColorHexa1 == ColorHexa2)
+            try
             {
-                ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
-                ColorBorde = Color.FromArgb("DFEAF2").ToHex();
-                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
-                IconoChip = "icono_chip_gris.png";
-            }
-            else
-            {
-                ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
-                ColorBorde = "Transparent";
-                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
-                IconoChip = "icono_chip_blanco.png";
-            }
+                EstaOcupado = true;
 
-            var agregarTarjetaCommand = new AgragarTarjetaCreditoCommand
-            {
-                Tipo = this.TipoTarjeta?.Tipo,
-                Nombre = this.NombreTarjeta,
-                UltimosCuatroDigitos = this.UltimosCuatroDigitos!.Value,
-                MesVencimiento = this.FechaVencimiento!.Value.Month,
-                AnioVencimiento = this.FechaVencimiento!.Value.Year,
-                LimiteCredito = this.LimiteCredito!.Value,
-                TipoMoneda = this.TipoMoneda?.Moneda,
-                DiaCorte = this.DiaCorte!.Value,
-                DiaPago = this.DiaPago!.Value,
-                NombreBanco = this.NombreBanco,
-                //Preferencias Visuales
-                ColorHex1 = ColorHexa1,
-                ColorHex2 = ColorHexa2,
-                ColorBorde = ColorBorde,
-                ColorTexto = ColorTextoTarjeta,
-                IconoTipoTarjeta = IconoTipoTarjeta,
-                IconoChip = IconoChip
-            };
+                if (ColorHexa1 == ColorHexa2)
+                {
+                    ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
+                    ColorBorde = Color.FromArgb("DFEAF2").ToHex();
+                    IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
+                    IconoChip = "icono_chip_gris.png";
+                }
+                else
+                {
+                    ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
+                    ColorBorde = "Transparent";
+                    IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
+                    IconoChip = "icono_chip_blanco.png";
+                }
 
-            var resultado = await _mediator.Send(agregarTarjetaCommand);
+                var agregarTarjetaCommand = new AgragarTarjetaCreditoCommand
+                {
+                    Tipo = this.TipoTarjeta?.Tipo,
+                    Nombre = this.NombreTarjeta,
+                    UltimosCuatroDigitos = this.UltimosCuatroDigitos!.Value,
+                    MesVencimiento = this.FechaVencimiento!.Value.Month,
+                    AnioVencimiento = this.FechaVencimiento!.Value.Year,
+                    LimiteCredito = this.LimiteCredito!.Value,
+                    TipoMoneda = this.TipoMoneda?.Moneda,
+                    DiaCorte = this.DiaCorte!.Value,
+                    DiaPago = this.DiaPago!.Value,
+                    NombreBanco = this.NombreBanco,
+                    //Preferencias Visuales
+                    ColorHex1 = ColorHexa1,
+                    ColorHex2 = ColorHexa2,
+                    ColorBorde = ColorBorde,
+                    ColorTexto = ColorTextoTarjeta,
+                    IconoTipoTarjeta = IconoTipoTarjeta,
+                    IconoChip = IconoChip
+                };
 
-            if (resultado.EsValido)
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync
-                    ("Informacion",
-                    "La tarjeta se ingreso con exito",
-                    "Ok");
-                LimpiarCampos();
-                _ = CargarTarjetasCreditoAsync();
-                PopupAgregaTarjetaEstaAbiero = false;
+                var resultado = await _mediator.Send(agregarTarjetaCommand);
+
+                if (resultado.EsValido)
+                {
+                    await Shell.Current.CurrentPage.DisplayAlertAsync
+                        ("Informacion",
+                        "La tarjeta se ingreso con exito",
+                        "Ok");
+                    LimpiarCampos();
+                    _ = CargarTarjetasCreditoAsync();
+                    PopupAgregaTarjetaEstaAbiero = false;
+                    EstaOcupado = false;
+                }
+                else
+                {
+                    await Shell.Current.CurrentPage.DisplayAlertAsync
+                        ("Error",
+                        "No se pudo guardar la tarjeta",
+                        "Ok");
+                    EstaOcupado = false;
+                    return;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Shell.Current.CurrentPage.DisplayAlertAsync
-                    ("Error",
-                    "No se pudo guardar la tarjeta",
-                    "Ok");
-                return;
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            }finally
+            {
+                EstaOcupado = false;
             }
         }
 

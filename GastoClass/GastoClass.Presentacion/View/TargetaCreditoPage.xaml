@@ -314,6 +314,10 @@
                             HeightRequest="48"
                             Text="Finalizar Registros "
                             TextColor="{StaticResource FondoBlanco}" />
+                        <ActivityIndicator
+                            IsRunning="{Binding EstaOcupado}"
+                            IsVisible="{Binding EstaOcupado}"
+                            Color="{StaticResource Azul Principal}" />
                     </StackLayout>
                 </DataTemplate>
             </syncfusion:SfPopup.FooterTemplate>
