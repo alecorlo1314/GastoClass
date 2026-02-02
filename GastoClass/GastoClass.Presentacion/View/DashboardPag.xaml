@@ -317,6 +317,29 @@
                                     Text="{Binding MensajeErrorCategoria}"
                                     TextColor="{StaticResource RojoError}" />
                             </VerticalStackLayout>
+
+                            <!--  ESTADO  -->
+                            <VerticalStackLayout Grid.Row="4" Spacing="12">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Estado"
+                                    TextColor="#333" />
+
+                                <HorizontalStackLayout Spacing="20">
+                                    <RadioButton
+                                        Content="Pendiente"
+                                        GroupName="EstadoGroup"
+                                        IsChecked="{Binding Estado, Converter={StaticResource EstadoToBoolConverter}, ConverterParameter=Pendiente, Mode=TwoWay}"
+                                        Value="Pendiente" />
+
+                                    <RadioButton
+                                        Content="Pagado"
+                                        GroupName="EstadoGroup"
+                                        IsChecked="{Binding Estado, Converter={StaticResource EstadoToBoolConverter}, ConverterParameter=Pagado, Mode=TwoWay}"
+                                        Value="Pagado" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
                         </VerticalStackLayout>
                     </ScrollView>
                 </DataTemplate>
