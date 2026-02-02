@@ -168,97 +168,47 @@ namespace GastoClass.Presentacion.ViewModel
         /// <summary>
         /// Indica si el popup de agregar tarjeta esta abierto
         /// </summary>
-        [ObservableProperty]
-        private bool? popupAgregaTarjetaEstaAbiero;
+        [ObservableProperty] private bool? popupAgregaTarjetaEstaAbiero;
 
-        /// <summary>
-        /// Indica si el tipo de tarjeta es válido
-        /// </summary>
         private bool esValidoTipoTarjeta = false;
-
-        /// <summary>
-        /// Indica si el nombre de tarjeta es válido
-        /// </summary>
         private bool esValidoNombreTarjeta = false;
-
-        /// <summary>
-        /// Indica si los últimos cuatro dígitos son válidos
-        /// </summary>
         private bool esValidoUltimosCuatroDigitos = false;
-
-        /// <summary>
-        /// Indica si la fecha de vencimiento es válida
-        /// </summary>
         private bool esValidoFechaVencimiento = false;
-
         private bool esValidoLimiteCredito = false;
         private bool esValidoTipoMoneda = false;
         private bool esValidoDiaCorte = false;
         private bool esValidoDiaPago = false;
         private bool esValidoNombreBanco = false;
 
-        [ObservableProperty]
-        private bool? borderVisible;
+        [ObservableProperty] private bool? borderVisible;
 
-        [ObservableProperty]
-        private bool? tituloTarjetasVisible;
+        //Estado se utilizan para mostrar cuando hay registros de tarjetas
+        [ObservableProperty] private bool? tituloTarjetasVisible;
+        [ObservableProperty] private bool? tituloGraficoVisible;
 
-        [ObservableProperty]
-        private bool? tituloGraficoVisible;
+        /// <summary>
+        /// Si se selecciona un color de tarjeta este se pondra en true
+        /// </summary>
+        [ObservableProperty] private bool? borderFueSeleccionado = false;
         #endregion
 
         #region Mensajes
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de ultimos cuatro digitos
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoUltimosCuatroDigitos;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de tipo de tarjeta
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoTipoTarjeta;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de nombre de tarjeta
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoNombreTarjeta;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de fecha de vencimiento
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoFechaVencimiento;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de limite de credito
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoLimiteCredito;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de tipo de moneda
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoTipoMoneda;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de dia de pago
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoDiaPago;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de dia de corte
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoDiaCorte;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de nombre del banco
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoNombreBanco;
         #endregion
@@ -396,7 +346,8 @@ namespace GastoClass.Presentacion.ViewModel
         [RelayCommand(CanExecute = nameof(FinalizarRegistroAccesible))]
         private async Task FinalizarRegistroTarjetaCredito()
         {
-            if (ColorHexa1 == null || ColorHexa2 == null || ColorBorde == null || ColorTextoTarjeta == null || IconoChip == null || IconoTipoTarjeta == null) return;
+            if(BorderFueSeleccionado!.Value) return;
+
             if(ColorHexa1 == ColorHexa2)
             {
                 ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
@@ -412,7 +363,7 @@ namespace GastoClass.Presentacion.ViewModel
                 IconoChip = "icono_chip_blanco.png";
             }
 
-            var commmand = new AgragarTarjetaCreditoCommand
+            var agregarTarjetaCommand = new AgragarTarjetaCreditoCommand
             {
                 Tipo = this.TipoTarjeta?.Tipo,
                 Nombre = this.NombreTarjeta,
@@ -433,24 +384,23 @@ namespace GastoClass.Presentacion.ViewModel
                 IconoChip = IconoChip
             };
 
-            var resultado = await _mediator.Send(commmand);
+            var resultado = await _mediator.Send(agregarTarjetaCommand);
 
             if (resultado.EsValido)
             {
                 await Shell.Current.CurrentPage.DisplayAlertAsync
-                    ("Informacion", 
-                    "La tarjeta se ingreso con exito", 
+                    ("Informacion",
+                    "La tarjeta se ingreso con exito",
                     "Ok");
                 LimpiarCampos();
                 _ = CargarTarjetasCreditoAsync();
                 PopupAgregaTarjetaEstaAbiero = false;
-                //Limpiar campos
             }
             else
             {
                 await Shell.Current.CurrentPage.DisplayAlertAsync
-                    ("Error", 
-                    "No se pudo guardar la tarjeta", 
+                    ("Error",
+                    "No se pudo guardar la tarjeta",
                     "Ok");
                 return;
             }
@@ -458,7 +408,7 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
-        #region Eliminar Tarjetas Credito
+        #region Comando eliminar Tarjetas Credito
         [RelayCommand]
         private async Task EliminarTarjetasCredito()
         {
@@ -482,11 +432,7 @@ namespace GastoClass.Presentacion.ViewModel
         }
         #endregion
 
-        #region Metodo Observables
-        /// <summary>
-        /// Realiza la validacion para el sfComboBox 
-        /// </summary>
-        /// <param name="value"></param>
+        #region Metodos de Cambio Basicos
         partial void OnTipoTarjetaChanged(TipoTarjeta? value)
         {
             if (value == null)
@@ -498,31 +444,38 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoTipoTarjeta = string.Empty;
             esValidoTipoTarjeta = true;
         }
-
-        /// <summary>
-        /// Realiza la validacion para el nombre de la tarjeta
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnNombreTarjetaChanged(string? value)
         {
-            if (string.IsNullOrWhiteSpace(value) || value.Length <= 2)
+            if (string.IsNullOrWhiteSpace(value))
             {
                 esValidoNombreTarjeta = false;
-                MensajeRequerimientoNombreTarjeta = "Tiene que tener mas de 2 caracteres";
+                MensajeRequerimientoNombreTarjeta = "Campo requerido";
+                return;
+            }
+            if (value!.Length <= 2)
+            {
+                esValidoNombreTarjeta = false;
+                MensajeRequerimientoNombreTarjeta = "Minimo 3 caracteres";
+                return;
+            }
+            if (value.Length > 50)
+            {
+                esValidoNombreTarjeta = false;
+                MensajeRequerimientoNombreTarjeta = "Maximo 50 caracteres";
                 return;
             }
             MensajeRequerimientoNombreTarjeta = string.Empty;
             esValidoNombreTarjeta = true;
         }
-
-        /// <summary>
-        /// Realiza la validacion para los ultimos cuatro digitos
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnUltimosCuatroDigitosChanged(int? value)
         {
-            //Validacion de longitud
-            if (value?.ToString().Length != 4 || string.IsNullOrWhiteSpace(value.ToString()))
+            if (string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                esValidoUltimosCuatroDigitos = false;
+                MensajeRequerimientoUltimosCuatroDigitos = "Campo es requerido";
+                return;
+            }
+            if (value?.ToString().Length != 4)
             {
                 esValidoUltimosCuatroDigitos = false;
                 MensajeRequerimientoUltimosCuatroDigitos = "Tienen que ser 4 digitos";
@@ -531,13 +484,15 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoUltimosCuatroDigitos = string.Empty;
             esValidoUltimosCuatroDigitos = true;
         }
-
-        /// <summary>
-        /// Realiza la validacion para la fecha de vencimiento
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnFechaVencimientoChanged(DateTime? value)
         {
+            if (string.IsNullOrWhiteSpace(value.ToString()) || string.IsNullOrEmpty(value.ToString()))
+            {
+                esValidoFechaVencimiento = false;
+                MensajeRequerimientoFechaVencimiento = "Campo es requerido";
+                return;
+            }
+            //De dominio - Corregir 
             if (value < DateTime.Now)
             {
                 esValidoFechaVencimiento = false;
@@ -548,12 +503,25 @@ namespace GastoClass.Presentacion.ViewModel
             esValidoFechaVencimiento = true;
         }
 
-        /// <summary>
-        /// Realiza la validacion para el limite de credito
-        /// </summary>
-        /// <param name="value"></param>
+        #endregion
+
+        #region Metodos de Cambio Finales
         partial void OnLimiteCreditoChanged(decimal? value)
         {
+            if (string.IsNullOrWhiteSpace(value.ToString()) || string.IsNullOrEmpty(value.ToString()))
+            {
+                MensajeRequerimientoLimiteCredito = "Campo es requerido";
+                esValidoLimiteCredito = false;
+                ActualizarComandoFinalizar();
+                return;
+            }
+            if(!int.TryParse(value.ToString(), out _))
+            {
+                MensajeRequerimientoLimiteCredito = "Solo se permiten numeros";
+                esValidoLimiteCredito = false;
+                ActualizarComandoFinalizar();
+                return;
+            }
             if (value == 0)
             {
                 MensajeRequerimientoLimiteCredito = "No puede ser 0";
@@ -572,11 +540,6 @@ namespace GastoClass.Presentacion.ViewModel
             esValidoLimiteCredito = true;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el tipo de moneda
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnTipoMonedaChanged(TipoMoneda? value)
         {
             if (value == null)
@@ -590,17 +553,12 @@ namespace GastoClass.Presentacion.ViewModel
             esValidoTipoMoneda = true;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el dia de corte
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnDiaCorteChanged(int? value)
         {
             if (value == null)
             {
                 esValidoDiaCorte = false;
-                MensajeRequerimientoDiaCorte = "Debes seleccionar un dia";
+                MensajeRequerimientoDiaCorte = "Campo requerido";
                 ActualizarComandoFinalizar();
                 return;
             }
@@ -615,11 +573,6 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoDiaCorte = string.Empty;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el dia de pago
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnDiaPagoChanged(int? value)
         {
             if (value == null)
@@ -640,14 +593,16 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoDiaPago = string.Empty;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el nombre del banco
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnNombreBancoChanged(string? value)
         {
-            if (string.IsNullOrWhiteSpace(value) || value.Length <= 2)
+            if(string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value))
+            {
+                esValidoNombreBanco = false;
+                MensajeRequerimientoNombreBanco = "Campo requerido";
+                ActualizarComandoFinalizar();
+                return;
+            }
+            if (value.Length <= 2)
             {
                 esValidoNombreBanco = false;
                 MensajeRequerimientoNombreBanco = "Tiene que tener mas de 2 caracteres";
@@ -659,19 +614,17 @@ namespace GastoClass.Presentacion.ViewModel
             ActualizarComandoFinalizar();
         }
 
-        /// <summary>
-        /// Actualiza el estado del comando FinalizarRegistro
-        /// </summary>
+        #endregion
+
+        #region Metodo aprobar registro formulario
         private void ActualizarComandoFinalizar()
         {
             FinalizarRegistroTarjetaCreditoCommand.NotifyCanExecuteChanged();
         }
+
         #endregion
 
         #region Metodo Limpieza
-        /// <summary>
-        /// Se encarga de limpiar las entradas despues de guardar la tarjeta de credito con exito
-        /// </summary>
         private async void LimpiarCampos()
         {
             TipoTarjeta = null;

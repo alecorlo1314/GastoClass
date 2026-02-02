@@ -78,23 +78,24 @@
                                     FontSize="14"
                                     Text="Limite de Credito"
                                     TextColor="#333" />
-                                <Border
-                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
-                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
-                                    StrokeShape="RoundRectangle 4">
-                                    <Entry
+                                <VerticalStackLayout Spacing="4">
+                                    <Border
+                                        BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                        Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                        StrokeShape="RoundRectangle 4">
+                                        <Entry
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            Placeholder="₡0.00"
+                                            Text="{Binding LimiteCredito}"
+                                            TextColor="{StaticResource Gray950}" />
+                                    </Border>
+                                    <Label
                                         FontFamily="PoppinsRegular"
-                                        FontSize="16"
-                                        Keyboard="Numeric"
-                                        Placeholder="₡0.00"
-                                        Text="{Binding LimiteCredito}"
-                                        TextColor="{StaticResource Gray950}" />
-                                </Border>
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="12"
-                                    Text="{Binding MensajeRequerimientoLimiteCredito, Mode=TwoWay}"
-                                    TextColor="Red" />
+                                        FontSize="12"
+                                        Text="{Binding MensajeRequerimientoLimiteCredito, Mode=TwoWay}"
+                                        TextColor="Red" />
+                                </VerticalStackLayout>
                             </VerticalStackLayout>
                             <!--  TIPO DE MONEDA  -->
                             <VerticalStackLayout Grid.Column="1" Spacing="8">
