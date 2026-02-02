@@ -1,6 +1,5 @@
 ﻿using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using GastoClass.GastoClass.Infraestructura.Mapper;
 using Infraestructura.Mapper;
 using Infraestructura.Persistencia.ContextoDB;
@@ -45,10 +44,16 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
         await conexion.InsertAsync(tarjetaEntidad);
     }
 
-    public async Task EliminarAsync(int idTarjetaCredito)
+    public async Task EliminarPorIdAsync(int idTarjetaCredito)
     {
         var conexion = await _conexion.ObtenerConexionAsync();
         await conexion.Table<TarjetaCreditoEntidad>().DeleteAsync();
+    }
+
+    public async Task<int> EliminarTodasAsync()
+    {
+       var conexion = await _conexion.ObtenerConexionAsync();
+        return await conexion.DeleteAllAsync<TarjetaCreditoEntidad>();
     }
 
     public Task<TarjetaCreditoDominio?> ObtenerPorIdAsync(int id)

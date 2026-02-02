@@ -7,6 +7,7 @@ public interface IRepositorioTarjetaCredito
     Task<List<TarjetaCreditoDominio>?> ObtenerTodosAsync();
     Task AgregarAsync(TarjetaCreditoDominio tarjetaCredito);
     Task ActualizarAsync(TarjetaCreditoDominio tarjetaCredito);
-    Task EliminarAsync(int idTarjetaCredito);
+    Task EliminarPorIdAsync(int idTarjetaCredito);
     Task<TarjetaCreditoDominio?> ObtenerPorIdAsync(int id);
+    Task<int> EliminarTodasAsync();
 }

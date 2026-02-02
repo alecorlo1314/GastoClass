@@ -4,6 +4,8 @@ using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Tarjeta.Commands;
 using GastoClass.Aplicacion.Utilidades;
 using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Gasto.Commands.EliminarGasto;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.Commands;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
 using GastoClass.Presentacion.View;
@@ -428,14 +430,16 @@ namespace GastoClass.Presentacion.ViewModel
         [RelayCommand]
         private async Task EliminarTarjetasCredito()
         {
-            var resultado = await _servicioTarjetaCredito.EliminarTarjetasCreditoAsync();
+            EstaOcupado = true;
+            var resultado = await _mediator.Send(new EliminarTodasTarjetasCommand());
             if (resultado >= 1)
             {
                 await Shell.Current.CurrentPage.DisplayAlertAsync
                     ("Informacion",
                     "Tarjeta eliminadas con exito",
                     "Ok");
-                _ = CargarTarjetasCreditoAsync();
+                EstaOcupado = false;
+                await CargarTarjetasCreditoAsync();
             }
             else
             {
@@ -443,6 +447,7 @@ namespace GastoClass.Presentacion.ViewModel
                     ("Error",
                     "No se pudo eliminar las tarjetas",
                     "Ok");
+                EstaOcupado = false;
                 return;
             }
         }

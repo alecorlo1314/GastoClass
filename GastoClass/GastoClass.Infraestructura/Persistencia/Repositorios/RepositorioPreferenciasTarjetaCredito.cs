@@ -27,6 +27,12 @@ public class RepositorioPreferenciasTarjetaCredito(AppContextoDatos contextoDato
         await conexion.DeleteAsync(preferenciaEnidad);
     }
 
+    public async Task<int> EliminarTodasAsync()
+    {
+        var conexion = await contextoDatos.ObtenerConexionAsync();
+        return await conexion.DeleteAllAsync<PreferenciasTarjetaEntidad>();
+    }
+
     public async Task<PreferenciaTarjetaDominio?> ObtenerPorIdTarjeta(int idPreferencia)
     {
         //Establecer conexion 
@@ -51,5 +57,10 @@ public class RepositorioPreferenciasTarjetaCredito(AppContextoDatos contextoDato
             preferenciasDominio.Add(PrefereciasTarjetaMapper.ToDominio(preferencia));
         }
         return preferenciasDominio;
+    }
+
+    Task<int> IRepositorioPreferenciaTarjeta.EliminarAsync(PreferenciaTarjetaDominio preferencia)
+    {
+        throw new NotImplementedException();
     }
 }
