@@ -1,10 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
+using GastoClass.Aplicacion.Tarjeta.Commands;
 using GastoClass.Aplicacion.Utilidades;
 using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Gasto.Commands.EliminarGasto;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.Commands;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
 using GastoClass.Presentacion.View;
+using MediatR;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -12,7 +17,8 @@ namespace GastoClass.Presentacion.ViewModel
     public partial class TarjetaCreditoViewModel : ObservableObject
     {
         #region Inyeccion de Dependencias
-        private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
+        private readonly IMediator _mediator;
+
         #endregion
 
         #region Propiedades UI
@@ -117,6 +123,12 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Listas Observables
+        [ObservableProperty]
+        private ObservableCollection<DetallesTarjetaDto>? listaTarjetasCredito = new();
+        [ObservableProperty]
+        private ObservableCollection<GastoTarjetaDto>? listaTotalGastosPorTarjeta = new();
+
+
         /// <summary>
         /// Contiene la lista de tipos de tarjeta
         /// </summary>
@@ -128,18 +140,12 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         [ObservableProperty]
         private ObservableCollection<TipoMoneda>? listaTipoMoneda = new();
+        #endregion
 
-        /// <summary>
-        /// Contiene la lista de tarjetas de credito
-        /// </summary>
+        #region Estados de carga
         [ObservableProperty]
-        private ObservableCollection<TarjetaCredito>? listaTarjetasCredito = new();
+        private bool? estaOcupado = false;
 
-        /// <summary>
-        /// Contiene la lista de total de gastos por tarjeta
-        /// </summary>
-        [ObservableProperty]
-        private ObservableCollection<TotalGastoPorTarjeta>? listaTotalGastosPorTarjeta = new();
         #endregion
 
         #region Propiedades Logicas
@@ -168,136 +174,90 @@ namespace GastoClass.Presentacion.ViewModel
         /// <summary>
         /// Indica si el popup de agregar tarjeta esta abierto
         /// </summary>
-        [ObservableProperty]
-        private bool? popupAgregaTarjetaEstaAbiero;
+        [ObservableProperty] private bool? popupAgregaTarjetaEstaAbiero;
 
-        /// <summary>
-        /// Indica si el tipo de tarjeta es válido
-        /// </summary>
         private bool esValidoTipoTarjeta = false;
-
-        /// <summary>
-        /// Indica si el nombre de tarjeta es válido
-        /// </summary>
         private bool esValidoNombreTarjeta = false;
-
-        /// <summary>
-        /// Indica si los últimos cuatro dígitos son válidos
-        /// </summary>
         private bool esValidoUltimosCuatroDigitos = false;
-
-        /// <summary>
-        /// Indica si la fecha de vencimiento es válida
-        /// </summary>
         private bool esValidoFechaVencimiento = false;
-
         private bool esValidoLimiteCredito = false;
         private bool esValidoTipoMoneda = false;
         private bool esValidoDiaCorte = false;
         private bool esValidoDiaPago = false;
         private bool esValidoNombreBanco = false;
 
-        [ObservableProperty]
-        private bool? borderVisible;
+        [ObservableProperty] private bool? borderVisible;
 
-        [ObservableProperty]
-        private bool? tituloTarjetasVisible;
+        //Estado se utilizan para mostrar cuando hay registros de tarjetas
+        [ObservableProperty] private bool? tituloTarjetasVisible;
+        [ObservableProperty] private bool? tituloGraficoVisible;
 
-        [ObservableProperty]
-        private bool? tituloGraficoVisible;
+        /// <summary>
+        /// Si se selecciona un color de tarjeta este se pondra en true
+        /// </summary>
+        [ObservableProperty] private bool? borderFueSeleccionado = false;
         #endregion
 
         #region Mensajes
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de ultimos cuatro digitos
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoUltimosCuatroDigitos;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de tipo de tarjeta
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoTipoTarjeta;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de nombre de tarjeta
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoNombreTarjeta;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de fecha de vencimiento
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoFechaVencimiento;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de limite de credito
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoLimiteCredito;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de tipo de moneda
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoTipoMoneda;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de dia de pago
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoDiaPago;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de dia de corte
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoDiaCorte;
-
-        /// <summary>
-        /// Contiene el mensaje de requerimiento de nombre del banco
-        /// </summary>
         [ObservableProperty]
         private string? mensajeRequerimientoNombreBanco;
         #endregion
 
         #region Constructor
-        public TarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito)
+        public TarjetaCreditoViewModel(IMediator mediator)
         {
-            //Inyeccion de dependencias
-            _servicioTarjetaCredito = servicioTarjetaCredito;
-
-            _ = CargarTarjetasCredito();
-            _ = CargarGastosPorTarjetaCreditoAsync();
-            //Inicializamos la lista de tipos de tarjetas
-            ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
-            {
-                new(){ Tipo = "MasterCard"},
-                new(){ Tipo = "Visa"},
-                new() { Tipo = "Amex"}
-            };
-            //Inicializamos la lista de tipos de moneda
-            ListaTipoMoneda = new ObservableCollection<TipoMoneda>
-            {
-                new(){ Moneda = "CRC"},
-                new(){ Moneda = "USD"}
-            };
+            _mediator = mediator;
         }
         #endregion
 
-        #region Carga Inicial
-        /// <summary>
-        /// Carga las tarjetas de credito
-        /// </summary>
-        /// <returns></returns>
-        private async Task CargarTarjetasCredito()
+        #region Inicializar Datos
+        public async Task InicializarAsync()
         {
             try
             {
-                var tarjetas = await _servicioTarjetaCredito.ObtenerTarjetasCreditoAsync();
-                ListaTarjetasCredito = new ObservableCollection<TarjetaCredito>(tarjetas!);
+                //Importante
+                _ = CargarTarjetasCreditoAsync();
+                _ = CargarGastosPorTarjetaCreditoAsync();
+
+                //No tan Importante
+                _ = CargarListaTiposTarjetasCredito();
+                _ = InicializarTiposMonedas();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync
+                ("Error",
+                "No se pudo inicializar la cargar" + ex.Message,
+                "Ok");
+            }
+        }
+
+        #endregion
+
+        #region Carga inicial de tarjetas de crédito
+        public async Task CargarTarjetasCreditoAsync()
+        {
+            try
+            {
+                var tarjetas = await _mediator.Send(new ObtenerTarjetaCreditoConsulta());
+
+                ListaTarjetasCredito = new ObservableCollection<DetallesTarjetaDto>(tarjetas!);
                 BorderVisible = tarjetas?.Count == 0 || tarjetas == null ? false : true;
                 TituloTarjetasVisible = tarjetas?.Count == 0 || tarjetas == null ? false : true;
             }
@@ -306,16 +266,16 @@ namespace GastoClass.Presentacion.ViewModel
                 await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+
+        #endregion
+
+        #region Carga inicial de gastos por tarjeta
         private async Task CargarGastosPorTarjetaCreditoAsync()
         {
             try
             {
-                var gastoPorTarjeta = await _servicioTarjetaCredito.ObtenerGastosPorTarjetasCreditoAsync();
-                ListaTotalGastosPorTarjeta = new ObservableCollection<TotalGastoPorTarjeta>(gastoPorTarjeta!);
+                var gastoPorTarjeta = await _mediator.Send(new ObtenerGastoPorTarjetaCreditoConsulta());
+                ListaTotalGastosPorTarjeta = new ObservableCollection<GastoTarjetaDto>(gastoPorTarjeta!);
                 TituloGraficoVisible = ListaTotalGastosPorTarjeta?.Count == 0 || ListaTotalGastosPorTarjeta == null ? false : true;
             }
             catch (Exception ex)
@@ -325,12 +285,34 @@ namespace GastoClass.Presentacion.ViewModel
         }
         #endregion
 
-        #region Commandos
-        /// <summary>
-        /// Se ejecuta al tocar los bordes de colores para guardar los colores en las propiedades Hexadecimales
-        /// </summary>
-        /// <param name="borderSeleccionado"></param>
-        /// <returns></returns>
+        #region Inicializar Tipos de Tarjetas de Credito
+        private async Task CargarListaTiposTarjetasCredito()
+        {
+            //Inicializamos la lista de tipos de tarjetas
+            ListaTipoTarjeta = new ObservableCollection<TipoTarjeta>
+            {
+                new(){ Tipo = "MasterCard"},
+                new(){ Tipo = "Visa"},
+                new() { Tipo = "Amex"}
+            };
+        }
+
+        #endregion
+
+        #region Inicializar Tipos de Monedas
+
+        private async Task InicializarTiposMonedas()
+        {
+            ListaTipoMoneda = new ObservableCollection<TipoMoneda>
+            {
+                new(){ Moneda = "CRC"},
+                new(){ Moneda = "USD"}
+            };
+        }
+
+        #endregion
+
+        #region Commando Seleccionar Color Tarjeta
         [RelayCommand]
         private async Task ColorTarjeta(Border borderSeleccionado)
         {
@@ -360,32 +342,48 @@ namespace GastoClass.Presentacion.ViewModel
                 IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower() ?? "mastercard"}_blanco.png";
                 IconoChip = "icono_chip_blanco.png";
             }
-
         }
-        /// <summary>
-        /// Se ejecuta al tocar el boton de finalizar el registro
-        /// </summary>
-        /// <returns></returns>
+
+        #endregion
+
+        #region Comando Finalizar Registro
         [RelayCommand(CanExecute = nameof(FinalizarRegistroAccesible))]
         private async Task FinalizarRegistroTarjetaCredito()
         {
-            if(ColorHexa1 == ColorHexa2)
+            if(BorderFueSeleccionado!.Value) return;
+
+            try
             {
-                ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
-                ColorBorde = Color.FromArgb("DFEAF2").ToHex();
-                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
-                IconoChip = "icono_chip_gris.png";
-            }
-            else
-            {
-                ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
-                ColorBorde = "Transparent";
-                IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
-                IconoChip = "icono_chip_blanco.png";
-            }
-            //Inicializamos un objeto PreferenciaTarjeta
-            PreferenciaTarjeta preferenciaTarjeta = new()
+                EstaOcupado = true;
+
+                if (ColorHexa1 == ColorHexa2)
                 {
+                    ColorTextoTarjeta = Color.FromArgb("343C6A").ToHex();
+                    ColorBorde = Color.FromArgb("DFEAF2").ToHex();
+                    IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_gris.png";
+                    IconoChip = "icono_chip_gris.png";
+                }
+                else
+                {
+                    ColorTextoTarjeta = Color.FromArgb("F0F7FF").ToHex();
+                    ColorBorde = "Transparent";
+                    IconoTipoTarjeta = $"icono_{TipoTarjeta?.Tipo?.ToString().ToLower()}_blanco.png";
+                    IconoChip = "icono_chip_blanco.png";
+                }
+
+                var agregarTarjetaCommand = new AgragarTarjetaCreditoCommand
+                {
+                    Tipo = this.TipoTarjeta?.Tipo,
+                    Nombre = this.NombreTarjeta,
+                    UltimosCuatroDigitos = this.UltimosCuatroDigitos!.Value,
+                    MesVencimiento = this.FechaVencimiento!.Value.Month,
+                    AnioVencimiento = this.FechaVencimiento!.Value.Year,
+                    LimiteCredito = this.LimiteCredito!.Value,
+                    TipoMoneda = this.TipoMoneda?.Moneda,
+                    DiaCorte = this.DiaCorte!.Value,
+                    DiaPago = this.DiaPago!.Value,
+                    NombreBanco = this.NombreBanco,
+                    //Preferencias Visuales
                     ColorHex1 = ColorHexa1,
                     ColorHex2 = ColorHexa2,
                     ColorBorde = ColorBorde,
@@ -393,59 +391,55 @@ namespace GastoClass.Presentacion.ViewModel
                     IconoTipoTarjeta = IconoTipoTarjeta,
                     IconoChip = IconoChip
                 };
-            //Inicializamos un objeto TarjetaCredito
-            TarjetaCredito tarjetaCredito = new ()
-            {
-                TipoTarjeta = this.TipoTarjeta?.Tipo,
-                NombreTarjeta = this.NombreTarjeta,
-                UltimosCuatroDigitos = this.UltimosCuatroDigitos,
-                MesVencimiento = this.FechaVencimiento!.Value.Month,
-                AnioVencimiento = this.FechaVencimiento!.Value.Year,
-                LimiteCredito = this.LimiteCredito,
-                Balance = 0,
-                CreditoDisponible = this.LimiteCredito,
-                Moneda = this.TipoMoneda?.Moneda,
-                DiaCorte = this.DiaCorte,
-                DiaPago = this.DiaPago, 
-                NombreBanco = this.NombreBanco,
-                IdPreferenciaTarjeta = preferenciaTarjeta.Id,
-                PreferenciaTarjeta = preferenciaTarjeta
-            };
 
-            //Realizamos la llamada al servicio de agregar tarjeta
-            var resultado = await _servicioTarjetaCredito.AgregarTarjetaCreditoAsync(tarjetaCredito);
+                var resultado = await _mediator.Send(agregarTarjetaCommand);
 
-            if(resultado == 1)
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync
-                    ("Informacion", 
-                    "La tarjeta se ingreso con exito", 
-                    "Ok");
-                LimpiarCampos();
-                _ = CargarTarjetasCredito();
-                PopupAgregaTarjetaEstaAbiero = false;
+                if (resultado.EsValido)
+                {
+                    await Shell.Current.CurrentPage.DisplayAlertAsync
+                        ("Informacion",
+                        "La tarjeta se ingreso con exito",
+                        "Ok");
+                    LimpiarCampos();
+                    _ = CargarTarjetasCreditoAsync();
+                    PopupAgregaTarjetaEstaAbiero = false;
+                    EstaOcupado = false;
+                }
+                else
+                {
+                    await Shell.Current.CurrentPage.DisplayAlertAsync
+                        ("Error",
+                        "No se pudo guardar la tarjeta",
+                        "Ok");
+                    EstaOcupado = false;
+                    return;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Shell.Current.CurrentPage.DisplayAlertAsync
-                    ("Error", 
-                    "No se pudo guardar la tarjeta", 
-                    "Ok");
-                return;
+                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+            }finally
+            {
+                EstaOcupado = false;
             }
         }
 
+        #endregion
+
+        #region Comando eliminar Tarjetas Credito
         [RelayCommand]
         private async Task EliminarTarjetasCredito()
         {
-            var resultado = await _servicioTarjetaCredito.EliminarTarjetasCreditoAsync();
+            EstaOcupado = true;
+            var resultado = await _mediator.Send(new EliminarTodasTarjetasCommand());
             if (resultado >= 1)
             {
                 await Shell.Current.CurrentPage.DisplayAlertAsync
                     ("Informacion",
                     "Tarjeta eliminadas con exito",
                     "Ok");
-                _ = CargarTarjetasCredito();
+                EstaOcupado = false;
+                await CargarTarjetasCreditoAsync();
             }
             else
             {
@@ -453,16 +447,13 @@ namespace GastoClass.Presentacion.ViewModel
                     ("Error",
                     "No se pudo eliminar las tarjetas",
                     "Ok");
+                EstaOcupado = false;
                 return;
             }
         }
         #endregion
 
-        #region Metodo Observables
-        /// <summary>
-        /// Realiza la validacion para el sfComboBox 
-        /// </summary>
-        /// <param name="value"></param>
+        #region Metodos de Cambio Basicos
         partial void OnTipoTarjetaChanged(TipoTarjeta? value)
         {
             if (value == null)
@@ -474,31 +465,38 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoTipoTarjeta = string.Empty;
             esValidoTipoTarjeta = true;
         }
-
-        /// <summary>
-        /// Realiza la validacion para el nombre de la tarjeta
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnNombreTarjetaChanged(string? value)
         {
-            if (string.IsNullOrWhiteSpace(value) || value.Length <= 2)
+            if (string.IsNullOrWhiteSpace(value))
             {
                 esValidoNombreTarjeta = false;
-                MensajeRequerimientoNombreTarjeta = "Tiene que tener mas de 2 caracteres";
+                MensajeRequerimientoNombreTarjeta = "Campo requerido";
+                return;
+            }
+            if (value!.Length <= 2)
+            {
+                esValidoNombreTarjeta = false;
+                MensajeRequerimientoNombreTarjeta = "Minimo 3 caracteres";
+                return;
+            }
+            if (value.Length > 50)
+            {
+                esValidoNombreTarjeta = false;
+                MensajeRequerimientoNombreTarjeta = "Maximo 50 caracteres";
                 return;
             }
             MensajeRequerimientoNombreTarjeta = string.Empty;
             esValidoNombreTarjeta = true;
         }
-
-        /// <summary>
-        /// Realiza la validacion para los ultimos cuatro digitos
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnUltimosCuatroDigitosChanged(int? value)
         {
-            //Validacion de longitud
-            if (value?.ToString().Length != 4 || string.IsNullOrWhiteSpace(value.ToString()))
+            if (string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                esValidoUltimosCuatroDigitos = false;
+                MensajeRequerimientoUltimosCuatroDigitos = "Campo es requerido";
+                return;
+            }
+            if (value?.ToString().Length != 4)
             {
                 esValidoUltimosCuatroDigitos = false;
                 MensajeRequerimientoUltimosCuatroDigitos = "Tienen que ser 4 digitos";
@@ -507,13 +505,15 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoUltimosCuatroDigitos = string.Empty;
             esValidoUltimosCuatroDigitos = true;
         }
-
-        /// <summary>
-        /// Realiza la validacion para la fecha de vencimiento
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnFechaVencimientoChanged(DateTime? value)
         {
+            if (string.IsNullOrWhiteSpace(value.ToString()) || string.IsNullOrEmpty(value.ToString()))
+            {
+                esValidoFechaVencimiento = false;
+                MensajeRequerimientoFechaVencimiento = "Campo es requerido";
+                return;
+            }
+            //De dominio - Corregir 
             if (value < DateTime.Now)
             {
                 esValidoFechaVencimiento = false;
@@ -524,12 +524,25 @@ namespace GastoClass.Presentacion.ViewModel
             esValidoFechaVencimiento = true;
         }
 
-        /// <summary>
-        /// Realiza la validacion para el limite de credito
-        /// </summary>
-        /// <param name="value"></param>
+        #endregion
+
+        #region Metodos de Cambio Finales
         partial void OnLimiteCreditoChanged(decimal? value)
         {
+            if (string.IsNullOrWhiteSpace(value.ToString()) || string.IsNullOrEmpty(value.ToString()))
+            {
+                MensajeRequerimientoLimiteCredito = "Campo es requerido";
+                esValidoLimiteCredito = false;
+                ActualizarComandoFinalizar();
+                return;
+            }
+            if(!int.TryParse(value.ToString(), out _))
+            {
+                MensajeRequerimientoLimiteCredito = "Solo se permiten numeros";
+                esValidoLimiteCredito = false;
+                ActualizarComandoFinalizar();
+                return;
+            }
             if (value == 0)
             {
                 MensajeRequerimientoLimiteCredito = "No puede ser 0";
@@ -548,11 +561,6 @@ namespace GastoClass.Presentacion.ViewModel
             esValidoLimiteCredito = true;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el tipo de moneda
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnTipoMonedaChanged(TipoMoneda? value)
         {
             if (value == null)
@@ -566,17 +574,12 @@ namespace GastoClass.Presentacion.ViewModel
             esValidoTipoMoneda = true;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el dia de corte
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnDiaCorteChanged(int? value)
         {
             if (value == null)
             {
                 esValidoDiaCorte = false;
-                MensajeRequerimientoDiaCorte = "Debes seleccionar un dia";
+                MensajeRequerimientoDiaCorte = "Campo requerido";
                 ActualizarComandoFinalizar();
                 return;
             }
@@ -591,11 +594,6 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoDiaCorte = string.Empty;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el dia de pago
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnDiaPagoChanged(int? value)
         {
             if (value == null)
@@ -616,14 +614,16 @@ namespace GastoClass.Presentacion.ViewModel
             MensajeRequerimientoDiaPago = string.Empty;
             ActualizarComandoFinalizar();
         }
-
-        /// <summary>
-        /// Realiza la validacion para el nombre del banco
-        /// </summary>
-        /// <param name="value"></param>
         partial void OnNombreBancoChanged(string? value)
         {
-            if (string.IsNullOrWhiteSpace(value) || value.Length <= 2)
+            if(string.IsNullOrWhiteSpace(value) || string.IsNullOrEmpty(value))
+            {
+                esValidoNombreBanco = false;
+                MensajeRequerimientoNombreBanco = "Campo requerido";
+                ActualizarComandoFinalizar();
+                return;
+            }
+            if (value.Length <= 2)
             {
                 esValidoNombreBanco = false;
                 MensajeRequerimientoNombreBanco = "Tiene que tener mas de 2 caracteres";
@@ -635,19 +635,17 @@ namespace GastoClass.Presentacion.ViewModel
             ActualizarComandoFinalizar();
         }
 
-        /// <summary>
-        /// Actualiza el estado del comando FinalizarRegistro
-        /// </summary>
+        #endregion
+
+        #region Metodo aprobar registro formulario
         private void ActualizarComandoFinalizar()
         {
             FinalizarRegistroTarjetaCreditoCommand.NotifyCanExecuteChanged();
         }
+
         #endregion
 
         #region Metodo Limpieza
-        /// <summary>
-        /// Se encarga de limpiar las entradas despues de guardar la tarjeta de credito con exito
-        /// </summary>
         private async void LimpiarCampos()
         {
             TipoTarjeta = null;

@@ -1,5 +1,6 @@
 ﻿using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+
 using Infraestructura.Persistencia.Entidades;
 
 namespace Infraestructura.Mapper;
@@ -17,7 +18,7 @@ public static class GastoMapper
             Comercio = gastoDominio.Comercio!.Value.Valor,
             Estado = gastoDominio.Estado.Valor,
             NombreImagen = gastoDominio.NombreImagen!.Value.Valor,
-            TarjetaId = gastoDominio.TarjetaId
+            TarjetaId = gastoDominio.TarjetaId.idTarjeta
         };
     }
 
@@ -31,7 +32,7 @@ public static class GastoMapper
                 new Fecha(GastoEntidad.Fecha),
                 new Estado(GastoEntidad.Estado!),
                 new NombreImagen(GastoEntidad.NombreImagen!),
-                GastoEntidad.TarjetaId
+                new Tarjeta(GastoEntidad.TarjetaId)
                 );
 
         gasto.SetId(GastoEntidad.Id);

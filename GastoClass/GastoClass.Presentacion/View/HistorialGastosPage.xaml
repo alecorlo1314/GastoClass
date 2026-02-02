@@ -19,6 +19,7 @@
     </ContentPage.Behaviors>
 
     <Grid RowDefinitions="Auto,*">
+
         <!--  OVERLAY DE CARGA  -->
         <ActivityIndicator
             Grid.RowSpan="2"
@@ -29,13 +30,20 @@
             IsVisible="{Binding IsBusy}"
             VerticalOptions="Center"
             WidthRequest="40" />
-        <!--  POPUP DE ELIMINACION DE GASTOS  -->
+
+        <!--
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+            POPUP DE ELIMINACION DE GASTOS (Usa EliminarGastoVM)
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+        -->
         <syncfusion:SfPopup
             x:Name="mipopupEliminacion"
             Grid.Row="1"
+            x:DataType="vm:EliminarGastoViewModel"
             AnimationMode="None"
+            BindingContext="{Binding EliminarGastoVM}"
             HeaderHeight="60"
-            IsOpen="{Binding MostarPopupEliminacion}"
+            IsOpen="{Binding PopupVisible}"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
@@ -54,35 +62,37 @@
                     PopupBackground="{StaticResource FondoBlanco}"
                     Stroke="Transparent" />
             </syncfusion:SfPopup.PopupStyle>
+
             <!--  ENCABEZADO DEL POPUP  -->
             <syncfusion:SfPopup.HeaderTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:EliminarGastoViewModel">
                     <StackLayout Padding="24">
                         <Label
                             FontFamily="PoppinsSemiBold"
                             FontSize="24"
-                            Text="Estas seguro?"
+                            Text="¿Estás seguro?"
                             TextColor="{StaticResource Gray950}" />
                     </StackLayout>
                 </DataTemplate>
             </syncfusion:SfPopup.HeaderTemplate>
+
             <!--  CONTENIDO DEL POPUP  -->
             <syncfusion:SfPopup.ContentTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:EliminarGastoViewModel">
                     <Grid Padding="12">
-                        <!--  FORMULARIO  -->
                         <Label
                             FontFamily="PoppinsRegular"
                             FontSize="14"
                             HorizontalOptions="Start"
-                            Text="{Binding MensajeEliminacionGasto}"
+                            Text="{Binding MensajeConfirmacion}"
                             TextColor="{StaticResource Gray500}" />
                     </Grid>
                 </DataTemplate>
             </syncfusion:SfPopup.ContentTemplate>
+
             <!--  FOOTER DEL POPUP  -->
             <syncfusion:SfPopup.FooterTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:EliminarGastoViewModel">
                     <StackLayout
                         Padding="24,0"
                         HorizontalOptions="End"
@@ -90,7 +100,7 @@
                         Spacing="16">
                         <Button
                             BackgroundColor="{StaticResource Gray100}"
-                            Command="{Binding CancelarEliminarGastoCommand}"
+                            Command="{Binding CancelarCommand}"
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
@@ -99,10 +109,11 @@
                             WidthRequest="140" />
                         <Button
                             BackgroundColor="{StaticResource Azul Principal}"
-                            Command="{Binding EliminarGastoCommand}"
+                            Command="{Binding EliminarCommand}"
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
+                            IsEnabled="{Binding ProcesandoEliminacion, Converter={StaticResource InvertedBoolConverter}}"
                             Text="Eliminar"
                             TextColor="{StaticResource FondoBlanco}"
                             WidthRequest="140" />
@@ -110,14 +121,21 @@
                 </DataTemplate>
             </syncfusion:SfPopup.FooterTemplate>
         </syncfusion:SfPopup>
-        <!--  POPUP DE EDICION DE GASTOS  -->
+
+        <!--
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+            POPUP DE EDICION DE GASTOS (Usa ActualizarGastoVM)
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+        -->
         <syncfusion:SfPopup
             x:Name="mipopup"
             Grid.Row="1"
+            x:DataType="vm:ActualizarGastoViewModel"
             AnimationMode="None"
+            BindingContext="{Binding ActualizarGastoVM}"
             HeaderHeight="97"
             HeightRequest="600"
-            IsOpen="{Binding ActualizadoConExito}"
+            IsOpen="{Binding PopupVisible}"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
@@ -136,9 +154,10 @@
                     PopupBackground="{StaticResource FondoBlanco}"
                     Stroke="Transparent" />
             </syncfusion:SfPopup.PopupStyle>
+
             <!--  ENCABEZADO DEL POPUP  -->
             <syncfusion:SfPopup.HeaderTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:ActualizarGastoViewModel">
                     <StackLayout Padding="24">
                         <Label
                             FontFamily="PoppinsSemiBold"
@@ -153,11 +172,11 @@
                     </StackLayout>
                 </DataTemplate>
             </syncfusion:SfPopup.HeaderTemplate>
+
             <!--  CONTENIDO DEL POPUP  -->
             <syncfusion:SfPopup.ContentTemplate>
-                <DataTemplate>
-                    <!--  FORMULARIO  -->
-                    <ScrollView Grid.Row="1" Padding="24">
+                <DataTemplate x:DataType="vm:ActualizarGastoViewModel">
+                    <ScrollView Padding="24">
                         <VerticalStackLayout Spacing="16">
 
                             <!--  MONTO  -->
@@ -172,7 +191,6 @@
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
                                     <Entry
-                                        x:Name="EntryMonto"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Keyboard="Numeric"
@@ -180,6 +198,13 @@
                                         Text="{Binding MontoSeleccionado}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <!--  Mensaje de error  -->
+                                <Label
+                                    Margin="0,5,0,0"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorMonto}"
+                                    Text="{Binding MensajeErrorMonto}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
 
                             <!--  DESCRIPCION  -->
@@ -194,16 +219,22 @@
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
                                     <Entry
-                                        x:Name="EntryDescripcion"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Placeholder="Ej: Almuerzo en restaurante"
                                         Text="{Binding DescripcionSeleccionada}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <!--  Mensaje de error  -->
+                                <Label
+                                    Margin="0,5,0,0"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorDescripcion}"
+                                    Text="{Binding MensajeErrorDescripcion}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
 
-                            <!--  Fecha  -->
+                            <!--  FECHA  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label
                                     FontFamily="PoppinsMedium"
@@ -215,7 +246,6 @@
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
                                     <DatePicker
-                                        x:Name="DatePickerFecha"
                                         Margin="8,0"
                                         Date="{Binding FechaSeleccionada}"
                                         FontFamily="PoppinsRegular"
@@ -223,9 +253,43 @@
                                         Format="dd/MM/yyyy"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <!--  Mensaje de error  -->
+                                <Label
+                                    Margin="0,5,0,0"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorFecha}"
+                                    Text="{Binding MensajeErrorFecha}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
 
-                            <!--  Categoría  -->
+                            <!--  COMERCIO  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Comercio"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <Entry
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Placeholder="Ej: McDonald's"
+                                        Text="{Binding ComercioSeleccionado}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                                <!--  Mensaje de error  -->
+                                <Label
+                                    Margin="0,5,0,0"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorComercio}"
+                                    Text="{Binding MensajeErrorComercio}"
+                                    TextColor="Red" />
+                            </VerticalStackLayout>
+
+                            <!--  CATEGORIA  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label
                                     FontFamily="PoppinsMedium"
@@ -237,29 +301,37 @@
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
                                     <editors:SfComboBox
-                                        x:Name="comboBox"
                                         ClearButtonIconColor="{StaticResource Gray600}"
-                                        DisplayMemberPath="Display"
+                                        DisplayMemberPath="CategoriaPrincipal"
                                         DropDownIconColor="{StaticResource Gray600}"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         HeightRequest="45"
                                         IsEditable="False"
-                                        ItemsSource="{Binding ListaCategoriaFinal}"
-                                        Placeholder="Categoria sugerida"
+                                        ItemsSource="{Binding ListaCategoriasPredichas}"
+                                        Placeholder="Categoría sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
-                                        SelectedItem="{Binding CategoriaSeleccionadaObjeto}"
-                                        TextColor="{x:StaticResource Gray950}"
-                                        TextMemberPath="Display" />
+                                        SelectedItem="{Binding CategoriaPredicha}"
+                                        TextColor="{StaticResource Gray950}"
+                                        TextMemberPath="CategoriaPrincipal" />
                                 </Border>
+                                <!--  Mensaje de error  -->
+                                <Label
+                                    Margin="0,5,0,0"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorCategoria}"
+                                    Text="{Binding MensajeErrorCategoria}"
+                                    TextColor="Red" />
                             </VerticalStackLayout>
+
                         </VerticalStackLayout>
                     </ScrollView>
                 </DataTemplate>
             </syncfusion:SfPopup.ContentTemplate>
+
             <!--  FOOTER DEL POPUP  -->
             <syncfusion:SfPopup.FooterTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="vm:ActualizarGastoViewModel">
                     <StackLayout
                         Padding="24,0"
                         HorizontalOptions="End"
@@ -267,7 +339,7 @@
                         Spacing="16">
                         <Button
                             BackgroundColor="{StaticResource Gray100}"
-                            Clicked="OnCancelarClicked"
+                            Command="{Binding CancelarCommand}"
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
@@ -287,7 +359,12 @@
                 </DataTemplate>
             </syncfusion:SfPopup.FooterTemplate>
         </syncfusion:SfPopup>
-        <!--  ENCABEZADO Y BARRA DE BUSQUEDA  -->
+
+        <!--
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+            ENCABEZADO Y BARRA DE BUSQUEDA (Usa HistorialGastosVM)
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+        -->
         <StackLayout Grid.Row="0">
             <StackLayout Margin="0,0,0,32" Spacing="16">
                 <Label
@@ -310,7 +387,6 @@
                             Source="search.png"
                             VerticalOptions="Center" />
                         <Entry
-                            x:Name="BuscarEntry"
                             BackgroundColor="Transparent"
                             ClearButtonVisibility="WhileEditing"
                             FontFamily="PoppinsRegular"
@@ -325,7 +401,12 @@
                 </Border>
             </StackLayout>
         </StackLayout>
-        <!--  LISTA DE GASTOS  -->
+
+        <!--
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+            LISTA DE GASTOS (Usa HistorialGastosVM)
+            ═══════════════════════════════════════════════════════════════════════════════════════════════
+        -->
         <Border
             Grid.Row="1"
             Padding="16"
@@ -333,7 +414,8 @@
             Stroke="Transparent"
             StrokeShape="RoundRectangle 15">
             <Grid RowDefinitions="Auto,Auto,*" RowSpacing="16">
-                <!--  TITULOS DEL ENCABEZADO DE MOVIMIENTOS  -->
+
+                <!--  TITULOS DEL ENCABEZADO  -->
                 <Grid ColumnDefinitions="2*,1*,2*,1*,1*,2*,1*">
                     <Label
                         Grid.Column="0"
@@ -347,14 +429,14 @@
                         FontFamily="PoppinsMedium"
                         FontSize="14"
                         HorizontalOptions="Start"
-                        Text="Transaccion ID"
+                        Text="Transacción ID"
                         TextColor="{StaticResource Gray500}" />
                     <Label
                         Grid.Column="2"
                         FontFamily="PoppinsMedium"
                         FontSize="14"
                         HorizontalOptions="Start"
-                        Text="Categoria"
+                        Text="Categoría"
                         TextColor="{StaticResource Gray500}" />
                     <Label
                         Grid.Column="3"
@@ -382,11 +464,13 @@
                         FontFamily="PoppinsMedium"
                         FontSize="14"
                         HorizontalOptions="Start"
-                        Text="Accion"
+                        Text="Acción"
                         TextColor="{StaticResource Gray500}" />
                 </Grid>
+
                 <!--  LINEA SEPARADORA  -->
                 <Border Grid.Row="1" Stroke="{StaticResource Gray100}" />
+
                 <!--  LISTA DE MOVIMIENTOS  -->
                 <CollectionView Grid.Row="2" ItemsSource="{Binding ListaGastosFiltrados}">
                     <CollectionView.ItemTemplate>
@@ -451,19 +535,19 @@
                                     VerticalOptions="Center"
                                     WidthRequest="96">
                                     <Grid ColumnDefinitions="*,*">
+                                        <!--  Botón Editar  -->
                                         <ImageButton
                                             Aspect="AspectFit"
                                             BackgroundColor="Transparent"
-                                            Clicked="Editar_Clicked"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AbrirPopupEdicionGastoCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HistorialGastosViewModel}}, Path=AbrirEdicionCommand}"
                                             CommandParameter="{Binding .}"
                                             Source="pencil_edit_02.png" />
+                                        <!--  Botón Eliminar  -->
                                         <ImageButton
                                             Grid.Column="1"
                                             Aspect="AspectFit"
                                             BackgroundColor="Transparent"
-                                            Clicked="Eliminar_Clicked"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AbrirPopupEliminarGastoCommand}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HistorialGastosViewModel}}, Path=AbrirEliminacionCommand}"
                                             CommandParameter="{Binding .}"
                                             Source="delete_02.png" />
                                     </Grid>
@@ -471,7 +555,8 @@
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                    <!--  MOSTRAR VISTA VACIA  -->
+
+                    <!--  VISTA VACIA  -->
                     <CollectionView.EmptyView>
                         <ContentView>
                             <StackLayout HorizontalOptions="Center" VerticalOptions="Center">

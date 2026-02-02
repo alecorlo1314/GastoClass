@@ -32,10 +32,10 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
         }
     }
 
-    public async Task EliminarAsync(int id)
+    public async Task<int> EliminarPorIdAsync(int id)
     {
         var conexion = await _conexion.ObtenerConexionAsync();
-        await conexion.DeleteAsync<GastoEntidad>(id);
+        return await conexion.DeleteAsync<GastoEntidad>(id);
     }
 
     public async Task<GastoDominio?> ObtenerPorIdAsync(int id)

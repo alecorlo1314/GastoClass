@@ -7,18 +7,22 @@ namespace GastoClass.Dominio.Entidades;
 /// </summary>
 public class TarjetaCreditoDominio
 {
-    public int Id { get; }
+    public int Id { get; private set; }
     public TipoTarjeta Tipo { get; private set; }
     public NombreTarjeta NombreTarjeta { get; private set; }
-    public UltimosCuatroDigitosTarjeta UltimosCuatroDigitos { get; }
-    public MesVencimiento MesVencimiento { get; }
-    public AnioVencimiento AnioVencimiento { get; }
-    public decimal Balance { get; }
-    public LimiteCredito LimiteCredito { get; }
+    public UltimosCuatroDigitosTarjeta UltimosCuatroDigitos { get; private set; }
+    public MesVencimiento MesVencimiento { get; private set; }
+    public AnioVencimiento AnioVencimiento { get; private set; }
+    public LimiteCredito LimiteCredito { get; private set; }
+    public decimal Balance { get; private set; }
+    public decimal CreditoDisponible { get; private set; }
     public TipoMoneda TipoMoneda { get; private set; }
-    public DiaCorte DiaCorte { get; }
-    public DiaPago DiaPago { get; }
+    public DiaCorte DiaCorte { get; private set; }
+    public DiaPago DiaPago { get; private set; }
     public NombreBanco NombreBanco { get; private set; }
+    public PreferenciaTarjetaDominio Preferencia { get; private set; }
+
+    public void SetId(int id) => Id = id;
 
     public TarjetaCreditoDominio(
         int id, 
@@ -31,7 +35,8 @@ public class TarjetaCreditoDominio
         TipoMoneda tipoMoneda,
         DiaCorte diaCorte,
         DiaPago diaPago,
-        NombreBanco nombreBanco)
+        NombreBanco nombreBanco,
+        PreferenciaTarjetaDominio preferencia)
     {
         Id = id;
         Tipo = tipo;
@@ -44,6 +49,39 @@ public class TarjetaCreditoDominio
         DiaCorte = diaCorte;
         DiaPago = diaPago;
         NombreBanco = nombreBanco;
+        Preferencia = preferencia;
+
+        // Inicializar balance y crédito disponible
+        Balance = 0;
+        CreditoDisponible = limiteCredito.Valor ?? 0;
+    }
+
+    public static TarjetaCreditoDominio Crear(
+           string tipo,
+           string nombre,
+           int ultimosCuatroDigitos,
+           int mesVencimiento,
+           int anioVencimiento,
+           string tipoMoneda,
+           decimal limiteCredito,
+           int diaCorte,
+           int diaPago,
+           string nombreBanco,
+           PreferenciaTarjetaDominio preferencia)
+    {
+        return new TarjetaCreditoDominio(
+            id: 0,
+            tipo: new TipoTarjeta(tipo!),
+            nombre: new NombreTarjeta(nombre!),
+            ultimosCuatro: new UltimosCuatroDigitosTarjeta(ultimosCuatroDigitos),
+            mesVencimiento: new MesVencimiento(mesVencimiento),
+            anioVencimiento: new AnioVencimiento(anioVencimiento),
+            limiteCredito: new LimiteCredito(limiteCredito),
+            tipoMoneda: new TipoMoneda(tipoMoneda!),
+            diaCorte: new DiaCorte(diaCorte),
+            diaPago: new DiaPago(diaPago),
+            nombreBanco: new NombreBanco(nombreBanco!),
+            preferencia: preferencia);
     }
     public void ActualizarDatos(
         TipoTarjeta tipoTarjeta,
@@ -55,5 +93,23 @@ public class TarjetaCreditoDominio
         NombreTarjeta = nombreTarjeta;
         TipoMoneda = tipoMoneda;
         NombreBanco = nombreBanco;
+    }
+
+    public void RevertirGasto(decimal montoGasto)
+    {
+        if(montoGasto <= 0)
+            throw new ArgumentException("El monto del gasto debe ser mayor a cero.");
+
+            //Aumentar creadito disponible
+            CreditoDisponible += montoGasto;
+
+            //Reducir balance
+            Balance -= montoGasto;
+
+            // Validaciones de consistencia
+            if (CreditoDisponible > LimiteCredito.Valor) 
+                CreditoDisponible = LimiteCredito.Valor.Value; // nunca debe superar el límite
+
+            if (Balance < 0) Balance = 0; // nunca debe quedar negativo
     }
 }

@@ -1,11 +1,15 @@
 ﻿using CommunityToolkit.Maui;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.Interfaces;
-using GastoClass.Aplicacion.Servicios;
 using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
+using GastoClass.Dominio.Interfaces;
 using GastoClass.Dominio.Interfacez;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
+using GastoClass.GastoClass.Aplicacion.HistorialGasto.Consultas;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using GastoClass.Infraestructura.Repositorios;
 using GastoClass.Presentacion.View;
@@ -16,7 +20,6 @@ using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using System.Globalization;
-using System.Reflection;
 
 namespace GastoClass
 {
@@ -58,6 +61,8 @@ namespace GastoClass
             builder.Services.AddTransient<DetallesTarjetaCreditoPage>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
+            builder.Services.AddTransient<ActualizarGastoViewModel>();
+            builder.Services.AddTransient<EliminarGastoViewModel>();
             builder.Services.AddTransient<ConfiguracionesViewModel>();
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<HistorialGastosViewModel>();
@@ -68,8 +73,11 @@ namespace GastoClass
             //Repositorios y servicios
             builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
             builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
-            builder.Services.AddScoped<IRepositorioGasto, RepositorioGasto>();
+
+            builder.Services.AddSingleton<IRepositorioGasto, RepositorioGasto>();
             builder.Services.AddSingleton<IPrediccionCategoriaServicio, PrediccionCategoriaServicio>();
+            builder.Services.AddSingleton<IRepositorioTarjetaCredito, RepositorioTarjetaCredito>();
+            builder.Services.AddSingleton<IRepositorioPreferenciaTarjeta, RepositorioPreferenciasTarjetaCredito>();
             builder.Services.AddSingleton<PrediccionCategoriaServicio>();
             builder.Services.AddSingleton<AppContextoDatos>();
             builder.Services.AddSingleton<ServicioGastos>();
@@ -81,6 +89,11 @@ namespace GastoClass
             {
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerResumenMesConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosPorCategoriaConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerUltimosTresGastosConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerGastoPorTarjetaCreditoConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerTarjetaCreditoConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerTarjetasCreditoComboBoxConsulta).Assembly);
             });
 
             // HTTP Client para el servicio de predicción

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 
-public class AgregarGastoCommand
+public record AgregarGastoCommand
     : IRequest<ResultadosValidacion>
 {
     public decimal? MontoCommand { get; init; }

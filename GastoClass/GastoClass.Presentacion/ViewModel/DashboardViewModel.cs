@@ -16,11 +16,9 @@ public partial class DashboardViewModel : ObservableObject
 {
     #region Inyección de Dependencias
     private readonly IMediator? _mediator;
-
+    public AgregarGastoViewModel AgregarGastoVM { get; }
 
     #endregion
-
-    public AgregarGastoViewModel AgregarGastoVM { get; }
 
     #region Propiedades para Control de Predicción ML
     // Token de cancelación para predicciones en curso
@@ -63,12 +61,9 @@ public partial class DashboardViewModel : ObservableObject
     {
         _mediator = mediator;
 
-        // Cargar datos iniciales del dashboard
-        _ = CargarTransaccionesGastoTotal();
-        _ = CargarGastosPorCategoria();
-        _ = ObtenerUltimos5GastosAsync();
+        // Inyectar el ViewModel de Agregar Gasto
         AgregarGastoVM = agregarGastoVM;
-
+        //Notificar al ViewModel de Agregar Gasto el evento GastoAgregado
         agregarGastoVM.GastoAgregado += OnGastoAgregado;
     }
 
@@ -89,15 +84,26 @@ public partial class DashboardViewModel : ObservableObject
     public async Task RefrescarDashboardAsync()
     {
         await Task.WhenAll(
-            CargarTransaccionesGastoTotal(),
+            CargarResumenMesAsync(),
             CargarGastosPorCategoria(),
             ObtenerUltimos5GastosAsync()
         );
     }
     #endregion
 
+    #region Inicializar Datos
+    public async Task InicializarDatosAsync()
+    {
+        await Task.WhenAll(
+            CargarResumenMesAsync(),
+            CargarGastosPorCategoria(),
+            ObtenerUltimos5GastosAsync());
+    }
+
+    #endregion
+
     #region Métodos de Carga de Datos 
-    private async Task CargarTransaccionesGastoTotal()
+    private async Task CargarResumenMesAsync()
     {
         try
         {

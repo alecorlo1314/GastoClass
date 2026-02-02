@@ -3,6 +3,7 @@
     x:Class="GastoClass.Presentacion.View.DashboardPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.Maui.Buttons;assembly=Syncfusion.Maui.Buttons"
     xmlns:chart="clr-namespace:Syncfusion.Maui.Charts;assembly=Syncfusion.Maui.Charts"
     xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
@@ -58,7 +59,7 @@
             AnimationMode="None"
             BindingContext="{Binding AgregarGastoVM}"
             HeaderHeight="97"
-            HeightRequest="600"
+            HeightRequest="670"
             OverlayMode="Blur"
             ShowCloseButton="True"
             ShowFooter="True"
@@ -95,10 +96,10 @@
             </syncfusion:SfPopup.HeaderTemplate>
             <!--  CONTENIDO DEL POPUP  -->
             <syncfusion:SfPopup.ContentTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewmodel:AgregarGastoViewModel">
                     <!--  FORMULARIO  -->
                     <ScrollView Grid.Row="1" Padding="24">
-                        <VerticalStackLayout Spacing="16">
+                        <VerticalStackLayout Spacing="12">
 
                             <!--  DESCRIPCION  -->
                             <VerticalStackLayout Spacing="8">
@@ -112,13 +113,19 @@
                                     Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                     StrokeShape="RoundRectangle 4">
                                     <Entry
-                                        x:Name="EntryDescripcion"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Placeholder="Ej: Almuerzo en restaurante"
-                                        Text="{Binding Descripcion}"
+                                        Text="{Binding Descripcion, Mode=TwoWay}"
                                         TextColor="{StaticResource Gray950}" />
                                 </Border>
+                                <!--  MENSAJE ERROR  -->
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorDescripcion}"
+                                    Text="{Binding MensajeErrorDescripcion}"
+                                    TextColor="{StaticResource RojoError}" />
                             </VerticalStackLayout>
 
                             <Grid ColumnDefinitions="4*,6*" ColumnSpacing="12">
@@ -134,17 +141,23 @@
                                         Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
                                         StrokeShape="RoundRectangle 4">
                                         <Entry
-                                            x:Name="EntryMonto"
                                             FontFamily="PoppinsRegular"
                                             FontSize="16"
                                             Keyboard="Numeric"
                                             Placeholder="$0.00"
-                                            Text="{Binding Monto}"
+                                            Text="{Binding Monto, Mode=TwoWay}"
                                             TextColor="{StaticResource Gray950}" />
                                     </Border>
+                                    <!--  MENSAJE ERROR  -->
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="12"
+                                        IsVisible="{Binding MostrarErrorMonto}"
+                                        Text="{Binding MensajeErrorMonto}"
+                                        TextColor="{StaticResource RojoError}" />
                                 </VerticalStackLayout>
                                 <!--  TARJETA  -->
-                                <VerticalStackLayout Grid.Column="1" Spacing="8">
+                                <VerticalStackLayout Grid.Column="1" Spacing="12">
                                     <Label
                                         FontFamily="PoppinsMedium"
                                         FontSize="14"
@@ -167,19 +180,22 @@
                                             Placeholder="Selecciona una tarjeta"
                                             PlaceholderColor="{StaticResource Gray500}"
                                             SelectedItem="{Binding TarjetaSeleccionada, Mode=TwoWay}"
-                                            TextColor="{x:StaticResource Gray950}">
-                                            <editors:SfComboBox.ItemTemplate>
-                                                <DataTemplate>
+                                            TextColor="{StaticResource Gray950}"
+                                            TextMemberPath="NombreTarjeta">
+                                            <!--<editors:SfComboBox.ItemTemplate>
+                                                <DataTemplate x:DataType="viewmodel:AgregarGastoViewModel">
                                                     <Grid
                                                         Padding="16,0"
                                                         ColumnDefinitions="Auto,Auto"
                                                         ColumnSpacing="16">
-                                                        <!--<Image
+                                            -->
+                                            <!--<Image
                                                             Grid.Column="0"
                                                             Aspect="AspectFill"
                                                             HorizontalOptions="Center"
                                                             Source="{Binding PreferenciaTarjeta.IconoTipoTarjeta}"
                                                             VerticalOptions="Center" />-->
+                                            <!--
                                                         <Label
                                                             Grid.Column="0"
                                                             FontFamily="PoppinsMedium"
@@ -191,17 +207,51 @@
                                                             Grid.Column="1"
                                                             FontFamily="PoppinsMedium"
                                                             FontSize="16"
-                                                            Text="{Binding UltimosCuatroDigitos}"
+                                                            Text="{Binding NumeroTarjeta}"
                                                             TextColor="{StaticResource Gray900}"
                                                             VerticalOptions="Center" />
                                                     </Grid>
                                                 </DataTemplate>
-                                            </editors:SfComboBox.ItemTemplate>
+                                            </editors:SfComboBox.ItemTemplate>-->
                                         </editors:SfComboBox>
                                     </Border>
+                                    <!--  MENSAJE ERROR  -->
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="12"
+                                        HorizontalOptions="Start"
+                                        IsVisible="{Binding MostrarErrorTarjeta}"
+                                        Text="{Binding MensajeErrorTarjeta}"
+                                        TextColor="{StaticResource RojoError}"
+                                        VerticalOptions="Start" />
                                 </VerticalStackLayout>
                             </Grid>
-
+                            <!--  COMERCIO  -->
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Comercio"
+                                    TextColor="#333" />
+                                <Border
+                                    BackgroundColor="{StaticResource FondoMenosBlanco}"
+                                    Stroke="{StaticResource ColorStrokeFomulariosEntrada}"
+                                    StrokeShape="RoundRectangle 4">
+                                    <Entry
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Placeholder="Ej: Walmart, Pali"
+                                        Text="{Binding Comercio, Mode=TwoWay}"
+                                        TextColor="{StaticResource Gray950}" />
+                                </Border>
+                                <!--  MENSAJE ERROR  -->
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorComercio}"
+                                    Text="{Binding MensajeErrorComercio}"
+                                    TextColor="{StaticResource RojoError}" />
+                            </VerticalStackLayout>
                             <!--  FECHA  -->
                             <VerticalStackLayout Spacing="8">
                                 <Label
@@ -216,17 +266,20 @@
                                     <DatePicker
                                         x:Name="DatePickerFecha"
                                         Margin="8,0"
-                                        Date="{Binding Fecha}"
+                                        Date="{Binding Fecha, Mode=TwoWay}"
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
                                         Format="dd/MM/yyyy"
-                                        TextColor="{StaticResource Gray950}" />
+                                        HorizontalOptions="Start"
+                                        TextColor="{StaticResource Gray950}"
+                                        WidthRequest="430" />
                                 </Border>
                                 <!--  Mensaje Error  -->
                                 <Label
                                     FontFamily="PoppinsRegular"
                                     FontSize="12"
-                                    Text="{Binding ErrorFecha}"
+                                    IsVisible="{Binding MostrarErrorFecha}"
+                                    Text="{Binding MensajeErrorFecha}"
                                     TextColor="{StaticResource RojoError}" />
                             </VerticalStackLayout>
 
@@ -254,9 +307,38 @@
                                         Placeholder="Categoria sugerida"
                                         PlaceholderColor="{StaticResource Gray500}"
                                         SelectedItem="{Binding CategoriaPredicha, Mode=TwoWay}"
-                                        TextColor="{x:StaticResource Gray950}"
+                                        TextColor="{StaticResource Gray950}"
                                         TextMemberPath="MostrarCategoriaPredicha" />
                                 </Border>
+                                <!--  MENSAJE ERROR  -->
+                                <Label
+                                    FontFamily="PoppinsRegular"
+                                    FontSize="12"
+                                    IsVisible="{Binding MostrarErrorCategoria}"
+                                    Text="{Binding MensajeErrorCategoria}"
+                                    TextColor="{StaticResource RojoError}" />
+                            </VerticalStackLayout>
+
+                            <!--  ESTADO  -->
+                            <VerticalStackLayout Grid.Row="4" Spacing="12">
+                                <Label
+                                    FontFamily="PoppinsMedium"
+                                    FontSize="14"
+                                    Text="Estado"
+                                    TextColor="#333" />
+
+                                <buttons:SfRadioGroup Orientation="Horizontal" SelectedValue="{Binding EstadoSeleccionado, Mode=TwoWay}">
+                                    <buttons:SfRadioButton
+                                        CheckedColor="{StaticResource Azul Principal}"
+                                        Text="Pendiente"
+                                        Value="Pendiente" />
+
+                                    <buttons:SfRadioButton
+                                        Text="Pagado"
+                                        UncheckedColor="{StaticResource Gray500}"
+                                        Value="Pagado" />
+                                </buttons:SfRadioGroup>
+
                             </VerticalStackLayout>
                         </VerticalStackLayout>
                     </ScrollView>

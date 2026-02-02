@@ -11,6 +11,15 @@ public partial class HistorialGastosPage : ContentPage
         BindingContext = historialGastosViewModel;
 
     }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        if (BindingContext is HistorialGastosViewModel vm)
+        {
+            vm.Dispose();
+        }
+    }
 
     private void Editar_Clicked(object sender, EventArgs e)
     {
@@ -21,10 +30,4 @@ public partial class HistorialGastosPage : ContentPage
     {
 
     }
-
-    //private async void comboBox_SelectionChanged(object sender, Syncfusion.Maui.Inputs.SelectionChangedEventArgs e)
-    //{
-    //    var seleccionactual = e.AddedItems?[0].ToString();
-    //    await Shell.Current.CurrentPage.DisplayAlertAsync("Alert", $"Se seleccion el item {seleccionactual}", "Ok");
-    //}
 }

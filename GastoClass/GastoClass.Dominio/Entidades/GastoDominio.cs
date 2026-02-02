@@ -1,4 +1,4 @@
-﻿using GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 namespace GastoClass.Dominio.Entidades;
 
@@ -12,7 +12,7 @@ public class GastoDominio
     public Fecha Fecha { get; }
     public Estado Estado { get; }
     public NombreImagen? NombreImagen { get; }
-    public int TarjetaId { get; }
+    public Tarjeta TarjetaId { get; }
     public GastoDominio(
         Descripcion descripcion,
         Monto monto, 
@@ -20,8 +20,8 @@ public class GastoDominio
         Comercio? comercio, 
         Fecha fecha, 
         Estado estado, 
-        NombreImagen nombreImagen, 
-        int tarjetaId)
+        NombreImagen nombreImagen,
+        Tarjeta tarjetaId)
     {
         Descripcion = descripcion;
         Monto = monto;
@@ -52,7 +52,33 @@ public class GastoDominio
             fecha: new Fecha(fecha),
             estado: new Estado(estado!),
             nombreImagen: new NombreImagen(nombreImagen),
-            tarjetaId: tarjetaId
+            tarjetaId: new Tarjeta(tarjetaId)
         );
+    }
+    public static GastoDominio Actualizar(
+        int id,
+        string? descripcion,
+        decimal monto,
+        string? categoria,
+        string? comercio,
+        DateTime fecha,
+        string? estado,
+        int tarjetaId,
+        string? nombreImagen)
+    {
+        var gasto = new GastoDominio(
+         descripcion: new Descripcion(descripcion!),
+         monto: new Monto(monto),
+         categoria: new Categoria(categoria),
+         comercio: new Comercio(comercio!),
+         fecha: new Fecha(fecha),
+         estado: new Estado(estado!),
+         nombreImagen: new NombreImagen(nombreImagen),
+         tarjetaId: new Tarjeta(tarjetaId)
+     );
+
+        gasto.SetId(id);
+
+        return gasto;
     }
 }

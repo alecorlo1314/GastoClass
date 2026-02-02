@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.Interfaces;
+using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
-using GastoClass.GastoClass.Aplicacion.Gasto.DTOs;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -27,28 +29,40 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     [ObservableProperty] private string? descripcion;
     [ObservableProperty] private decimal? monto;
     [ObservableProperty] private string? comercio;
-    [ObservableProperty] private string? estado;
     [ObservableProperty] private DateTime fecha = DateTime.Now;
-    [ObservableProperty] private TarjetaGastoDto? tarjetaSeleccionada;
+    [ObservableProperty] private TarjetaCreditoComboBoxDto? tarjetaSeleccionada;
+    [ObservableProperty] private string? nombreTarjeta;
+    [ObservableProperty] private string? numeroTarjeta;
+    [ObservableProperty] private string? estadoSeleccionado = "Pendiente";
     #endregion
 
     #region Listas Observables
     [ObservableProperty] private CategoriaPredichaDto? categoriaPredicha;
     [ObservableProperty] private ObservableCollection<CategoriaPredichaDto>? listaCategoriasPredichas = new();
+    [ObservableProperty] private ObservableCollection<TarjetaCreditoComboBoxDto>? listaTarjetasCredito = new();
     #endregion
 
-    #region Propiedades para Control de Predicción ML
+    #region Propiedades de procesos
     // Token de cancelación para predicciones en curso
     private CancellationTokenSource? _cts;
     #endregion
 
     #region Mensajes de Error Formulario
-    [ObservableProperty] private string? errorMonto;
-    [ObservableProperty] private string? errorDescripcion;
-    [ObservableProperty] private string? errorTarjeta;
-    [ObservableProperty] private string? errorEstado;
-    [ObservableProperty] private string? errorFecha;
-    [ObservableProperty] private string? errorCategoria;
+    [ObservableProperty] private string? mensajeErrorMonto;
+    [ObservableProperty] private string? mensajeErrorDescripcion;
+    [ObservableProperty] private string? mensajeErrorTarjeta;
+    [ObservableProperty] private string? mensajeErrorEstado;
+    [ObservableProperty] private string? mensajeErrorComercio;
+    [ObservableProperty] private string? mensajeErrorFecha;
+    [ObservableProperty] private string? mensajeErrorCategoria;
+    public bool MostrarErrorMonto => !string.IsNullOrWhiteSpace(MensajeErrorMonto);
+    public bool MostrarErrorDescripcion => !string.IsNullOrWhiteSpace(MensajeErrorDescripcion);
+    public bool MostrarErrorTarjeta => !string.IsNullOrWhiteSpace(MensajeErrorTarjeta);
+    public bool MostrarErrorEstado => !string.IsNullOrWhiteSpace(MensajeErrorEstado);
+    public bool MostrarErrorComercio => !string.IsNullOrWhiteSpace(MensajeErrorComercio);
+    public bool MostrarErrorFecha => !string.IsNullOrWhiteSpace(MensajeErrorFecha);
+    public bool MostrarErrorCategoria => !string.IsNullOrWhiteSpace(MensajeErrorCategoria);
+
     #endregion
 
     #region Constructor
@@ -56,12 +70,106 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     {
         _mediator = mediator;
         _prediccionCategoriaServicio = prediccionCategoriaServicio;
+
+        // Inicializar Datos
+        //_ = InicializarDatosAsync();
+    }
+    #endregion
+
+    #region Inicializar Datos 
+    public async Task InicializarDatosAsync()
+    {
+        await CargarDatosTarjetasComboBoxAsync();
+    }
+
+    private async Task CargarDatosTarjetasComboBoxAsync()
+    {
+        //Se necesita icono, nombre y ultimos 4 digitos
+        var tarjetas = await _mediator!.Send(new ObtenerTarjetasCreditoComboBoxConsulta());
+        ListaTarjetasCredito = new ObservableCollection<TarjetaCreditoComboBoxDto>(tarjetas);
+    }
+
+    #endregion
+
+    #region Validaciones Descripcion
+    private void ValidarDescripcion(string? descripcion)
+    {
+        if (string.IsNullOrWhiteSpace(descripcion) || string.IsNullOrEmpty(descripcion)) MensajeErrorDescripcion = "Descripcion es requerida";
+        else if (descripcion.Length > 200) MensajeErrorDescripcion = "No puede ser mayor a 200 caracteres";
+        else if (descripcion!.Length < 3) MensajeErrorDescripcion = "No puede ser menor a 3 caracteres";
+        else MensajeErrorDescripcion = null;
+
+        OnPropertyChanged(nameof(MostrarErrorDescripcion));
+    }
+
+    #endregion
+
+    #region Validaciones Monto
+    partial void OnMontoChanged(decimal? value) => ValidarMonto(value);
+
+    private void ValidarMonto(decimal? monto)
+    {
+        if (string.IsNullOrWhiteSpace(monto.ToString()) || string.IsNullOrEmpty(monto.ToString())) MensajeErrorMonto = "Monto es requerido";
+        else if (monto < 0) MensajeErrorMonto = "No puede ser menor a 0";
+        else MensajeErrorMonto = null;
+
+        OnPropertyChanged(nameof(MostrarErrorMonto));
+    }
+
+    #endregion
+
+    #region Validaciones Categoria
+    partial void OnCategoriaPredichaChanged(CategoriaPredichaDto? value) => ValidacionCategoria(value);
+    private void ValidacionCategoria(CategoriaPredichaDto? categoria)
+    {
+        if (categoria == null) MensajeErrorCategoria = "Categoria es requerida";
+        else MensajeErrorCategoria = null;
+
+        OnPropertyChanged(nameof(MostrarErrorCategoria));
+    }
+    #endregion
+
+    #region Valdaciones Comercio
+    partial void OnComercioChanged(string? value) => ValidarComercio(value);
+    private void ValidarComercio(string? comercio)
+    {
+        if (string.IsNullOrWhiteSpace(comercio) || string.IsNullOrEmpty(comercio)) MensajeErrorComercio = "Comercio es requerido";
+        else if (comercio!.Length > 100) MensajeErrorComercio = "No puede ser mayor a 100 caracteres";
+        else if (comercio.Length < 3) MensajeErrorComercio = "No puede ser menor a 3 caracteres";
+        else MensajeErrorComercio = null;
+
+        OnPropertyChanged(nameof(MostrarErrorComercio));
+    }
+    #endregion
+
+    #region Validaciones Fecha
+    partial void OnFechaChanged(DateTime value) => ValidarFecha(value);
+    private void ValidarFecha(DateTime fecha)
+    {
+        if (fecha!.Year < 2024) MensajeErrorFecha = "No puede ser menor al 2024";
+        else if (fecha > DateTime.Now) MensajeErrorFecha = "No puede ser mayor a la fecha actual";
+        else MensajeErrorFecha = null;
+
+        OnPropertyChanged(nameof(MostrarErrorFecha));
+    }
+
+    #endregion
+
+    #region Validaciones Tarjeta
+    partial void OnTarjetaSeleccionadaChanged(TarjetaCreditoComboBoxDto? value) => ValidarTarjeta(value);
+    private void ValidarTarjeta(TarjetaCreditoComboBoxDto? tarjeta)
+    {
+        if (tarjeta == null) MensajeErrorTarjeta = "Tarjeta es requerida";
+        else MensajeErrorTarjeta = null;
+
+        OnPropertyChanged(nameof(MostrarErrorTarjeta));
     }
     #endregion
 
     #region OnDescripcionChanged
     partial void OnDescripcionChanged(string? value)
     {
+        ValidarDescripcion(value);
         // Cancelar predicción anterior
         _cts?.Cancel();
         _cts?.Dispose();
@@ -89,8 +197,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             }
             catch (OperationCanceledException)
             {
-                // Esto es normal cuando el usuario sigue escribiendo
-                // No necesitas mostrar un alert aquí
             }
             catch (Exception ex)
             {
@@ -100,6 +206,21 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 });
             }
         }, cancellationToken);
+    }
+    #endregion
+
+    #region Validaciones Estado
+    partial void OnEstadoSeleccionadoChanged(string? value)
+    {
+        ValidarEstadoSeleccionado(value);
+        EstadoSeleccionado = value;
+    }
+    private void ValidarEstadoSeleccionado(string? estado)
+    {
+        if (string.IsNullOrWhiteSpace(estado) || string.IsNullOrEmpty(estado)) MensajeErrorEstado = "Estado es requerido";
+        else MensajeErrorEstado = null;
+
+        OnPropertyChanged(nameof(MostrarErrorEstado));
     }
     #endregion
 
@@ -155,12 +276,32 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             // Cancelar cualquier predicción en curso
             _cts?.Cancel();
 
+            //validar antes de guardar
+            bool hayErrores = false;
+
+
+            ValidarFecha(Fecha);
+            ValidarMonto(Monto);
+            ValidarDescripcion(Descripcion);
+            ValidacionCategoria(CategoriaPredicha);
+            ValidarComercio(Comercio);
+            ValidarEstadoSeleccionado(EstadoSeleccionado);
+            ValidarTarjeta(TarjetaSeleccionada);
+            hayErrores = MostrarErrorFecha || MostrarErrorMonto || MostrarErrorDescripcion ||
+                         MostrarErrorCategoria || MostrarErrorComercio || MostrarErrorEstado ||
+                         MostrarErrorTarjeta;
+
+            if(hayErrores)
+            {
+                //Retornar si hay errores de validación
+                return;
+            }
+
             var command = new AgregarGastoCommand
             {
                 MontoCommand = Monto!.Value,
                 FechaCommand = Fecha,
-                TarjetaIdCommand = 1,
-                //TarjetaIdCommand = TarjetaSeleccionada!.Id,
+                TarjetaIdCommand = TarjetaSeleccionada!.Id,
                 DescripcionCommand = Descripcion,
                 CategoriaCommand = CategoriaPredicha?.CategoriaPrincipal,
                 ComercioCommand = "Comercio",
@@ -173,18 +314,30 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             if (!resultado.EsValido)
             {
                 // Mostrar errores de validación
-                ErrorMonto = resultado.Errores.ContainsKey(nameof(Monto))
-                    ? resultado.Errores[nameof(Monto)] : null;
-                ErrorDescripcion = resultado.Errores.ContainsKey(nameof(Descripcion))
-                    ? resultado.Errores[nameof(Descripcion)] : null;
-                ErrorTarjeta = resultado.Errores.ContainsKey(nameof(TarjetaSeleccionada))
-                    ? resultado.Errores[nameof(TarjetaSeleccionada)] : null;
-                ErrorEstado = resultado.Errores.ContainsKey(nameof(Estado))
-                    ? resultado.Errores[nameof(Estado)] : null;
-                ErrorFecha = resultado.Errores.ContainsKey("fecha")
+                MensajeErrorMonto = resultado.Errores.ContainsKey("monto")
+                    ? resultado.Errores["monto"] : null;
+                MensajeErrorDescripcion = resultado.Errores.ContainsKey("descripcion")
+                    ? resultado.Errores["descripcion"] : null;
+                MensajeErrorTarjeta = resultado.Errores.ContainsKey("tarjetaId")
+                    ? resultado.Errores["tarjetaId"] : null;
+                MensajeErrorEstado = resultado.Errores.ContainsKey("estado")
+                    ? resultado.Errores["estado"] : null;
+                MensajeErrorFecha = resultado.Errores.ContainsKey("fecha")
                     ? resultado.Errores["fecha"] : null;
-                ErrorCategoria = resultado.Errores.ContainsKey("Categoria")
-                    ? resultado.Errores["Categoria"] : null;
+                MensajeErrorCategoria = resultado.Errores.ContainsKey("categoria")
+                    ? resultado.Errores["categoria"] : null;
+                MensajeErrorComercio = resultado.Errores.ContainsKey("comercio")
+                    ? resultado .Errores["comercio"] : null;
+
+                // Notificar cambios en visibilidad
+                OnPropertyChanged(nameof(MostrarErrorMonto));
+                OnPropertyChanged(nameof(MostrarErrorDescripcion));
+                OnPropertyChanged(nameof(MostrarErrorTarjeta));
+                OnPropertyChanged(nameof(MostrarErrorEstado));
+                OnPropertyChanged(nameof(MostrarErrorFecha));
+                OnPropertyChanged(nameof(MostrarErrorCategoria));
+                OnPropertyChanged(nameof(MostrarErrorComercio));
+
                 return;
             }
 
@@ -212,6 +365,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         Monto = null;
         Descripcion = null;
         Comercio = null;
+        Fecha = DateTime.Now;
         CategoriaPredicha = null;
         ListaCategoriasPredichas?.Clear();
     }
@@ -220,12 +374,19 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     #region Limpiar Errores
     private void LimpiarErrores()
     {
-        ErrorMonto = null;
-        ErrorDescripcion = null;
-        ErrorTarjeta = null;
-        ErrorEstado = null;
-        ErrorFecha = null;
-        ErrorCategoria = null;
+        MensajeErrorMonto = null;
+        MensajeErrorDescripcion = null;
+        MensajeErrorTarjeta = null;
+        MensajeErrorEstado = null;
+        MensajeErrorFecha = null;
+        MensajeErrorCategoria = null;
+
+        OnPropertyChanged(nameof(MostrarErrorMonto));
+        OnPropertyChanged(nameof(MostrarErrorDescripcion));
+        OnPropertyChanged(nameof(MostrarErrorTarjeta));
+        OnPropertyChanged(nameof(MostrarErrorEstado));
+        OnPropertyChanged(nameof(MostrarErrorFecha));
+        OnPropertyChanged(nameof(MostrarErrorCategoria));
     }
     #endregion
 
