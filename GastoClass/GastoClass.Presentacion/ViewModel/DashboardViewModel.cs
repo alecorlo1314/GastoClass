@@ -63,10 +63,8 @@ public partial class DashboardViewModel : ObservableObject
     {
         _mediator = mediator;
 
+        _ = InicializarDatosAsync();
         // Cargar datos iniciales del dashboard
-        _ = CargarTransaccionesGastoTotal();
-        _ = CargarGastosPorCategoria();
-        _ = ObtenerUltimos5GastosAsync();
         AgregarGastoVM = agregarGastoVM;
 
         agregarGastoVM.GastoAgregado += OnGastoAgregado;
@@ -94,6 +92,23 @@ public partial class DashboardViewModel : ObservableObject
             ObtenerUltimos5GastosAsync()
         );
     }
+    #endregion
+
+    #region Inicializar Datos
+    public async Task InicializarDatosAsync()
+    {
+        try
+        {
+            await CargarTransaccionesGastoTotal();
+            await CargarGastosPorCategoria();
+            await ObtenerUltimos5GastosAsync();
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
+        }
+    }
+
     #endregion
 
     #region Métodos de Carga de Datos 

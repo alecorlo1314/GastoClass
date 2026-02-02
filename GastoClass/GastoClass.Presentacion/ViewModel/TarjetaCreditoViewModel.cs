@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Tarjeta.Commands;
 using GastoClass.Aplicacion.Utilidades;
