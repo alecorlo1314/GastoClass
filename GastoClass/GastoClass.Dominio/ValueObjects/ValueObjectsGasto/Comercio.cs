@@ -9,11 +9,10 @@ public readonly record struct Comercio
     public Comercio(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))
-            throw new ExcepcionComercioRequerido(nameof(Valor), "El comercio es requerido");
+            throw new ExcepcionDominio(nameof(Valor), "El comercio es requerido");
 
         if (valor.Length > 100)
-            throw new ExcepcionComercioMaximoCaracteres(nameof(Valor),
-                "El comercio no puede tener más de 100 caracteres");
+            throw new ExcepcionDominio(nameof(Valor), "Máximo 100 caracteres");
 
         Valor = valor.Trim();
     }
