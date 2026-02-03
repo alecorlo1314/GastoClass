@@ -1,20 +1,15 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
-
-namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+﻿namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 public readonly record struct DiaPago
 {
     public int Dia { get; }
 
-    public DiaPago(int diaPago)
+    public DiaPago(int dia)
     {
-        Dia = diaPago;
-        if (string.IsNullOrWhiteSpace(diaPago.ToString()))
-            throw new ExcepcionDiaPagoInvalido(nameof(diaPago), "Dia es requerido");
-        if (diaPago < 1)
-            throw new ExcepcionDiaPagoInvalido(nameof(diaPago), "No puede ser menor a 1");
-        if (diaPago > 31)
-            throw new ExcepcionDiaPagoInvalido(nameof(diaPago), "No puede ser mayor a 31");
-        Dia = diaPago;
+        if (dia < 1 || dia > 31)
+            throw new ExcepcionDominio(nameof(Dia), "El día de pago debe estar entre 1 y 31");
+
+        Dia = dia;
     }
 }
+
