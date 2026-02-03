@@ -77,6 +77,7 @@ public partial class EliminarGastoViewModel : ObservableObject
                     "Error",
                     $"No se pudo eliminar el gasto: {errores}",
                     "OK");
+               
                 return;
             }
 

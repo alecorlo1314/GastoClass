@@ -25,9 +25,14 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
 
     #endregion
 
-    public Task ActualizarAsync(TarjetaCreditoDominio tarjetaCredito)
+    public async Task ActualizarAsync(TarjetaCreditoDominio tarjetaCredito)
     {
-        throw new NotImplementedException();
+        var conexion = await _conexion.ObtenerConexionAsync();
+        if(tarjetaCredito.Id == 0) return;
+        var preferencia = await conexion.Table<PreferenciasTarjetaEntidad>().FirstOrDefaultAsync(t => t.Id == tarjetaCredito.Id);
+        //Mapear a entidad 
+        var tarjetaEntidad = TarjetaCreditoMapper.ToEntidadConPreferencia(tarjetaCredito,preferencia.ToDominio());
+        await conexion.UpdateAsync(tarjetaEntidad);
     }
 
     public async Task AgregarAsync(TarjetaCreditoDominio tarjetaCredito)
@@ -56,9 +61,13 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
         return await conexion.DeleteAllAsync<TarjetaCreditoEntidad>();
     }
 
-    public Task<TarjetaCreditoDominio?> ObtenerPorIdAsync(int id)
+    public async Task<TarjetaCreditoDominio?> ObtenerPorIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var conexion = await _conexion.ObtenerConexionAsync();
+        var resultado = await conexion.Table<TarjetaCreditoEntidad>().
+             Where(t => t.Id == id).FirstOrDefaultAsync();
+        if (resultado == null) return null;
+        return TarjetaCreditoMapper.ToDominio(resultado);
     }
 
     public async Task<List<TarjetaCreditoDominio>?> ObtenerTodosAsync()

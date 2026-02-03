@@ -113,7 +113,6 @@
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
-                            IsEnabled="{Binding ProcesandoEliminacion, Converter={StaticResource InvertedBoolConverter}}"
                             Text="Eliminar"
                             TextColor="{StaticResource FondoBlanco}"
                             WidthRequest="140" />
@@ -513,7 +512,7 @@
                                     FontFamily="PoppinsRegular"
                                     FontSize="16"
                                     HorizontalOptions="Start"
-                                    Text="{Binding Fecha, StringFormat='{0:dd.MM.yy}'}"
+                                    Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
                                     TextColor="{StaticResource Gray900}"
                                     VerticalOptions="Center" />
                                 <Label

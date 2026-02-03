@@ -5,7 +5,6 @@ using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboB
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -70,9 +69,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     {
         _mediator = mediator;
         _prediccionCategoriaServicio = prediccionCategoriaServicio;
-
-        // Inicializar Datos
-        //_ = InicializarDatosAsync();
     }
     #endregion
 
@@ -198,13 +194,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             catch (OperationCanceledException)
             {
             }
-            catch (Exception ex)
-            {
-                await MainThread.InvokeOnMainThreadAsync(async () =>
-                {
-                    await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-                });
-            }
         }, cancellationToken);
     }
     #endregion
@@ -213,7 +202,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     partial void OnEstadoSeleccionadoChanged(string? value)
     {
         ValidarEstadoSeleccionado(value);
-        EstadoSeleccionado = value;
     }
     private void ValidarEstadoSeleccionado(string? estado)
     {
@@ -260,9 +248,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 }
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error", $"Error al predecir categoría: {ex.Message}", "OK");
         }
     }
     #endregion
@@ -304,8 +291,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 TarjetaIdCommand = TarjetaSeleccionada!.Id,
                 DescripcionCommand = Descripcion,
                 CategoriaCommand = CategoriaPredicha?.CategoriaPrincipal,
-                ComercioCommand = "Comercio",
-                EstadoCommand = "Activo",
+                ComercioCommand = Comercio,                 
+                EstadoCommand = EstadoSeleccionado, 
                 NombreImagenCommand = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
             };
 
@@ -341,9 +328,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 return;
             }
 
-            // Mostrar mensaje de exito
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Exito", "Gasto guardado con exito", "OK");
-
+            await InicializarDatosAsync();
             // Limpiar espacios
             LimpiarCampos();
             LimpiarErrores();
@@ -353,8 +338,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            await Shell.Current.CurrentPage.DisplayAlertAsync("Error",
-                $"Error al guardar el gasto: {ex.Message}", "OK");
         }
     }
     #endregion
@@ -367,6 +350,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         Comercio = null;
         Fecha = DateTime.Now;
         CategoriaPredicha = null;
+        TarjetaSeleccionada = null;
+        EstadoSeleccionado = "Pendiente";
         ListaCategoriasPredichas?.Clear();
     }
     #endregion
@@ -380,6 +365,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         MensajeErrorEstado = null;
         MensajeErrorFecha = null;
         MensajeErrorCategoria = null;
+        MensajeErrorComercio = null;
 
         OnPropertyChanged(nameof(MostrarErrorMonto));
         OnPropertyChanged(nameof(MostrarErrorDescripcion));
@@ -387,6 +373,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(MostrarErrorEstado));
         OnPropertyChanged(nameof(MostrarErrorFecha));
         OnPropertyChanged(nameof(MostrarErrorCategoria));
+        OnPropertyChanged(nameof(MostrarErrorComercio));
     }
     #endregion
 

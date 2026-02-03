@@ -11,7 +11,7 @@ public class ObtenerUltimosTresGastosHandler(IRepositorioGasto repositorioGasto)
     {
         var resultado = await repositorioGasto.ObtenerTodosAsync();
         //realizar la seleccion de los cinco en orden descendente
-        return resultado!.OrderBy(g => g.Fecha)
+        return resultado!.OrderByDescending(g => g.Fecha.Valor!.Value)
             .Take(5)
             .Select(g => new UltimoCincoGastosDto
             {

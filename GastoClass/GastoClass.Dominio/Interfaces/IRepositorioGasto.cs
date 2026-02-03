@@ -12,5 +12,4 @@ public interface IRepositorioGasto
     Task<List<GastoDominio>?> ObtenerPorTarjetaAsync(int tarjetaId);
     Task<List<GastoDominio>?> ObtenerTodosAsync();
     Task<decimal> TotalMesAsync(int mes, int ano);
-    Task<List<GastoDominio>?> GastoPorCategoriaMes(int mes, int anio);
 }

@@ -102,7 +102,7 @@ public partial class DashboardViewModel : ObservableObject
 
     #endregion
 
-    #region Métodos de Carga de Datos 
+    #region Metodo cargar el resumen del mes
     private async Task CargarResumenMesAsync()
     {
         try
@@ -118,13 +118,12 @@ public partial class DashboardViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-            });
         }
     }
 
+    #endregion
+
+    #region Metodo para mostrar el mensaje de cantidad de transacciones
     private void MostrarMensajeCantidadTransacciones()
     {
         MensajeCantidadTransacciones = CantidadTransacciones switch
@@ -135,6 +134,9 @@ public partial class DashboardViewModel : ObservableObject
         };
     }
 
+    #endregion
+
+    #region Metodo para cargar los gastos por categoria
     private async Task CargarGastosPorCategoria()
     {
         try
@@ -142,53 +144,42 @@ public partial class DashboardViewModel : ObservableObject
             var gastosPorCategoria = await _mediator!.Send(
                 new ObtenerGastosPorCategoriaConsulta(DateTime.Now.Month, DateTime.Now.Year));
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                GastoPorCategoriasMes.Clear();
+            GastoPorCategoriasMes.Clear();
 
-                if (gastosPorCategoria != null)
+            if (gastosPorCategoria != null)
+            {
+                foreach (var gasto in gastosPorCategoria)
                 {
-                    foreach (var gasto in gastosPorCategoria)
-                    {
-                        GastoPorCategoriasMes.Add(gasto);
-                    }
+                    GastoPorCategoriasMes.Add(gasto);
                 }
-            });
+            }
         }
         catch (Exception ex)
         {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-            });
         }
     }
 
+    #endregion
 
+    #region Metodo para cargar los ultimos 5 gastos
     private async Task ObtenerUltimos5GastosAsync()
     {
         try
         {
             var ultimosCincoGastos = await _mediator!.Send(new ObtenerUltimosTresGastosConsulta());
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                UltimosCincoMovimientos?.Clear();
+            UltimosCincoMovimientos?.Clear();
 
-                if (ultimosCincoGastos != null)
-                {
-                    UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            await MainThread.InvokeOnMainThreadAsync(async () =>
+            if (ultimosCincoGastos != null)
             {
-                await Shell.Current.CurrentPage.DisplayAlertAsync("Error", ex.Message, "OK");
-            });
+                UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
+            }
+        }
+        catch (Exception)
+        {
         }
     }
+
     #endregion
 
     #region IDisposable
