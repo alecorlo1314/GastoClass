@@ -1,4 +1,5 @@
 ﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+using GastoClass.GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 namespace GastoClass.Dominio.Entidades;
@@ -139,4 +140,16 @@ public class TarjetaCreditoDominio
     {
         Balance += gastoTotal;
     }
+    public void AplicarGasto(decimal monto)
+    {
+        if (monto <= 0)
+            throw new ExcepcionDominio(nameof(monto), "El monto debe ser mayor a cero");
+
+        if (CreditoDisponible < monto)
+            throw new ExcepcionDominio(nameof(monto), "Crédito insuficiente");
+
+        Balance += monto;
+        CreditoDisponible -= monto;
+    }
+
 }
