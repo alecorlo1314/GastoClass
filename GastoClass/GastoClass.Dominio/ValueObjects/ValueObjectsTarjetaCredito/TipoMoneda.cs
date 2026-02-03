@@ -9,3 +9,4 @@ public readonly record struct TipoMoneda
         Tipo = TipoMoneda; 
     }
 }
+ 
