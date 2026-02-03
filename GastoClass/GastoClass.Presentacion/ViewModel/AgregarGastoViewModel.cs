@@ -351,11 +351,14 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         Comercio = null;
         Fecha = DateTime.Now;
         CategoriaPredicha = null;
+        TarjetaSeleccionada = null;
+        EstadoSeleccionado = "Pendiente";
         ListaCategoriasPredichas?.Clear();
     }
     #endregion
 
     #region Limpiar Errores
+    // PROBLEMA: Falta MensajeErrorComercio
     private void LimpiarErrores()
     {
         MensajeErrorMonto = null;
@@ -364,6 +367,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         MensajeErrorEstado = null;
         MensajeErrorFecha = null;
         MensajeErrorCategoria = null;
+        MensajeErrorComercio = null;
 
         OnPropertyChanged(nameof(MostrarErrorMonto));
         OnPropertyChanged(nameof(MostrarErrorDescripcion));
@@ -371,6 +375,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(MostrarErrorEstado));
         OnPropertyChanged(nameof(MostrarErrorFecha));
         OnPropertyChanged(nameof(MostrarErrorCategoria));
+        OnPropertyChanged(nameof(MostrarErrorComercio));
     }
     #endregion
 
