@@ -513,7 +513,7 @@
                                     FontFamily="PoppinsRegular"
                                     FontSize="16"
                                     HorizontalOptions="Start"
-                                    Text="{Binding Fecha, StringFormat='{0:dd.MM.yy}'}"
+                                    Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
                                     TextColor="{StaticResource Gray900}"
                                     VerticalOptions="Center" />
                                 <Label
