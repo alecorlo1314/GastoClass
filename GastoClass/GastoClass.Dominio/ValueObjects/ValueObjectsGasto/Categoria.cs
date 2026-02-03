@@ -8,7 +8,7 @@ public readonly record struct Categoria
     public Categoria(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))
-            throw new ExcepcionCategoriaInvalida(nameof(Valor), "La categoría es requerida");
+            throw new ExcepcionDominio(nameof(Valor), "La categoría es requerida");
 
         Valor = valor.Trim();
     }
