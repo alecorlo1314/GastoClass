@@ -9,7 +9,7 @@ public readonly record struct Monto
     public Monto(decimal valor)
     {
         if (valor <= 0)
-            throw new ExcepcionMontoNegativo(nameof(Valor),
+            throw new ExcepcionDominio(nameof(Valor),
                 "El monto debe ser mayor a cero");
 
         Valor = valor;
