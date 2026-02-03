@@ -69,9 +69,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     {
         _mediator = mediator;
         _prediccionCategoriaServicio = prediccionCategoriaServicio;
-
-        // Inicializar Datos
-        //_ = InicializarDatosAsync();
     }
     #endregion
 
@@ -332,6 +329,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 return;
             }
 
+            await InicializarDatosAsync();
             // Limpiar espacios
             LimpiarCampos();
             LimpiarErrores();

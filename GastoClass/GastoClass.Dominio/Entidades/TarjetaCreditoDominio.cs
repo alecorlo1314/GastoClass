@@ -1,4 +1,6 @@
-﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+﻿using GastoClass.Dominio.Model;
+using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -23,6 +25,7 @@ public class TarjetaCreditoDominio
     public PreferenciaTarjetaDominio Preferencia { get; private set; }
 
     public void SetId(int id) => Id = id;
+    public void SetBalance(decimal balance) => Balance = balance;
 
     public TarjetaCreditoDominio(
         int id, 
@@ -111,5 +114,21 @@ public class TarjetaCreditoDominio
                 CreditoDisponible = LimiteCredito.Valor.Value; // nunca debe superar el límite
 
             if (Balance < 0) Balance = 0; // nunca debe quedar negativo
+    }
+    public void RestarBalance(decimal gastoAnterior, decimal gastoActual)
+    {
+        Balance -= gastoAnterior - gastoActual;
+    }
+    public void SumarBalance(decimal gastosAnterior, decimal gastoActual)
+    {
+        Balance += gastoActual - gastosAnterior;
+    }
+    public void ActualizacionCreditoDisponible(decimal limiteCredito, decimal balance)
+    {
+        CreditoDisponible = limiteCredito - balance;
+    }
+    public void AumentarBalance(decimal gastoTotal)
+    {
+        Balance += gastoTotal;
     }
 }

@@ -30,10 +30,36 @@ public static class TarjetaCreditoMapper
             IdPreferenciaTarjeta = dominio.Preferencia.Id
         };
     }
+    public static TarjetaCreditoEntidad ToEntidadConPreferencia(TarjetaCreditoDominio dominio, PreferenciaTarjetaDominio preferenciaTarjetaDominio)
+    {
+        if (dominio == null)
+            throw new ArgumentNullException(nameof(dominio));
+        if (preferenciaTarjetaDominio == null)
+            throw new ArgumentNullException(nameof(preferenciaTarjetaDominio));
+        return new TarjetaCreditoEntidad
+        {
+            Id = dominio.Id,
+            TipoTarjeta = dominio.Tipo.Valor,
+            NombreTarjeta = dominio.NombreTarjeta.Valor,
+            UltimosCuatroDigitos = dominio.UltimosCuatroDigitos.Valor,
+            MesVencimiento = dominio.MesVencimiento.Mes,
+            AnioVencimiento = dominio.AnioVencimiento.Anio,
+            LimiteCredito = dominio.LimiteCredito.Valor,
+            Balance = dominio.Balance,
+            CreditoDisponible = dominio.CreditoDisponible,
+            Moneda = dominio.TipoMoneda.Tipo,
+            DiaCorte = dominio.DiaCorte.Dia,
+            DiaPago = dominio.DiaPago.Dia,
+            NombreBanco = dominio.NombreBanco.Valor,
+            IdPreferenciaTarjeta = preferenciaTarjetaDominio.Id,
+            PreferenciaTarjeta = preferenciaTarjetaDominio
+        };
+    }
     public static TarjetaCreditoDominio ToDominio(this TarjetaCreditoEntidad entidad)
     {
         if (entidad == null)
             throw new ArgumentNullException(nameof(entidad));
+
         var tarjeta = TarjetaCreditoDominio.Crear(
             tipo: entidad.TipoTarjeta!,
             nombre: entidad.NombreTarjeta!,
@@ -48,6 +74,7 @@ public static class TarjetaCreditoMapper
             preferencia: entidad.PreferenciaTarjeta!
         );
         tarjeta.SetId(entidad.Id);
+        tarjeta.SetBalance(entidad.Balance!.Value);
 
         return tarjeta;
     }
