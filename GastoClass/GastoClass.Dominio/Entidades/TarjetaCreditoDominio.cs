@@ -1,4 +1,5 @@
 ﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -85,15 +86,24 @@ public class TarjetaCreditoDominio
             preferencia: preferencia);
     }
     public void ActualizarDatos(
-        TipoTarjeta tipoTarjeta,
-        NombreTarjeta nombreTarjeta,
-        TipoMoneda tipoMoneda,
-        NombreBanco nombreBanco)
+    Descripcion descripcion,
+    Monto monto,
+    Categoria categoria,
+    Comercio? comercio,
+    Fecha fecha,
+    Estado estado,
+    NombreImagen? nombreImagen,
+    Tarjeta tarjetaId)
+
     {
-        Tipo = tipoTarjeta;
-        NombreTarjeta = nombreTarjeta;
-        TipoMoneda = tipoMoneda;
-        NombreBanco = nombreBanco;
+        new Descripcion(descripcion.Valor);
+        new Monto(monto.Valor);
+        new Categoria(categoria.Valor);
+        new Comercio(comercio!.Value.Valor);
+        new Fecha(fecha.Valor);
+        new Estado(estado.Valor);
+        new NombreImagen(nombreImagen!.Value.Valor);
+        new Tarjeta(tarjetaId.IdTarjeta);
     }
 
     public void RevertirGasto(decimal montoGasto)
