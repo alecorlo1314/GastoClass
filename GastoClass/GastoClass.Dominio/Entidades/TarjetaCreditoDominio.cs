@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Model;
-using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -27,7 +25,7 @@ public class TarjetaCreditoDominio
     public void SetId(int id) => Id = id;
     public void SetBalance(decimal balance) => Balance = balance;
 
-    public TarjetaCreditoDominio(
+    private TarjetaCreditoDominio(
         int id, 
         TipoTarjeta tipo, 
         NombreTarjeta nombre, 
@@ -111,7 +109,7 @@ public class TarjetaCreditoDominio
 
             // Validaciones de consistencia
             if (CreditoDisponible > LimiteCredito.Valor) 
-                CreditoDisponible = LimiteCredito.Valor.Value; // nunca debe superar el límite
+                CreditoDisponible = LimiteCredito.Valor; // nunca debe superar el límite
 
             if (Balance < 0) Balance = 0; // nunca debe quedar negativo
     }
