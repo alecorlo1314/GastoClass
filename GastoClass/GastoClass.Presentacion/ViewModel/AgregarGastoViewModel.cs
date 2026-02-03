@@ -198,7 +198,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     }
     #endregion
 
-    #region Validaciones Estado
+     #region Validaciones Estado
     partial void OnEstadoSeleccionadoChanged(string? value)
     {
         ValidarEstadoSeleccionado(value);
