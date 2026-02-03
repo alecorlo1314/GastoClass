@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
-
-namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+﻿namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 public readonly record struct UltimosCuatroDigitosTarjeta
 {
@@ -8,10 +6,10 @@ public readonly record struct UltimosCuatroDigitosTarjeta
 
     public UltimosCuatroDigitosTarjeta(int valor)
     {
-        if (string.IsNullOrWhiteSpace(valor.ToString()))
-            throw new ExcepcionNumeroTarjetaInvalida(nameof(valor), "El número de tarjeta no puede estar vacío.");
-        if (valor.ToString().Length != 4)
-            throw new ExcepcionNumeroTarjetaInvalida(nameof(valor), "El número de tarjeta debe ser de 4 digitos.");
+        if (valor < 1000 || valor > 9999)
+            throw new ExcepcionDominio(nameof(Valor), "Debe contener exactamente 4 dígitos");
+
         Valor = valor;
     }
 }
+
