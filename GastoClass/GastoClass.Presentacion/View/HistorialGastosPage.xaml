@@ -113,7 +113,6 @@
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
                             HeightRequest="48"
-                            IsEnabled="{Binding ProcesandoEliminacion, Converter={StaticResource InvertedBoolConverter}}"
                             Text="Eliminar"
                             TextColor="{StaticResource FondoBlanco}"
                             WidthRequest="140" />

@@ -15,9 +15,12 @@ public partial class HistorialGastosViewModel : ObservableObject
     #region Dependencias
     private readonly IMediator _mediator;
 
-    // ViewModels de operaciones específicas
+    #endregion
+
+    #region Viewmodels 
     public ActualizarGastoViewModel ActualizarGastoVM { get; }
     public EliminarGastoViewModel EliminarGastoVM { get; }
+
     #endregion
 
     #region Colecciones Observables
@@ -141,7 +144,7 @@ public partial class HistorialGastosViewModel : ObservableObject
     }
     #endregion
 
-    #region Comandos de Navegación
+    #region Comando Abrir Actualizacion
     [RelayCommand]
     private void AbrirEdicion(GastoHistorialDto gasto)
     {
@@ -149,12 +152,22 @@ public partial class HistorialGastosViewModel : ObservableObject
         ActualizarGastoVM.CargarGastoParaEdicion(gasto);
     }
 
+    #endregion
+
+    #region Comando Abrir Popup Eliminacion
     [RelayCommand]
     private void AbrirEliminacion(GastoHistorialDto gasto)
     {
         // Delegar al ViewModel de eliminación
         EliminarGastoVM.AbrirConfirmacion(gasto);
     }
+
+    [RelayCommand]
+    private void Eliminar()
+    {
+        IAsyncRelayCommand eliminarCommand = EliminarGastoVM.EliminarCommand;
+    }
+
     #endregion
 
     #region Cleanup

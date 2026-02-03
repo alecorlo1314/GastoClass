@@ -66,6 +66,7 @@ public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
         var conexion = await _conexion.ObtenerConexionAsync();
         var resultado = await conexion.Table<TarjetaCreditoEntidad>().
              Where(t => t.Id == id).FirstOrDefaultAsync();
+        if (resultado == null) return null;
         return TarjetaCreditoMapper.ToDominio(resultado);
     }
 

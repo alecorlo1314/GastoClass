@@ -292,8 +292,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                 TarjetaIdCommand = TarjetaSeleccionada!.Id,
                 DescripcionCommand = Descripcion,
                 CategoriaCommand = CategoriaPredicha?.CategoriaPrincipal,
-                ComercioCommand = "Comercio",
-                EstadoCommand = "Activo",
+                ComercioCommand = Comercio,                 
+                EstadoCommand = EstadoSeleccionado, 
                 NombreImagenCommand = $"icono_{CategoriaPredicha?.CategoriaPrincipal?.ToLower()}.png"
             };
 
