@@ -2,11 +2,14 @@
 
 public readonly record struct TipoMoneda
 {
-    public string? Tipo { get; }
+    public string Valor { get; }
 
-    public TipoMoneda(string? TipoMoneda)
+    public TipoMoneda(string valor)
     {
-        Tipo = TipoMoneda; 
+        if (string.IsNullOrWhiteSpace(valor))
+            throw new ExcepcionDominio(nameof(Valor), "El tipo de moneda es requerido");
+
+        Valor = valor.Trim();
     }
 }
- 
+
