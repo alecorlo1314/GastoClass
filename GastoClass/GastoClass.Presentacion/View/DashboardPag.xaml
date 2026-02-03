@@ -552,10 +552,9 @@
                     ItemsSource="{Binding UltimosCincoMovimientos}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid
-                                Padding="8"
-                                ColumnDefinitions="Auto, Auto, *"
-                                ColumnSpacing="16">
+                            <!--  CONTENEDOR  -->
+                            <Grid Padding="8" ColumnDefinitions="Auto, *, Auto">
+                                <!--  ICONO DEL GASTOS  -->
                                 <Image
                                     Grid.Column="0"
                                     Aspect="AspectFill"
@@ -563,15 +562,18 @@
                                     Source="{Binding Icono}"
                                     WidthRequest="55" />
 
+                                <!--  DESCRIPCION Y FECHA DE GASTO  -->
                                 <StackLayout
                                     Grid.Column="1"
+                                    Margin="24,0,0,0"
                                     Spacing="4"
                                     VerticalOptions="Center"
                                     WidthRequest="500">
                                     <Label
                                         FontFamily="PoppinsRegular"
                                         FontSize="16"
-                                        LineBreakMode="WordWrap"
+                                        LineBreakMode="TailTruncation"
+                                        MaxLines="1"
                                         Text="{Binding Descripcion}"
                                         TextColor="{StaticResource Gray900}" />
                                     <Label
@@ -580,15 +582,15 @@
                                         Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
                                         TextColor="{StaticResource Gray500}" />
                                 </StackLayout>
+                                <!--  MONTO DEL GASTO  -->
                                 <Label
                                     Grid.Column="2"
                                     FontFamily="PoppinsSemiBold"
                                     FontSize="16"
-                                    HorizontalOptions="End"
+                                    HorizontalTextAlignment="End"
                                     Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
                                     TextColor="{StaticResource Gray900}"
-                                    VerticalOptions="Center"
-                                    WidthRequest="150" />
+                                    VerticalOptions="Center" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
