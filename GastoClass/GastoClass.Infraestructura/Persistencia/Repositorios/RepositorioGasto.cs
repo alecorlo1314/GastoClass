@@ -70,25 +70,15 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
 
     public async Task<decimal> TotalMesAsync(int mes, int anio)
     {
-        //Establecer conexion
         var conexion = await _conexion.ObtenerConexionAsync();
-        //Convertimos el mes y año en un rango de fechas
         var inicioMes = new DateTime(anio, mes, 1);
         var finMes = inicioMes.AddMonths(1);
-        //Consulta para obtener los gastos del mes y año especificados
-        var consulta = conexion.Table<GastoEntidad>()
-            .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes);
-        //lo convertimos en lista asyncrona
-        var gastosDelMes = await consulta.ToListAsync();
-        //inicializamos el total de gastos
-        decimal totalGastos = 0;
-        //iteramos sobre los gastos y sumamos los montos
-        foreach (var gasto in gastosDelMes)
-        {
-            totalGastos += gasto.Monto;
-        }
-        //retornamos el total de gastos
-        return totalGastos;
+
+        var gastosDelMes = await conexion.Table<GastoEntidad>()
+            .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes)
+            .ToListAsync();
+
+        return gastosDelMes.Sum(g => g.Monto);
     }
     public async Task<int> CantidadMesAsync(int mes, int anio)
     {
@@ -101,9 +91,6 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
         var consulta = conexion.Table<GastoEntidad>()
             .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes);
         //contamos la cantidad de transacciones
-        var cantidadTransacciones = await consulta.CountAsync();
-
-        //retornamos la cantidad de transacciones
-        return cantidadTransacciones;
+        return await consulta.CountAsync();
     }
 }

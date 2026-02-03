@@ -202,7 +202,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     partial void OnEstadoSeleccionadoChanged(string? value)
     {
         ValidarEstadoSeleccionado(value);
-        EstadoSeleccionado = value;
     }
     private void ValidarEstadoSeleccionado(string? estado)
     {
@@ -358,7 +357,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     #endregion
 
     #region Limpiar Errores
-    // PROBLEMA: Falta MensajeErrorComercio
     private void LimpiarErrores()
     {
         MensajeErrorMonto = null;
