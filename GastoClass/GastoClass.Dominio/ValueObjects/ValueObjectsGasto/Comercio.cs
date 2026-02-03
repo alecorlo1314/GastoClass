@@ -1,5 +1,6 @@
 ﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
 using GastoClass.GastoClass.Dominio.Excepciones.ExcepcionesGasto;
+namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 public readonly record struct Comercio
 {

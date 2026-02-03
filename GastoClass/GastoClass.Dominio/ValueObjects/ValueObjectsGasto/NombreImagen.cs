@@ -1,15 +1,19 @@
 ﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
+namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
-public readonly record struct Monto
+public readonly record struct NombreImagen
 {
-    public decimal Valor { get; }
+    public string Valor { get; }
 
-    public Monto(decimal valor)
+    public NombreImagen(string valor)
     {
-        if (valor <= 0)
-            throw new ExcepcionMontoNegativo(nameof(Valor),
-                "El monto debe ser mayor a cero");
+        if (string.IsNullOrWhiteSpace(valor))
+            throw new ExcepcionNombreImagenRequerido(nameof(Valor),
+                "El nombre de la imagen es requerido");
 
-        Valor = valor;
+        Valor = valor.Trim();
     }
+
+    public override string ToString() => Valor;
 }
+
