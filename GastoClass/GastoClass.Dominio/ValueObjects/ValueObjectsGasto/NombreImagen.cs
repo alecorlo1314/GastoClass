@@ -1,16 +1,15 @@
 ﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
 
-public readonly record struct Estado
+public readonly record struct Monto
 {
-    public string Valor { get; }
+    public decimal Valor { get; }
 
-    public Estado(string valor)
+    public Monto(decimal valor)
     {
-        if (string.IsNullOrWhiteSpace(valor))
-            throw new ExcepcionEstadoInvalido(nameof(Valor), "El estado es requerido");
+        if (valor <= 0)
+            throw new ExcepcionMontoNegativo(nameof(Valor),
+                "El monto debe ser mayor a cero");
 
-        Valor = valor.Trim();
+        Valor = valor;
     }
-
-    public override string ToString() => Valor;
 }
