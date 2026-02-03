@@ -106,32 +106,4 @@ public class RepositorioGasto(AppContextoDatos _conexion) : IRepositorioGasto
         //retornamos la cantidad de transacciones
         return cantidadTransacciones;
     }
-    public async Task<List<GastoDominio>?> GastoPorCategoriaMes(int mes, int anio)
-    {
-        //obtener la conexion a la base de datos
-        var conexion = await _conexion.ObtenerConexionAsync();
-        //Convertimos el mes y año en un rango de fechas
-        var inicioMes = new DateTime(anio, mes, 1);
-        var finMes = inicioMes.AddMonths(1);
-        //Consulta para obtener los gastos del mes y ano por categoria especificados
-        var consulta = (await conexion.Table<GastoEntidad>().ToListAsync())
-            .Where(g => g.Fecha >= inicioMes && g.Fecha < finMes)
-            .GroupBy(g => g.Categoria)
-            .Select(g => new GastoEntidad
-            {
-                //Se pasa la categoria
-                Categoria = g.Key,
-                //Se suma el monto por categoria
-                Monto = g.Sum(x => x.Monto)
-                //Se ordena de mayor a menor
-            }).OrderByDescending(g => g.Monto);
-         List<GastoDominio> listaGasto = new();
-        foreach (var gasto in consulta)
-        {
-            //Mapear a dominio
-            listaGasto.Add(GastoMapper.ToDomain(gasto));
-        }
-        return listaGasto;
-
-    }
 }

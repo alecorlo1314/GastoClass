@@ -144,18 +144,15 @@ public partial class DashboardViewModel : ObservableObject
             var gastosPorCategoria = await _mediator!.Send(
                 new ObtenerGastosPorCategoriaConsulta(DateTime.Now.Month, DateTime.Now.Year));
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                GastoPorCategoriasMes.Clear();
+            GastoPorCategoriasMes.Clear();
 
-                if (gastosPorCategoria != null)
+            if (gastosPorCategoria != null)
+            {
+                foreach (var gasto in gastosPorCategoria)
                 {
-                    foreach (var gasto in gastosPorCategoria)
-                    {
-                        GastoPorCategoriasMes.Add(gasto);
-                    }
+                    GastoPorCategoriasMes.Add(gasto);
                 }
-            });
+            }
         }
         catch (Exception ex)
         {

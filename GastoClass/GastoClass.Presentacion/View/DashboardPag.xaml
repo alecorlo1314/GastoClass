@@ -520,7 +520,7 @@
                         Radius="0.9"
                         ShowDataLabels="True"
                         XBindingPath="Categoria"
-                        YBindingPath="Monto" />
+                        YBindingPath="TotalGastado" />
                 </chart:SfCircularChart>
             </Grid>
         </Border>
@@ -533,6 +533,7 @@
             Stroke="Transparent"
             StrokeShape="RoundRectangle 15">
             <Grid RowDefinitions="Auto,Auto">
+                <!--  TITULO SECCION  -->
                 <VerticalStackLayout Grid.Row="0" Spacing="4">
                     <Label
                         FontFamily="InterSemiBold"
