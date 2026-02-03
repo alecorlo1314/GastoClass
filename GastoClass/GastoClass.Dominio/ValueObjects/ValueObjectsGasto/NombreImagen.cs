@@ -1,5 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
-namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 public readonly record struct NombreImagen
 {
@@ -8,7 +7,7 @@ public readonly record struct NombreImagen
     public NombreImagen(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))
-            throw new ExcepcionNombreImagenRequerido(nameof(Valor),
+            throw new ExcepcionDominio(nameof(Valor),
                 "El nombre de la imagen es requerido");
 
         Valor = valor.Trim();
