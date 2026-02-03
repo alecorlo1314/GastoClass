@@ -1,18 +1,16 @@
 ﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
 
-namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
-
-public readonly record struct NombreImagen
+public readonly record struct Estado
 {
-    public NombreImagen(string? valor)
+    public string Valor { get; }
+
+    public Estado(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))
-        {
-            throw new ExcepcionNombreImagenRequerido(nameof(valor),"Nombre imagen es requerida");
-        }
-        Valor = valor;
+            throw new ExcepcionEstadoInvalido(nameof(Valor), "El estado es requerido");
+
+        Valor = valor.Trim();
     }
 
-    public string? Valor { get; }
-    
+    public override string ToString() => Valor;
 }
