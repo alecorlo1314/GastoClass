@@ -2,6 +2,7 @@
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.Dominio.Model;
+using MediatR;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
 
@@ -16,12 +17,9 @@ namespace GastoClass.Presentacion.ViewModel
     public partial class DetallesTarjetaCreditoViewModel : ObservableObject
     {
         #region Servicios e Inyección de Dependencias
-
-        /// <summary>
-        /// Servicio para operaciones relacionadas con tarjetas de crédito.
-        /// Proporciona acceso a datos de gastos, movimientos y categorías.
-        /// </summary>
         private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
+
+        IMediator _mediator;
 
         #endregion
 
@@ -31,15 +29,13 @@ namespace GastoClass.Presentacion.ViewModel
         /// Tarjeta de crédito recibida desde la pantalla anterior mediante QueryProperty.
         /// Al establecerse, dispara la carga automática de datos relacionados.
         /// </summary>
-        [ObservableProperty]
-        private TarjetaCredito? tarjetaCredito;
+        [ObservableProperty] private DetallesTarjetaDto? tarjetaCredito;
 
         /// <summary>
         /// ID de la tarjeta de crédito actual.
         /// Se utiliza para consultar movimientos y gastos asociados.
         /// </summary>
-        [ObservableProperty]
-        private int? idTarjetaCredito;
+        [ObservableProperty] private int? idTarjetaCredito;
 
         #endregion
 
@@ -206,8 +202,9 @@ namespace GastoClass.Presentacion.ViewModel
         /// Constructor del ViewModel.
         /// </summary>
         /// <param name="servicioTarjetaCredito">Servicio de tarjetas de crédito inyectado.</param>
-        public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito)
+        public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito, IMediator mediator)
         {
+            _mediator = mediator;
             _servicioTarjetaCredito = servicioTarjetaCredito;
         }
 
@@ -252,11 +249,11 @@ namespace GastoClass.Presentacion.ViewModel
         /// - Gastos por categoría de los últimos 7 días
         /// </summary>
         /// <param name="value">Nueva tarjeta de crédito seleccionada.</param>
-        partial void OnTarjetaCreditoChanged(TarjetaCredito? value)
+        partial void OnTarjetaCreditoChanged(DetallesTarjetaDto? value)
         {
             if (value == null) return;
 
-            IdTarjetaCredito = value.Id;
+            IdTarjetaCredito = value.IdTarjeta;
 
             // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
             _ = CargarUltimosTresMovimientosAsync();

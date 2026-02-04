@@ -39,6 +39,8 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     #region Propiedades de procesos
     // Token de cancelación para predicciones en curso
     private CancellationTokenSource? _cts;
+
+    [ObservableProperty] private bool estaOcupado = false;
     #endregion
 
     #region Mensajes de Error Formulario
@@ -257,6 +259,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         {
             // Cancelar cualquier predicción en curso
             _cts?.Cancel();
+            EstaOcupado = true;
 
             //validar antes de guardar
             bool hayErrores = false;
@@ -311,6 +314,10 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlertAsync("Error", ex.Message, "Aceptar");
+        }
+        finally
+        {
+            EstaOcupado = false;
         }
     }
     #endregion
