@@ -70,9 +70,9 @@ public partial class DashboardViewModel : ObservableObject
     #endregion
 
     #region Event Handlers
-    private async void OnGastoAgregado()
+    private void OnGastoAgregado()
     {
-        await RefrescarDashboardAsync();
+        _ = RefrescarDashboardAsync();
     }
 
     #endregion
