@@ -1,6 +1,5 @@
 ﻿using GastoClass.Aplicacion.Common;
 using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.Excepciones;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using MediatR;
 

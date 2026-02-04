@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones;
-
-namespace GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
+﻿namespace GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
 
 public class ColorHex
 {
@@ -9,7 +7,7 @@ public class ColorHex
     public ColorHex(string valor)
     {
         if (string.IsNullOrWhiteSpace(valor))
-            throw new ArgumentException("El color hex no puede estar vacío");
+            throw new ExcepcionDominio(nameof(Valor),"El color hex no puede estar vacío");
 
         Valor = valor;
     }

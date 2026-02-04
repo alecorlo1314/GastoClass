@@ -1,6 +1,5 @@
 ﻿using GastoClass.Aplicacion.Common;
 using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using GastoClass.Infraestructura.Excepciones;
@@ -57,7 +56,7 @@ public class AgregarGastoHandler(
             // 5. Actualizar balance y crédito disponible de la tarjeta
             tarjeta.AumentarBalance(gastoDominio.Monto.Valor);
             tarjeta.ActualizacionCreditoDisponible(
-                tarjeta.LimiteCredito.Valor!.Value,
+                tarjeta.LimiteCredito.Valor,
                 tarjeta.Balance);
 
             // 6. Guardar cambios de la tarjeta

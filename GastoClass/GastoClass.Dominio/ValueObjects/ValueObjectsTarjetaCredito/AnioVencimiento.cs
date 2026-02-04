@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
-
-namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+﻿namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 public readonly record struct AnioVencimiento
 {

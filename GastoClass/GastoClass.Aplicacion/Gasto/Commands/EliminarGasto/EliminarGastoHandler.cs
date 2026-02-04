@@ -1,7 +1,5 @@
 ﻿using GastoClass.Aplicacion.Common;
-using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.Dominio.Model;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using MediatR;
 
@@ -27,7 +25,7 @@ public class EliminarGastoHandler(
             }
 
             //Verificar si la tarjeta de credito existe
-            var tarjetaCreditoExiste = await repositorioTarjetaCredito.ObtenerPorIdAsync(gastosExiste!.TarjetaId.idTarjeta);
+            var tarjetaCreditoExiste = await repositorioTarjetaCredito.ObtenerPorIdAsync(gastosExiste!.TarjetaId.IdTarjeta);
             if(tarjetaCreditoExiste == null)
             {
                 //Como no hay tarjeta , solamente eliminamos el gastos

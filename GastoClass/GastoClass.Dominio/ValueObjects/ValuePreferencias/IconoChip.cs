@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones;
-
-namespace GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
+﻿namespace GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
 
 public class IconoChip
 {
