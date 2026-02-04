@@ -1,6 +1,6 @@
 ﻿namespace GastoClass.GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 
-public sealed class LimiteCreditoExcedidoException : ExcepcionDominio
+public sealed class LimiteCreditoExcedidoException : ExcepcionDominio, IExcepcionPopup
 {
     public decimal Limite { get; }
     public decimal TotalActual { get; }

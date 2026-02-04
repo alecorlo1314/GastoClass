@@ -1,6 +1,6 @@
 ﻿namespace GastoClass.GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
 
-public sealed class GastoDuplicadoException : ExcepcionDominio
+public sealed class GastoDuplicadoException : ExcepcionDominio, IExcepcionPopup
 {
     public int GastoId { get; }
 
