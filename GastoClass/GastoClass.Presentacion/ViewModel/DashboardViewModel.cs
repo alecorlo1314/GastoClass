@@ -72,10 +72,7 @@ public partial class DashboardViewModel : ObservableObject
     #region Event Handlers
     private async void OnGastoAgregado()
     {
-        await MainThread.InvokeOnMainThreadAsync(async () =>
-        {
-            await RefrescarDashboardAsync();
-        });
+        await RefrescarDashboardAsync();
     }
 
     #endregion
@@ -105,20 +102,11 @@ public partial class DashboardViewModel : ObservableObject
     #region Metodo cargar el resumen del mes
     private async Task CargarResumenMesAsync()
     {
-        try
-        {
-            var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
+        var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                GastoTotalMes = consulta.TotalGastado;
-                CantidadTransacciones = consulta.CantidadTransacciones;
-                MostrarMensajeCantidadTransacciones();
-            });
-        }
-        catch (Exception ex)
-        {
-        }
+        GastoTotalMes = consulta.TotalGastado;
+        CantidadTransacciones = consulta.CantidadTransacciones;
+        MostrarMensajeCantidadTransacciones();
     }
 
     #endregion
@@ -164,21 +152,18 @@ public partial class DashboardViewModel : ObservableObject
     #region Metodo para cargar los ultimos 5 gastos
     private async Task ObtenerUltimos5GastosAsync()
     {
-        try
-        {
-            var ultimosCincoGastos = await _mediator!.Send(new ObtenerUltimosTresGastosConsulta());
+        var resultado = await _mediator!
+            .Send(new ObtenerUltimosCincoGastosConsulta());
 
-            UltimosCincoMovimientos?.Clear();
-
-            if (ultimosCincoGastos != null)
-            {
-                UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
-            }
-        }
-        catch (Exception)
+        if (!resultado.EsValido)
         {
+            return;
         }
+
+        UltimosCincoMovimientos =
+            new ObservableCollection<UltimoCincoGastosDto>(resultado.Datos!);
     }
+
 
     #endregion
 

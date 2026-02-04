@@ -5,4 +5,4 @@ using MediatR;
 namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 
 public record ObtenerGastosPorCategoriaConsulta(int mes, int anio) 
-    : IRequest<ResultadoConsulta<List<GastoPorCategoriaDto>?>> { }
+    : IRequest<List<GastoPorCategoriaDto>?> { }

@@ -306,8 +306,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
                     "Aceptar");
                 return;
             }
-
-            await InicializarDatosAsync();
             // Limpiar espacios
             LimpiarCampos();
             LimpiarErrores();

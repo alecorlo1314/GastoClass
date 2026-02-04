@@ -4,7 +4,7 @@ using MediatR;
 
 namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 
-public record ObtenerUltimosTresGastosConsulta
+public record ObtenerUltimosCincoGastosConsulta
     : IRequest<ResultadoConsulta<List<UltimoCincoGastosDto>>>
 
 {
