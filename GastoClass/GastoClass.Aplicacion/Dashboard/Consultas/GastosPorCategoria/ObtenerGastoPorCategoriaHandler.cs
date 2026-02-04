@@ -1,6 +1,5 @@
 ﻿using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Dominio.Interfaces;
-using Infraestructura.Persistencia.Entidades;
 using MediatR;
 
 namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;

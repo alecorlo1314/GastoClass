@@ -8,6 +8,12 @@
 /// </summary>
 public class ResultadosValidacion
 {
-    public bool EsValido => !Errores.Any();
+    public bool EsValido => !Errores.Any() && Popup == null;
+
     public Dictionary<string, string> Errores { get; } = new();
+
+    public PopupError? Popup { get; set; }
 }
+
+public record PopupError(string Titulo, string Mensaje);
+

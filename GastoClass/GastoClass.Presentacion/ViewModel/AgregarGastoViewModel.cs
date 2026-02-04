@@ -198,7 +198,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     }
     #endregion
 
-     #region Validaciones Estado
+    #region Validaciones Estado
     partial void OnEstadoSeleccionadoChanged(string? value)
     {
         ValidarEstadoSeleccionado(value);
@@ -298,33 +298,12 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
 
             var resultado = await _mediator!.Send(command);
 
-            if (!resultado.EsValido)
+            if (resultado.Popup != null)
             {
-                // Mostrar errores de validación
-                MensajeErrorMonto = resultado.Errores.ContainsKey("monto")
-                    ? resultado.Errores["monto"] : null;
-                MensajeErrorDescripcion = resultado.Errores.ContainsKey("descripcion")
-                    ? resultado.Errores["descripcion"] : null;
-                MensajeErrorTarjeta = resultado.Errores.ContainsKey("tarjetaId")
-                    ? resultado.Errores["tarjetaId"] : null;
-                MensajeErrorEstado = resultado.Errores.ContainsKey("estado")
-                    ? resultado.Errores["estado"] : null;
-                MensajeErrorFecha = resultado.Errores.ContainsKey("fecha")
-                    ? resultado.Errores["fecha"] : null;
-                MensajeErrorCategoria = resultado.Errores.ContainsKey("categoria")
-                    ? resultado.Errores["categoria"] : null;
-                MensajeErrorComercio = resultado.Errores.ContainsKey("comercio")
-                    ? resultado .Errores["comercio"] : null;
-
-                // Notificar cambios en visibilidad
-                OnPropertyChanged(nameof(MostrarErrorMonto));
-                OnPropertyChanged(nameof(MostrarErrorDescripcion));
-                OnPropertyChanged(nameof(MostrarErrorTarjeta));
-                OnPropertyChanged(nameof(MostrarErrorEstado));
-                OnPropertyChanged(nameof(MostrarErrorFecha));
-                OnPropertyChanged(nameof(MostrarErrorCategoria));
-                OnPropertyChanged(nameof(MostrarErrorComercio));
-
+                await Shell.Current.DisplayAlertAsync(
+                    resultado.Popup.Titulo,
+                    resultado.Popup.Mensaje,
+                    "Aceptar");
                 return;
             }
 
