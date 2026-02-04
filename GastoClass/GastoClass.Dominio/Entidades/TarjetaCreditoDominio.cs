@@ -110,10 +110,10 @@ public class TarjetaCreditoDominio
     public void RevertirGasto(decimal montoGasto)
     {
         if(montoGasto <= 0)
-            throw new ArgumentException("El monto del gasto debe ser mayor a cero.");
+            throw new ExcepcionDominio(nameof(montoGasto), "El monto del gasto debe ser mayor a cero");
 
-            //Aumentar creadito disponible
-            CreditoDisponible += montoGasto;
+        //Aumentar creadito disponible
+        CreditoDisponible += montoGasto;
 
             //Reducir balance
             Balance -= montoGasto;
