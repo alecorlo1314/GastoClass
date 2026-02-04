@@ -69,14 +69,6 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
 
     #endregion
 
-    #region Event Handlers
-    private void OnGastoAgregado()
-    {
-        _ = RefrescarDashboardAsync();
-    }
-
-    #endregion
-
     #region Métodos Públicos
     public async Task RefrescarDashboardAsync()
     {

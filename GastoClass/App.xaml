@@ -34,10 +34,10 @@
             <Style x:Key="DashboardFlyout" TargetType="FlyoutItem">
                 <Style.Triggers>
                     <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
-                        <Setter Property="FlyoutIcon" Value="dashboard_icon_black.png" />
+                        <Setter Property="FlyoutIcon" Value="dashboard_icon_negro.png" />
                     </Trigger>
                     <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
-                        <Setter Property="FlyoutIcon" Value="dashboard_icon.png" />
+                        <Setter Property="FlyoutIcon" Value="dashboard_icon_blanco.png" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -45,10 +45,10 @@
             <Style x:Key="HistorialFlyout" TargetType="FlyoutItem">
                 <Style.Triggers>
                     <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
-                        <Setter Property="FlyoutIcon" Value="hitorial_menu_negro.png" />
+                        <Setter Property="FlyoutIcon" Value="historial_menu_negro.png" />
                     </Trigger>
                     <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
-                        <Setter Property="FlyoutIcon" Value="hitorial_menu_blanco.png" />
+                        <Setter Property="FlyoutIcon" Value="historial_menu_blanco.png" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -70,7 +70,7 @@
                         <Setter Property="FlyoutIcon" Value="credit_card_menu_negro.png" />
                     </Trigger>
                     <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
-                        <Setter Property="FlyoutIcon" Value="credit_card_menu_blanco.png" />
+                        <Setter Property="FlyoutIcon" Value="credit_card_men_blanco.png" />
                     </Trigger>
                 </Style.Triggers>
             </Style>

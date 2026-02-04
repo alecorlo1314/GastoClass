@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
-using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
+using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
+using MediatR;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
 
@@ -16,12 +18,9 @@ namespace GastoClass.Presentacion.ViewModel
     public partial class DetallesTarjetaCreditoViewModel : ObservableObject
     {
         #region Servicios e Inyección de Dependencias
-
-        /// <summary>
-        /// Servicio para operaciones relacionadas con tarjetas de crédito.
-        /// Proporciona acceso a datos de gastos, movimientos y categorías.
-        /// </summary>
         private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
+
+        IMediator _mediator;
 
         #endregion
 
@@ -31,15 +30,13 @@ namespace GastoClass.Presentacion.ViewModel
         /// Tarjeta de crédito recibida desde la pantalla anterior mediante QueryProperty.
         /// Al establecerse, dispara la carga automática de datos relacionados.
         /// </summary>
-        [ObservableProperty]
-        private TarjetaCredito? tarjetaCredito;
+        [ObservableProperty] private DetallesTarjetaDto? tarjetaCredito;
 
         /// <summary>
         /// ID de la tarjeta de crédito actual.
         /// Se utiliza para consultar movimientos y gastos asociados.
         /// </summary>
-        [ObservableProperty]
-        private int? idTarjetaCredito;
+        [ObservableProperty] private int? idTarjetaCredito;
 
         #endregion
 
@@ -50,7 +47,7 @@ namespace GastoClass.Presentacion.ViewModel
         /// Se actualiza automáticamente cuando cambia la tarjeta seleccionada.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<UltimoTresMovimientoDTOs>? listaUltimosTresMovimientos = new();
+        private ObservableCollection<UltimosTresMovimientosDto>? listaUltimosTresMovimientos = new();
 
         #endregion
 
@@ -60,73 +57,73 @@ namespace GastoClass.Presentacion.ViewModel
         /// Gastos de la categoría "Alimentación" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosAlimentacion = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosAlimentacion = new();
 
         /// <summary>
         /// Gastos de la categoría "Transporte" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosTransporte = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosTransporte = new();
 
         /// <summary>
         /// Gastos de la categoría "Entretenimiento" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosEntretenimiento = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosEntretenimiento = new();
 
         /// <summary>
         /// Gastos de la categoría "Servicios" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosServicios = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosServicios = new();
 
         /// <summary>
         /// Gastos de la categoría "Ropa" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosRopa = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosRopa = new();
 
         /// <summary>
         /// Gastos de la categoría "Deportes" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosDeportes = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosDeportes = new();
 
         /// <summary>
         /// Gastos de la categoría "Viajes" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosViajes = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosViajes = new();
 
         /// <summary>
         /// Gastos de la categoría "Tecnología" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosTecnologia = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosTecnologia = new();
 
         /// <summary>
         /// Gastos de la categoría "Educación" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosEducacion = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosEducacion = new();
 
         /// <summary>
         /// Gastos de la categoría "Salud" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosSalud = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosSalud = new();
 
         /// <summary>
         /// Gastos de la categoría "Mascotas" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosMascotas = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosMascotas = new();
 
         /// <summary>
         /// Gastos de la categoría "Hogar" en los últimos 7 días.
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? datosHogar = new();
+        private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosHogar = new();
 
         #endregion
 
@@ -206,8 +203,9 @@ namespace GastoClass.Presentacion.ViewModel
         /// Constructor del ViewModel.
         /// </summary>
         /// <param name="servicioTarjetaCredito">Servicio de tarjetas de crédito inyectado.</param>
-        public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito)
+        public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito, IMediator mediator)
         {
+            _mediator = mediator;
             _servicioTarjetaCredito = servicioTarjetaCredito;
         }
 
@@ -226,12 +224,11 @@ namespace GastoClass.Presentacion.ViewModel
             {
                 if (IdTarjetaCredito == null) return;
 
-                var movimientos = await _servicioTarjetaCredito
-                    .ObtenerUltimosTresGastosPorTarjetaCreditoAsync(IdTarjetaCredito);
+                var movimientos = await _mediator.Send(new ObtenerUltimosTresMovimientosConsulta(IdTarjetaCredito.Value));
 
                 ListaUltimosTresMovimientos = movimientos != null
-                    ? new ObservableCollection<UltimoTresMovimientoDTOs>(movimientos)
-                    : new ObservableCollection<UltimoTresMovimientoDTOs>();
+                    ? new ObservableCollection<UltimosTresMovimientosDto>(movimientos)
+                    : new ObservableCollection<UltimosTresMovimientosDto>();
             }
             catch (Exception ex)
             {
@@ -252,16 +249,16 @@ namespace GastoClass.Presentacion.ViewModel
         /// - Gastos por categoría de los últimos 7 días
         /// </summary>
         /// <param name="value">Nueva tarjeta de crédito seleccionada.</param>
-        partial void OnTarjetaCreditoChanged(TarjetaCredito? value)
+        partial void OnTarjetaCreditoChanged(DetallesTarjetaDto? value)
         {
             if (value == null) return;
 
-            IdTarjetaCredito = value.Id;
+            IdTarjetaCredito = value.IdTarjeta;
 
             // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
             _ = CargarUltimosTresMovimientosAsync();
             _ = InicializarPropiedadesVisualesAsync(value);
-            _ = CargarGastosPorCategoriaAsync(value.Id);
+            _ = CargarGastosPorCategoriaAsync(value.IdTarjeta);
         }
 
         #endregion
@@ -272,23 +269,22 @@ namespace GastoClass.Presentacion.ViewModel
         /// </summary>
         /// <param name="value">Tarjeta de crédito de la cual extraer las propiedades.</param>
         /// <returns>Tarea asíncrona.</returns>
-        private Task InicializarPropiedadesVisualesAsync(TarjetaCredito? value)
+        private async Task InicializarPropiedadesVisualesAsync(DetallesTarjetaDto? value)
         {
-            if (value == null) return Task.CompletedTask;
+            if (value == null) return ;
+            //var prefereciaTarjeta = await _mediator.Send(new ObtenerPreferenciaTarjetaConsulta(value.IdTarjeta));
 
             BalanceDetalles = value.Balance;
-            IconoChipDetalles = value.PreferenciaTarjeta?.IconoChip;
+            IconoChipDetalles = value.IconoChip;
             NombreBancoDetalles = value.NombreBanco;
             MesVencimientoDetalles = value.MesVencimiento;
             AnioVencimientoDetalles = value.AnioVencimiento;
             UltimosCuatroDigitos = value.UltimosCuatroDigitos;
-            IconoTipoTarjetaDetalles = value.PreferenciaTarjeta?.IconoTipoTarjeta;
-            ColorHex1Detalles = value.PreferenciaTarjeta?.ColorHex1;
-            ColorHex2Detalles = value.PreferenciaTarjeta?.ColorHex2;
-            ColorBordeDetalles = value.PreferenciaTarjeta?.ColorBorde;
-            ColorTextoDetalles = value.PreferenciaTarjeta?.ColorTexto;
-
-            return Task.CompletedTask;
+            IconoTipoTarjetaDetalles = value.IconoTipoTarjeta;
+            ColorHex1Detalles = value.ColorHex1;
+            ColorHex2Detalles = value.ColorHex2;
+            ColorBordeDetalles = value.ColorBorde;
+            ColorTextoDetalles = value.ColorTexto;
         }
 
         /// <summary>
@@ -302,7 +298,7 @@ namespace GastoClass.Presentacion.ViewModel
         {
             try
             {
-                var resultados = await _servicioTarjetaCredito.GastosPorCategoriaSemanaAsync(idTarjeta);
+                var resultados = await _mediator.Send(new ObtenerGastosPorCategoriaSemanaConsulta(idTarjeta));
 
                 if (resultados == null) return;
 
@@ -341,8 +337,8 @@ namespace GastoClass.Presentacion.ViewModel
         /// <param name="resultados">Lista completa de gastos categorizados.</param>
         /// <param name="nombreCategoria">Nombre de la categoría a filtrar.</param>
         private void ActualizarCategoria(
-            ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDTO>? coleccion,
-            IEnumerable<GastoCategoriaUltimosSieteDiasTarjetaDTO> resultados,
+            ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? coleccion,
+            IEnumerable<GastoCategoriaUltimosSieteDiasTarjetaDto> resultados,
             string nombreCategoria)
         {
             if (coleccion == null) return;

@@ -68,6 +68,18 @@
 		<MauiImage Update="Resources\Images\icono_compras.svg" Resize="True" BaseSize="300,185" />
 		<MauiImage Update="Resources\Images\icono_ropa.svg" Resize="True" BaseSize="300,185" /> 
         <MauiImage Update="Resources\Images\icono_servicios.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\icono_transporte.svg" Resize="True" BaseSize="300,185" />
+		<!-- ICONO DEL MENU -->
+		<MauiImage Update="Resources\Images\dashboard_icon_negro.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\dashboard_icon_blanco.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\historial_menu_negro.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\historial_menu_blanco.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\ia_menu_negro.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\ia_menu_blanco.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\credit_card_men_negro.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\credit_card_men_blanco.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\configuracion_menu_negro.svg" Resize="True" BaseSize="300,185" />
+		<MauiImage Update="Resources\Images\configuracion_menu_blanco.svg" Resize="True" BaseSize="300,185" />
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 

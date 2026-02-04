@@ -663,7 +663,7 @@ namespace GastoClass.Presentacion.ViewModel
 
         #region Navegacion
         [RelayCommand]
-        private async Task TarjetaSeleccionada(TarjetaCredito tarjeta)
+        private async Task TarjetaSeleccionada(DetallesTarjetaDto tarjeta)
         {
             if (tarjeta == null) return;
 

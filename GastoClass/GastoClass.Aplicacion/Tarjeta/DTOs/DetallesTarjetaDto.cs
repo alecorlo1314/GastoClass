@@ -6,6 +6,7 @@ namespace GastoClass.Aplicacion.DTOs
     public class DetallesTarjetaDto
     {
         // Datos financieros
+        public int IdTarjeta { get; set; }
         public string? TipoTarjeta { get; set; }
         public string? NombreTarjeta { get; set; }
         public int UltimosCuatroDigitos { get; set; }
@@ -32,6 +33,7 @@ namespace GastoClass.Aplicacion.DTOs
         {
             return new DetallesTarjetaDto
             {
+                IdTarjeta = tarjeta.Id,
                 TipoTarjeta = tarjeta.Tipo.Valor,
                 NombreTarjeta = tarjeta.NombreTarjeta.Valor,
                 UltimosCuatroDigitos = tarjeta.UltimosCuatroDigitos.Valor,
