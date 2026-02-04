@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Model;
-using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>
@@ -27,7 +25,7 @@ public class TarjetaCreditoDominio
     public void SetId(int id) => Id = id;
     public void SetBalance(decimal balance) => Balance = balance;
 
-    public TarjetaCreditoDominio(
+    private TarjetaCreditoDominio(
         int id, 
         TipoTarjeta tipo, 
         NombreTarjeta nombre, 
@@ -56,9 +54,10 @@ public class TarjetaCreditoDominio
 
         // Inicializar balance y crédito disponible
         Balance = 0;
-        CreditoDisponible = limiteCredito.Valor ?? 0;
+        CreditoDisponible = limiteCredito.Valor;
     }
 
+    #region Crear 
     public static TarjetaCreditoDominio Crear(
            string tipo,
            string nombre,
@@ -86,32 +85,35 @@ public class TarjetaCreditoDominio
             nombreBanco: new NombreBanco(nombreBanco!),
             preferencia: preferencia);
     }
-    public void ActualizarDatos(
-        TipoTarjeta tipoTarjeta,
-        NombreTarjeta nombreTarjeta,
-        TipoMoneda tipoMoneda,
-        NombreBanco nombreBanco)
+
+    #endregion
+
+    public void ActualizarDetalles(
+    string TipoTarjeta,
+    string NombreTarjeta,
+    string TipoMoneda,
+    string NombreBanco)
     {
-        Tipo = tipoTarjeta;
-        NombreTarjeta = nombreTarjeta;
-        TipoMoneda = tipoMoneda;
-        NombreBanco = nombreBanco;
+        new TipoTarjeta(TipoTarjeta);
+        new NombreTarjeta(NombreTarjeta);
+        new TipoMoneda(TipoMoneda);
+        new NombreBanco(NombreBanco);
     }
 
     public void RevertirGasto(decimal montoGasto)
     {
         if(montoGasto <= 0)
-            throw new ArgumentException("El monto del gasto debe ser mayor a cero.");
+            throw new ExcepcionDominio(nameof(montoGasto), "El monto del gasto debe ser mayor a cero");
 
-            //Aumentar creadito disponible
-            CreditoDisponible += montoGasto;
+        //Aumentar creadito disponible
+        CreditoDisponible += montoGasto;
 
             //Reducir balance
             Balance -= montoGasto;
 
             // Validaciones de consistencia
             if (CreditoDisponible > LimiteCredito.Valor) 
-                CreditoDisponible = LimiteCredito.Valor.Value; // nunca debe superar el límite
+                CreditoDisponible = LimiteCredito.Valor; // nunca debe superar el límite
 
             if (Balance < 0) Balance = 0; // nunca debe quedar negativo
     }
@@ -131,4 +133,16 @@ public class TarjetaCreditoDominio
     {
         Balance += gastoTotal;
     }
+    public void AplicarGasto(decimal monto)
+    {
+        if (monto <= 0)
+            throw new ExcepcionDominio(nameof(monto), "El monto debe ser mayor a cero");
+
+        if (CreditoDisponible < monto)
+            throw new ExcepcionDominio(nameof(monto), "Crédito insuficiente");
+
+        Balance += monto;
+        CreditoDisponible -= monto;
+    }
+
 }

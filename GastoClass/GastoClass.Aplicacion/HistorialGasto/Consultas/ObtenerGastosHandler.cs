@@ -17,8 +17,8 @@ public class ObtenerGastosHandler(IRepositorioGasto repositorioGastos)
             {
                 Categoria = g.Categoria.Valor,
                 Id = g.Id,
-                TarjetaId = g.TarjetaId.idTarjeta,
-                Fecha = g.Fecha.Valor!.Value,
+                TarjetaId = g.TarjetaId.IdTarjeta,
+                Fecha = g.Fecha.Valor!,
                 Descripcion = g.Descripcion.Valor,
                 Monto = g.Monto.Valor
             }));

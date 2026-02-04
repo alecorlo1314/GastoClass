@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.GastoClass.Presentacion.Mensajes;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -12,11 +14,10 @@ namespace GastoClass.Presentacion.ViewModel;
 /// ViewModel principal del Dashboard
 /// Gestiona la visualización de gastos, predicciones ML y operaciones CRUD
 /// </summary>
-public partial class DashboardViewModel : ObservableObject
+public partial class DashboardViewModel : ObservableObject, IDisposable
 {
     #region Inyección de Dependencias
     private readonly IMediator? _mediator;
-    public AgregarGastoViewModel AgregarGastoVM { get; }
 
     #endregion
 
@@ -57,25 +58,21 @@ public partial class DashboardViewModel : ObservableObject
     #endregion
 
     #region Constructor
-    public DashboardViewModel(IMediator mediator, AgregarGastoViewModel agregarGastoVM)
+    public DashboardViewModel(IMediator mediator)
     {
         _mediator = mediator;
 
-        // Inyectar el ViewModel de Agregar Gasto
-        AgregarGastoVM = agregarGastoVM;
-        //Notificar al ViewModel de Agregar Gasto el evento GastoAgregado
-        agregarGastoVM.GastoAgregado += OnGastoAgregado;
+        WeakReferenceMessenger.Default.Register<GastoAgregadoMessage>(
+            this,
+            async(_, _) => await RefrescarDashboardAsync());
     }
 
     #endregion
 
     #region Event Handlers
-    private async void OnGastoAgregado()
+    private void OnGastoAgregado()
     {
-        await MainThread.InvokeOnMainThreadAsync(async () =>
-        {
-            await RefrescarDashboardAsync();
-        });
+        _ = RefrescarDashboardAsync();
     }
 
     #endregion
@@ -105,20 +102,11 @@ public partial class DashboardViewModel : ObservableObject
     #region Metodo cargar el resumen del mes
     private async Task CargarResumenMesAsync()
     {
-        try
-        {
-            var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
+        var consulta = await _mediator!.Send(new ObtenerResumenMesConsulta(DateTime.Now.Month, DateTime.Now.Year));
 
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                GastoTotalMes = consulta.TotalGastado;
-                CantidadTransacciones = consulta.CantidadTransacciones;
-                MostrarMensajeCantidadTransacciones();
-            });
-        }
-        catch (Exception ex)
-        {
-        }
+        GastoTotalMes = consulta.TotalGastado;
+        CantidadTransacciones = consulta.CantidadTransacciones;
+        MostrarMensajeCantidadTransacciones();
     }
 
     #endregion
@@ -164,31 +152,25 @@ public partial class DashboardViewModel : ObservableObject
     #region Metodo para cargar los ultimos 5 gastos
     private async Task ObtenerUltimos5GastosAsync()
     {
-        try
-        {
-            var ultimosCincoGastos = await _mediator!.Send(new ObtenerUltimosTresGastosConsulta());
+        var resultado = await _mediator!
+            .Send(new ObtenerUltimosCincoGastosConsulta());
 
-            UltimosCincoMovimientos?.Clear();
-
-            if (ultimosCincoGastos != null)
-            {
-                UltimosCincoMovimientos = new ObservableCollection<UltimoCincoGastosDto>(ultimosCincoGastos);
-            }
-        }
-        catch (Exception)
+        if (!resultado.EsValido)
         {
+            return;
         }
+
+        UltimosCincoMovimientos =
+            new ObservableCollection<UltimoCincoGastosDto>(resultado.Datos!);
     }
+
 
     #endregion
 
     #region IDisposable
     public void Dispose()
     {
-        if (AgregarGastoVM != null)
-        {
-            AgregarGastoVM.GastoAgregado -= OnGastoAgregado;
-        }
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
     #endregion
 }

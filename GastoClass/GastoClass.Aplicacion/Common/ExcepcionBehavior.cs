@@ -1,5 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones;
-using MediatR;
+﻿using MediatR;
 
 namespace GastoClass.Aplicacion.Common;
 

@@ -14,11 +14,11 @@ public static class GastoMapper
             Descripcion = gastoDominio.Descripcion.Valor,
             Monto = gastoDominio.Monto.Valor,
             Categoria = gastoDominio.Categoria.Valor,
-            Fecha = gastoDominio.Fecha.Valor!.Value,
+            Fecha = gastoDominio.Fecha.Valor!,
             Comercio = gastoDominio.Comercio!.Value.Valor,
             Estado = gastoDominio.Estado.Valor,
             NombreImagen = gastoDominio.NombreImagen!.Value.Valor,
-            TarjetaId = gastoDominio.TarjetaId.idTarjeta
+            TarjetaId = gastoDominio.TarjetaId.IdTarjeta
         };
     }
 

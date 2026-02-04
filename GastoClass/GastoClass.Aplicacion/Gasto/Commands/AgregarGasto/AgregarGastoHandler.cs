@@ -1,7 +1,7 @@
 ﻿using GastoClass.Aplicacion.Common;
 using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
+using GastoClass.GastoClass.Dominio.Excepciones;
 using GastoClass.GastoClass.Dominio.Interfaces;
 using GastoClass.Infraestructura.Excepciones;
 using MediatR;
@@ -57,7 +57,7 @@ public class AgregarGastoHandler(
             // 5. Actualizar balance y crédito disponible de la tarjeta
             tarjeta.AumentarBalance(gastoDominio.Monto.Valor);
             tarjeta.ActualizacionCreditoDisponible(
-                tarjeta.LimiteCredito.Valor!.Value,
+                tarjeta.LimiteCredito.Valor,
                 tarjeta.Balance);
 
             // 6. Guardar cambios de la tarjeta
@@ -65,19 +65,19 @@ public class AgregarGastoHandler(
         }
         catch (ExcepcionDominio ex)
         {
-            // Errores que lanza el dominio (validaciones en GastoDominio.Crear, etc.)
-            resultados.Errores.Add(ex.Campo, ex.Message);
+            if (ex is IExcepcionPopup)
+            {
+                resultados.Popup = new PopupError(
+                    "Error de negocio",
+                    ex.Message
+                );
+            }
+            else
+            {
+                resultados.Errores.Add(ex.Campo, ex.Message);
+            }
         }
-        catch (RespositorioGastoExcepcion ex)
-        {
-            // Errores específicos del repositorio
-            resultados.Errores.Add("repositorio", ex.Message);
-        }
-        catch (Exception ex)
-        {
-            // Errores inesperados
-            resultados.Errores.Add("general", $"Error inesperado: {ex.Message}");
-        }
+
 
         return resultados;
     }

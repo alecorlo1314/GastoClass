@@ -4,6 +4,4 @@ using MediatR;
 namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 
 public record ObtenerTarjetasCreditoComboBoxConsulta
-    : IRequest<IEnumerable<TarjetaCreditoComboBoxDto>>
-{
-}
+    : IRequest<IEnumerable<TarjetaCreditoComboBoxDto>> { }

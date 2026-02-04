@@ -89,7 +89,7 @@ namespace GastoClass
             {
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerResumenMesConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosPorCategoriaConsulta).Assembly);
-                cfg.RegisterServicesFromAssembly(typeof(ObtenerUltimosTresGastosConsulta).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(ObtenerUltimosCincoGastosConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastosConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerGastoPorTarjetaCreditoConsulta).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(ObtenerTarjetaCreditoConsulta).Assembly);

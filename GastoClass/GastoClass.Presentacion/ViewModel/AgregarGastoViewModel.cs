@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using GastoClass.Aplicacion.Interfaces;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.GastoClass.Presentacion.Mensajes;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -15,13 +17,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     #region Inyeccion de Dependencias
     private readonly IMediator? _mediator;
     private readonly IPrediccionCategoriaServicio? _prediccionCategoriaServicio;
-    #endregion
-
-    #region Eventos
-    /// <summary>
-    /// Evento que se dispara cuando se agrega un gasto
-    /// </summary>
-    public event Action? GastoAgregado;
     #endregion
 
     #region Propiedades del Formulario
@@ -298,46 +293,24 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
 
             var resultado = await _mediator!.Send(command);
 
-            if (!resultado.EsValido)
+            if (resultado.Popup != null)
             {
-                // Mostrar errores de validación
-                MensajeErrorMonto = resultado.Errores.ContainsKey("monto")
-                    ? resultado.Errores["monto"] : null;
-                MensajeErrorDescripcion = resultado.Errores.ContainsKey("descripcion")
-                    ? resultado.Errores["descripcion"] : null;
-                MensajeErrorTarjeta = resultado.Errores.ContainsKey("tarjetaId")
-                    ? resultado.Errores["tarjetaId"] : null;
-                MensajeErrorEstado = resultado.Errores.ContainsKey("estado")
-                    ? resultado.Errores["estado"] : null;
-                MensajeErrorFecha = resultado.Errores.ContainsKey("fecha")
-                    ? resultado.Errores["fecha"] : null;
-                MensajeErrorCategoria = resultado.Errores.ContainsKey("categoria")
-                    ? resultado.Errores["categoria"] : null;
-                MensajeErrorComercio = resultado.Errores.ContainsKey("comercio")
-                    ? resultado .Errores["comercio"] : null;
-
-                // Notificar cambios en visibilidad
-                OnPropertyChanged(nameof(MostrarErrorMonto));
-                OnPropertyChanged(nameof(MostrarErrorDescripcion));
-                OnPropertyChanged(nameof(MostrarErrorTarjeta));
-                OnPropertyChanged(nameof(MostrarErrorEstado));
-                OnPropertyChanged(nameof(MostrarErrorFecha));
-                OnPropertyChanged(nameof(MostrarErrorCategoria));
-                OnPropertyChanged(nameof(MostrarErrorComercio));
-
+                await Shell.Current.DisplayAlertAsync(
+                    resultado.Popup.Titulo,
+                    resultado.Popup.Mensaje,
+                    "Aceptar");
                 return;
             }
-
-            await InicializarDatosAsync();
             // Limpiar espacios
             LimpiarCampos();
             LimpiarErrores();
 
-            // Disparar evento
-            GastoAgregado?.Invoke();
+            //Notificar a DashboardViewModel y refrescar datos nuevos
+            WeakReferenceMessenger.Default.Send(new GastoAgregadoMessage());
         }
         catch (Exception ex)
         {
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "Aceptar");
         }
     }
     #endregion

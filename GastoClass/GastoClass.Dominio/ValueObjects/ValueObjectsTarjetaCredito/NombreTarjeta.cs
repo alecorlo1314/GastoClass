@@ -1,7 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
-using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
-
-namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+﻿namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 /// <summary>
 /// Representa el nombre de la tarjeta
@@ -9,12 +6,14 @@ namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 /// </summary>
 public readonly record struct NombreTarjeta
 {
-    public string? Valor { get; }
+    public string Valor { get; }
 
-    public NombreTarjeta(string nombreTarjeta)
+    public NombreTarjeta(string valor)
     {
-        if (string.IsNullOrWhiteSpace(nombreTarjeta))
-            throw new ExcepcionNombreImagenRequerido(nameof(nombreTarjeta), "El nombre de la tarjeta no puede estar vacío.");
-        this.Valor = nombreTarjeta;
+        if (string.IsNullOrWhiteSpace(valor))
+            throw new ExcepcionDominio(nameof(Valor), "El nombre de la tarjeta es requerido");
+
+        Valor = valor.Trim();
     }
 }
+

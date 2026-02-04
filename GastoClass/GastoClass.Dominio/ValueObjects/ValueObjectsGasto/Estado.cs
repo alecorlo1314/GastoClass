@@ -1,6 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesGasto;
-
-namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 public readonly record struct Estado
 {
@@ -9,7 +7,7 @@ public readonly record struct Estado
     {
         if (string.IsNullOrWhiteSpace(valor))
         {
-            throw new ExcepcionEstadoInvalido(nameof(valor),"El estado es requerido");
+            throw new ExcepcionDominio(nameof(valor),"El estado es requerido");
         }
         Valor = valor;
     }

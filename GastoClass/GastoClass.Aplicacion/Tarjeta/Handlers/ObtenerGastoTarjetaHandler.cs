@@ -22,7 +22,7 @@ public class ObtenerGastoTarjetaHandler(
 
         //Agruparlos con join
         var resultado = (from g in gastos
-                         join t in tarjetas! on g.TarjetaId.idTarjeta equals t.Id
+                         join t in tarjetas! on g.TarjetaId.IdTarjeta equals t.Id
                          group g by t.NombreTarjeta into grupo
                          select new GastoTarjetaDto
                          {
