@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using GastoClass.Aplicacion.Interfaces;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
 using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.GastoClass.Presentacion.Mensajes;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -15,13 +17,6 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     #region Inyeccion de Dependencias
     private readonly IMediator? _mediator;
     private readonly IPrediccionCategoriaServicio? _prediccionCategoriaServicio;
-    #endregion
-
-    #region Eventos
-    /// <summary>
-    /// Evento que se dispara cuando se agrega un gasto
-    /// </summary>
-    public event Action? GastoAgregado;
     #endregion
 
     #region Propiedades del Formulario
@@ -310,11 +305,12 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
             LimpiarCampos();
             LimpiarErrores();
 
-            // Disparar evento
-            GastoAgregado?.Invoke();
+            //Notificar a DashboardViewModel y refrescar datos nuevos
+            WeakReferenceMessenger.Default.Send(new GastoAgregadoMessage());
         }
         catch (Exception ex)
         {
+            await Shell.Current.DisplayAlertAsync("Error", ex.Message, "Aceptar");
         }
     }
     #endregion

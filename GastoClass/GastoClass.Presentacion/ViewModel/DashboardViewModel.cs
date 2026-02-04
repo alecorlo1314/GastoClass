@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
 using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
 using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.GastoClass.Presentacion.Mensajes;
 using MediatR;
 using System.Collections.ObjectModel;
 
@@ -12,11 +14,10 @@ namespace GastoClass.Presentacion.ViewModel;
 /// ViewModel principal del Dashboard
 /// Gestiona la visualización de gastos, predicciones ML y operaciones CRUD
 /// </summary>
-public partial class DashboardViewModel : ObservableObject
+public partial class DashboardViewModel : ObservableObject, IDisposable
 {
     #region Inyección de Dependencias
     private readonly IMediator? _mediator;
-    public AgregarGastoViewModel AgregarGastoVM { get; }
 
     #endregion
 
@@ -57,14 +58,13 @@ public partial class DashboardViewModel : ObservableObject
     #endregion
 
     #region Constructor
-    public DashboardViewModel(IMediator mediator, AgregarGastoViewModel agregarGastoVM)
+    public DashboardViewModel(IMediator mediator)
     {
         _mediator = mediator;
 
-        // Inyectar el ViewModel de Agregar Gasto
-        AgregarGastoVM = agregarGastoVM;
-        //Notificar al ViewModel de Agregar Gasto el evento GastoAgregado
-        agregarGastoVM.GastoAgregado += OnGastoAgregado;
+        WeakReferenceMessenger.Default.Register<GastoAgregadoMessage>(
+            this,
+            async(_, _) => await RefrescarDashboardAsync());
     }
 
     #endregion
@@ -170,10 +170,7 @@ public partial class DashboardViewModel : ObservableObject
     #region IDisposable
     public void Dispose()
     {
-        if (AgregarGastoVM != null)
-        {
-            AgregarGastoVM.GastoAgregado -= OnGastoAgregado;
-        }
+        WeakReferenceMessenger.Default.UnregisterAll(this);
     }
     #endregion
 }
