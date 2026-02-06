@@ -249,7 +249,7 @@
                         <Label
                             FontFamily="PoppinsSemiBold"
                             FontSize="18"
-                            Text="{Binding CategoriaRecomendadaML.Display, Mode=TwoWay}"
+                            Text="{Binding CategoriaRecomendadaML.Mostrar, Mode=TwoWay}"
                             TextColor="{StaticResource Azul Principal}" />
                     </HorizontalStackLayout>
                     <!--  GRAFICO DE BARRAS  -->
@@ -285,11 +285,11 @@
                             EnableTooltip="True"
                             IsVisibleOnLegend="True"
                             ItemsSource="{Binding CategoriasRecomendadas}"
-                            Label="DescripcionCategoriaRecomendada"
+                            Label="CategoriaPrincipal"
                             LabelContext="Percentage"
                             ShowDataLabels="True"
-                            XBindingPath="DescripcionCategoriaRecomendada"
-                            YBindingPath="ScoreCategoriaRecomendada" />
+                            XBindingPath="CategoriaPrincipal"
+                            YBindingPath="Confidencial" />
                     </chart:SfCartesianChart>
                 </Grid>
             </Grid>

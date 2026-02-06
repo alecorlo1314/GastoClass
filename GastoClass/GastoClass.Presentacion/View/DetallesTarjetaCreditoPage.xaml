@@ -409,7 +409,11 @@
                     </StackLayout>
                 </HorizontalStackLayout>
                 <!--  ZONA INFERIOR  -->
-                <Grid Grid.Row="2" ColumnDefinitions="*,*">
+                <Grid
+                    Grid.Row="2"
+                    ColumnDefinitions="*,*"
+                    ColumnSpacing="32">
+                    <!--  GRAFICO DE BARRAS  -->
                     <StackLayout Grid.Column="0" Spacing="20">
                         <Label
                             FontFamily="PoppinsSemiBold"
@@ -537,7 +541,56 @@
                             </chart:SfCartesianChart>
                         </Border>
                     </StackLayout>
+                    <!--  GRAFICO POLAR  -->
+                    <StackLayout Spacing="20">
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="20"
+                            Text="Gastos por día de la semana"
+                            TextColor="{StaticResource Gray900}" />
 
+                        <Border
+                            Padding="28"
+                            BackgroundColor="{StaticResource FondoBlanco}"
+                            HeightRequest="400"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20">
+
+                            <chart:SfPolarChart>
+                                <!--  Eje primario (días de la semana)  -->
+                                <chart:SfPolarChart.PrimaryAxis>
+                                    <chart:CategoryAxis LabelStyle="{StaticResource LabelStyleAxis}" ShowMajorGridLines="True" />
+                                </chart:SfPolarChart.PrimaryAxis>
+
+                                <!--  Eje secundario (montos)  -->
+                                <chart:SfPolarChart.SecondaryAxis>
+                                    <chart:NumericalAxis LabelStyle="{StaticResource LabelStyleAxis}" ShowMajorGridLines="True" />
+                                </chart:SfPolarChart.SecondaryAxis>
+
+                                <!--  Leyenda  -->
+                                <chart:SfPolarChart.Legend>
+                                    <chart:ChartLegend IsVisible="False" />
+                                </chart:SfPolarChart.Legend>
+
+                                <!--  Serie del gráfico polar  -->
+                                <chart:PolarAreaSeries
+                                    Fill="#4A90E2"
+                                    ItemsSource="{Binding GastosPorDiaSemana}"
+                                    Label="Gastos semanales"
+                                    Opacity="0.7"
+                                    Stroke="#2E5C8A"
+                                    StrokeWidth="2"
+                                    XBindingPath="DiaSemana"
+                                    YBindingPath="Total">
+
+                                    <!--  Etiquetas de datos  -->
+                                    <chart:PolarAreaSeries.DataLabelSettings>
+                                        <chart:PolarDataLabelSettings LabelStyle="{StaticResource DataLabelStyle}" />
+                                    </chart:PolarAreaSeries.DataLabelSettings>
+                                </chart:PolarAreaSeries>
+                            </chart:SfPolarChart>
+                        </Border>
+                    </StackLayout>
                 </Grid>
             </Grid>
         </ScrollView>

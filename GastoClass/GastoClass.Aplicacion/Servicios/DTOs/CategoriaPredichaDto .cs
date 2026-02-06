@@ -1,6 +1,6 @@
 ﻿namespace GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
 
-public class CategoriaPredichaDto()
+public class CategoriaPredichaDto
 {
     public string? CategoriaPrincipal { get; set; }
     public float Confidencial { get; set; }
