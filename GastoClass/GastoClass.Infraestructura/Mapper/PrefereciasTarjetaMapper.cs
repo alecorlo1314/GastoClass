@@ -1,7 +1,7 @@
 ﻿using GastoClass.Dominio.Entidades;
-using Infraestructura.Persistencia.Entidades;
+using GastoClass.Infraestructura.Persistencia.Entidades;
 
-namespace Infraestructura.Mapper;
+namespace GastoClass.Infraestructura.Mappers;
 
 public static class PrefereciasTarjetaMapper
 {

@@ -1,11 +1,10 @@
 ﻿using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Infraestructura.Mapper;
-using Infraestructura.Mapper;
-using Infraestructura.Persistencia.ContextoDB;
-using Infraestructura.Persistencia.Entidades;
+using GastoClass.Infraestructura.Mappers;
+using GastoClass.Infraestructura.Persistencia.ContextoDB;
+using GastoClass.Infraestructura.Persistencia.Entidades;
 
-namespace Infraestructura.Persistencia.Repositorios;
+namespace GastoClass.Infraestructura.Persistencia.Repositorios;
 
 public class RepositorioTarjetaCredito : IRepositorioTarjetaCredito
 {

@@ -1,8 +1,7 @@
-﻿using GastoClass.Infraestructura.Persistencia.ContextoDB;
-using Infraestructura.Persistencia.Entidades;
+﻿using GastoClass.Infraestructura.Persistencia.Entidades;
 using SQLite;
 
-namespace Infraestructura.Persistencia.ContextoDB;
+namespace GastoClass.Infraestructura.Persistencia.ContextoDB;
 
 public class AppContextoDatos
 {

@@ -1,7 +1,7 @@
 ﻿using GastoClass.Dominio.Entidades;
 using SQLite;
 
-namespace Infraestructura.Persistencia.Entidades;
+namespace GastoClass.Infraestructura.Persistencia.Entidades;
 
 /// <summary>
 /// Clase contendra el gasto ejemplo

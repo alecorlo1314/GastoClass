@@ -1,8 +1,7 @@
 ﻿using GastoClass.Dominio.Entidades;
-using Infraestructura.Mapper;
-using Infraestructura.Persistencia.Entidades;
+using GastoClass.Infraestructura.Persistencia.Entidades;
 
-namespace GastoClass.GastoClass.Infraestructura.Mapper;
+namespace GastoClass.Infraestructura.Mappers;
 
 public static class TarjetaCreditoMapper
 {

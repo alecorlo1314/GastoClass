@@ -1,5 +1,5 @@
 ﻿using SQLite;
-namespace Infraestructura.Persistencia.Entidades;
+namespace GastoClass.Infraestructura.Persistencia.Entidades;
 
 public class PreferenciasTarjetaEntidad
 {
