@@ -1,7 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Interfaces;
+using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using MediatR;
 using System.Collections.ObjectModel;
 
 namespace GastoClass.Presentacion.ViewModel
@@ -12,14 +16,16 @@ namespace GastoClass.Presentacion.ViewModel
         /// <summary>
         /// Para obtener los servicios las predicciones
         /// </summary>
-        private readonly PredictionApiService _predictionApiService;
+        private readonly PrediccionCategoriaServicio _prediccionCategoriaServicio;
+        private readonly IMediator _mediator;
         #endregion
 
         #region Constructor
-        public MLDetallesViewModel(PredictionApiService predictionApiService)
+        public MLDetallesViewModel(PrediccionCategoriaServicio prediccionCategoriaServicio, IMediator mediator)
         {
             //Inyeccion de dependencias
-            _predictionApiService = predictionApiService;
+            _prediccionCategoriaServicio = prediccionCategoriaServicio;
+            _mediator = mediator;
             //inicializar datos
             ResultadosVisibles = false;        
         }
@@ -63,13 +69,13 @@ namespace GastoClass.Presentacion.ViewModel
         /// Contiene la categoria recomendada por el ML
         /// </summary>
         [ObservableProperty]
-        private CategoriasRecomendadas? _categoriaRecomendadaML;
+        private CategoriaPredichaDto? _categoriaRecomendadaML;
 
         /// <summary>
         /// Contiene el resultado de la prediccion
         /// </summary>
         [ObservableProperty]
-        private ResultadoPrediccion? _resultadoPrediccion;
+        private CategoriaPredichaDto? _resultadoPrediccion;
         #endregion
 
         #region Listas
@@ -77,7 +83,7 @@ namespace GastoClass.Presentacion.ViewModel
         /// Contiene las categorias recomendadas con descripcio y puntaje
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<CategoriasRecomendadas>? _categoriasRecomendadas = new();
+        private ObservableCollection<CategoriaPredichaDto>? _categoriasRecomendadas = new();
         #endregion
 
         #region Tiempo de Prediccion
@@ -96,31 +102,36 @@ namespace GastoClass.Presentacion.ViewModel
 
             try
             {
+                var solicitudPredic = new SolicitudPrediccion
+                {
+                    Descripcion = Descripcion
+                };
                 //Obtener la prediccion desde el servicio
-                var prediccion = await _predictionApiService.PredictAsync(Descripcion!);
+                var prediccion = await _prediccionCategoriaServicio.PredecirAsync(solicitudPredic.Descripcion!);
+
                 //Limpiar la lista de categorias recomendadas
                 CategoriasRecomendadas?.Clear();
                 //Agregar la nueva prediccion a la lista
-                foreach (var (key, value) in prediccion!.scoreDict!)
+                foreach (var (key, value) in prediccion!.ScoreDict!)
                 {
-                    CategoriasRecomendadas?.Add(new CategoriasRecomendadas
+                    CategoriasRecomendadas?.Add(new CategoriaPredichaDto
                     {
-                        DescripcionCategoriaRecomendada = key,
-                        ScoreCategoriaRecomendada = value * 100
+                        CategoriaPrincipal = key,
+                        Confidencial = value * 100
                     });
                 }
                 // ordernar lista de puntos, desdendentemente por puntos
                 var ordenada = CategoriasRecomendadas
-                    ?.OrderBy(s => s.ScoreCategoriaRecomendada)
+                    ?.OrderBy(s => s.Confidencial)
                     .ToList();
                 //Actualizar la lista final con los datos ordenados por scores
-                CategoriasRecomendadas = new ObservableCollection<CategoriasRecomendadas>(ordenada!);
+                CategoriasRecomendadas = new ObservableCollection<CategoriaPredichaDto>(ordenada!);
 
                 //Actualizar la categoria recomendada y se mostrara asi (Alimentos 80%)
-                CategoriaRecomendadaML = new CategoriasRecomendadas
+                CategoriaRecomendadaML = new CategoriaPredichaDto
                 {
-                    DescripcionCategoriaRecomendada = prediccion!.Categoria,
-                    ScoreCategoriaRecomendada = prediccion.Confidencial
+                    CategoriaPrincipal = prediccion!.CategoriaPrincipal,
+                    Confidencial = prediccion.Confidencial
                 };
                 ResultadosVisibles = true;
                 BotonPredecirOculto = true;
