@@ -1,5 +1,5 @@
 ﻿using GastoClass.Dominio.Entidades;
-using GastoClass.GastoClass.Dominio.Interfaces;
+using GastoClass.Dominio.Interfaces;
 using Infraestructura.Mapper;
 using Infraestructura.Persistencia.ContextoDB;
 using Infraestructura.Persistencia.Entidades;

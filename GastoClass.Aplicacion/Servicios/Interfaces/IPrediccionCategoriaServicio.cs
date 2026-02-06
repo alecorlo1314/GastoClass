@@ -1,4 +1,4 @@
-﻿using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+﻿using GastoClass.Aplicacion.Servicios.DTOs;
 
 namespace GastoClass.Aplicacion.Interfaces;
 

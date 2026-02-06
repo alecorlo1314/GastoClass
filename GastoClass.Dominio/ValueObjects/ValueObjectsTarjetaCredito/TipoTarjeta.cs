@@ -1,14 +1,17 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
+﻿using GastoClass.Dominio.Excepciones;
 
 namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
 public readonly record struct TipoTarjeta
 {
-    public string? Valor { get; }
-    public TipoTarjeta(string tipoTarjeta)
+    public string Valor { get; }
+
+    public TipoTarjeta(string valor)
     {
-        if(string.IsNullOrWhiteSpace(tipoTarjeta) || string.IsNullOrEmpty(tipoTarjeta))
-            throw new ExcepcionTipoTarjetaInvalido(nameof(tipoTarjeta), "El tipo de tarjeta no puede estar vacío.");
-        Valor = tipoTarjeta;
+        if (string.IsNullOrWhiteSpace(valor))
+            throw new ExcepcionDominio(nameof(Valor), "El tipo de tarjeta es requerido");
+
+        Valor = valor.Trim();
     }
 }
+

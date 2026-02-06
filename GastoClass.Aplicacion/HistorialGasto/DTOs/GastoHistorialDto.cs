@@ -1,4 +1,4 @@
-﻿namespace GastoClass.GastoClass.Aplicacion.HistorialGasto.DTOs;
+﻿namespace GastoClass.Aplicacion.HistorialGasto.DTOs;
 
 public class GastoHistorialDto
 {

@@ -88,6 +88,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="GastoClass.Aplicacion\Gasto\Consultas\**" />
+	  <Compile Remove="GastoClass.Aplicacion\Gasto\Consultas\**" />
+	  <EmbeddedResource Remove="GastoClass.Aplicacion\Gasto\Consultas\**" />
+	  <MauiCss Remove="GastoClass.Aplicacion\Gasto\Consultas\**" />
+	  <MauiXaml Remove="GastoClass.Aplicacion\Gasto\Consultas\**" />
+	  <None Remove="GastoClass.Aplicacion\Gasto\Consultas\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="MediatR" Version="14.0.0" />
@@ -129,7 +138,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="GastoClass.Aplicacion\Gasto\Consultas\" />
+	  <ProjectReference Include="..\GastoClass.Aplicacion\GastoClass.Aplicacion.csproj" />
+	  <ProjectReference Include="..\GastoClass.Dominio\GastoClass.Dominio.csproj" />
 	</ItemGroup>
 
 </Project>

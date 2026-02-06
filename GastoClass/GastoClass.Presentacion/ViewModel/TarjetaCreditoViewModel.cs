@@ -2,10 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.Aplicacion.Tarjeta.Commands;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Commands;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
-using GastoClass.GastoClass.Aplicacion.Utilidades;
+using GastoClass.Aplicacion.Tarjeta.Consultas;
+using GastoClass.Aplicacion.Tarjeta.DTOs;
+using GastoClass.Aplicacion.Utilidades;
 using GastoClass.Presentacion.View;
 using MediatR;
 using System.Collections.ObjectModel;

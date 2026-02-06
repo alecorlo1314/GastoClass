@@ -1,3 +1,3 @@
-﻿namespace GastoClass.GastoClass.Presentacion.Mensajes;
+﻿namespace GastoClass.Presentacion.Mensajes;
 
 public record GastoAgregadoMessage;

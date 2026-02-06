@@ -2,11 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using GastoClass.Aplicacion.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
-using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
-using GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
-using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
-using GastoClass.GastoClass.Presentacion.Mensajes;
+using GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+using GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
+using GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.Presentacion.Mensajes;
 using MediatR;
 using System.Collections.ObjectModel;
 

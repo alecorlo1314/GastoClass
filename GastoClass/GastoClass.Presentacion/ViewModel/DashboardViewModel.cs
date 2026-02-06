@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
-using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
-using GastoClass.GastoClass.Presentacion.Mensajes;
+using GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
+using GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
+using GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
+using GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.Presentacion.Mensajes;
 using MediatR;
 using System.Collections.ObjectModel;
 

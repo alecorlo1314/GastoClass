@@ -1,9 +1,8 @@
-﻿using GastoClass.GastoClass.Aplicacion.Common;
-using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
-using GastoClass.GastoClass.Dominio.Interfaces;
+﻿using GastoClass.Dominio.Interfaces;
+using GastoClass.Aplicacion.Dashboard.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
+namespace GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
 
 public class ObtenerResumenMesHandler(
     IRepositorioGasto repositorioGasto)

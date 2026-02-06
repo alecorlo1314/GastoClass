@@ -1,3 +1,3 @@
-﻿namespace GastoClass.GastoClass.Dominio.Excepciones;
+﻿namespace GastoClass.Dominio.Excepciones;
 
 public interface IExcepcionPopup { }

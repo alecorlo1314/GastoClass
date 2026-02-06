@@ -1,4 +1,4 @@
-﻿namespace GastoClass.GastoClass.Aplicacion.Gasto.DTOs;
+﻿namespace GastoClass.Aplicacion.Gasto.DTOs;
 
 public class TarjetaGastoDto
 {

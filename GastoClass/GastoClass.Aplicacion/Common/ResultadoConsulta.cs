@@ -1,6 +1,6 @@
 ﻿using GastoClass.Aplicacion.Common;
 
-namespace GastoClass.GastoClass.Aplicacion.Common;
+namespace GastoClass.Aplicacion.Common;
 
 public class ResultadoConsulta<T>
 {

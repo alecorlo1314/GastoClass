@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using GastoClass.Aplicacion.DTOs;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
+using GastoClass.Aplicacion.Tarjeta.Consultas;
+using GastoClass.Aplicacion.Tarjeta.DTOs;
 using MediatR;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;

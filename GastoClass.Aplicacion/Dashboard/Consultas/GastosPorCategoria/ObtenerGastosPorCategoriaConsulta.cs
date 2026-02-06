@@ -1,8 +1,7 @@
-﻿using GastoClass.GastoClass.Aplicacion.Common;
-using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+﻿using GastoClass.Aplicacion.Dashboard.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
+namespace GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 
 public record ObtenerGastosPorCategoriaConsulta(int mes, int anio) 
     : IRequest<List<GastoPorCategoriaDto>?> { }

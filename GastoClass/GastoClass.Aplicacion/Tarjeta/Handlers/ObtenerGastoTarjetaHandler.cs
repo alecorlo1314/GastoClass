@@ -1,10 +1,9 @@
 ﻿using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
-using GastoClass.GastoClass.Dominio.Interfaces;
+using GastoClass.Aplicacion.Tarjeta.Consultas;
+using GastoClass.Aplicacion.Tarjeta.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Tarjeta.Handlers;
+namespace GastoClass.Aplicacion.Tarjeta.Handlers;
 
 public class ObtenerGastoTarjetaHandler(
     IRepositorioTarjetaCredito repositorioTarjetaCredito, 

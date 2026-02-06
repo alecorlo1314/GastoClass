@@ -1,7 +1,7 @@
 ﻿using GastoClass.Aplicacion.Common;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Gasto.Commands.ActualizarGasto;
+namespace GastoClass.Aplicacion.Gasto.Commands.ActualizarGasto;
 
 public record ActualizarGastoCommand
     : IRequest<ResultadosValidacion>

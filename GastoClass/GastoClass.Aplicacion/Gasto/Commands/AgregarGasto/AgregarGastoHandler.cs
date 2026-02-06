@@ -1,11 +1,10 @@
 ﻿using GastoClass.Aplicacion.Common;
 using GastoClass.Dominio.Entidades;
+using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Dominio.Excepciones;
-using GastoClass.GastoClass.Dominio.Interfaces;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
+namespace GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
 
 public class AgregarGastoHandler(
     IRepositorioGasto repositorioGasto,

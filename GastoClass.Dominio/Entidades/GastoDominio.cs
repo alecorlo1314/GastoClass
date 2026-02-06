@@ -1,4 +1,4 @@
-﻿using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿using GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 namespace GastoClass.Dominio.Entidades;
 

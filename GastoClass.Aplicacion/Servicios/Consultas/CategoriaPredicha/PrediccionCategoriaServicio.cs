@@ -1,6 +1,5 @@
 ﻿using GastoClass.Aplicacion.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
-using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.Aplicacion.Servicios.DTOs;
 using System.Net.Http.Json;
 
 namespace GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;

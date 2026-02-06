@@ -1,6 +1,5 @@
 ﻿using GastoClass.Dominio.Entidades;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
-
+using GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using Infraestructura.Persistencia.Entidades;
 
 namespace Infraestructura.Mapper;

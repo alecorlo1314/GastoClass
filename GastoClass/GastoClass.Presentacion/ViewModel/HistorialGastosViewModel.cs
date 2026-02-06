@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.GastoClass.Aplicacion.HistorialGasto.Consultas;
-using GastoClass.GastoClass.Aplicacion.HistorialGasto.DTOs;
+using GastoClass.Aplicacion.HistorialGasto.Consultas;
+using GastoClass.Aplicacion.HistorialGasto.DTOs;
 using MediatR;
 using System.Collections.ObjectModel;
 

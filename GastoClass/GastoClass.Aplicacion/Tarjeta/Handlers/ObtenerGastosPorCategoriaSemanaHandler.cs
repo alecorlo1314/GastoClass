@@ -1,10 +1,9 @@
 ﻿using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
-using GastoClass.GastoClass.Dominio.Interfaces;
+using GastoClass.Aplicacion.Tarjeta.DTOs;
 using MediatR;
+using GastoClass.Aplicacion.Tarjeta.Consultas;
 
-namespace GastoClass.GastoClass.Aplicacion.Tarjeta.Handlers;
+namespace GastoClass.Aplicacion.Tarjeta.Handlers;
 
 class ObtenerGastosPorCategoriaSemanaHandler(IRepositorioTarjetaCredito repositorioTarjetaCredito, IRepositorioGasto repositorioGastos)
     : IRequestHandler<ObtenerGastosPorCategoriaSemanaConsulta, List<GastoCategoriaUltimosSieteDiasTarjetaDto>?>

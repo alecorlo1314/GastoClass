@@ -1,16 +1,17 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
+﻿using GastoClass.Dominio.Excepciones;
 
-namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+namespace GastoClass.Dominio.ValueObjects.ValuePreferencias;
 
 public readonly record struct LimiteCredito
 {
-    public decimal? Valor { get; }
+    public decimal Valor { get; }
 
-    public LimiteCredito(decimal limiteCredito)
+    public LimiteCredito(decimal valor)
     {
-        if (string.IsNullOrWhiteSpace(limiteCredito.ToString()))
-            throw new ExcepcionLimiteCreditoInvalido(nameof(limiteCredito), "Limite Credito es requerido");
-        if(limiteCredito <= 0) throw new ExcepcionLimiteCreditoInvalido(nameof(limiteCredito), "No puede ser menor a 0");
-        Valor = limiteCredito;
+        if (valor <= 0)
+            throw new ExcepcionDominio(nameof(Valor), "El límite de crédito debe ser mayor a cero");
+
+        Valor = valor;
     }
 }
+

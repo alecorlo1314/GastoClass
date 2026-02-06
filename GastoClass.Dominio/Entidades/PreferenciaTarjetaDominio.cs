@@ -1,4 +1,5 @@
-﻿using GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
+﻿using GastoClass.Dominio.ValueObjects.ValuePreferencias;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
 
 namespace GastoClass.Dominio.Entidades;
 

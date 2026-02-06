@@ -1,9 +1,9 @@
 ﻿using GastoClass.Aplicacion.Common;
+using GastoClass.Dominio.Excepciones;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Dominio.Interfaces;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Gasto.Commands.EliminarGasto;
+namespace GastoClass.Aplicacion.Gasto.Commands.EliminarGasto;
 
 public class EliminarGastoHandler(
     IRepositorioGasto repositorioGasto, 

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.GastoClass.Aplicacion.Gasto.Commands.EliminarGasto;
-using GastoClass.GastoClass.Aplicacion.HistorialGasto.DTOs;
+using GastoClass.Aplicacion.Gasto.Commands.EliminarGasto;
+using GastoClass.Aplicacion.HistorialGasto.DTOs;
 using MediatR;
 
 namespace GastoClass.Presentacion.ViewModel;

@@ -1,9 +1,9 @@
-﻿using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
-using GastoClass.GastoClass.Dominio.Interfaces;
+﻿using GastoClass.Dominio.Excepciones;
+using GastoClass.Dominio.Interfaces;
+using GastoClass.Aplicacion.Tarjeta.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
+namespace GastoClass.Aplicacion.Tarjeta.Consultas;
 
 class ObtenerUltimosTresMovimientosHandler(IRepositorioGasto repositorioGasto, IRepositorioTarjetaCredito repositorioTarjetaCredito)
     : IRequestHandler<ObtenerUltimosTresMovimientosConsulta, List<UltimosTresMovimientosDto>?>

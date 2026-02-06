@@ -2,10 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using GastoClass.Aplicacion.Common;
 using GastoClass.Aplicacion.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Gasto.Commands.ActualizarGasto;
-using GastoClass.GastoClass.Aplicacion.Gasto.DTOs;
-using GastoClass.GastoClass.Aplicacion.HistorialGasto.DTOs;
-using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
+using GastoClass.Aplicacion.Gasto.Commands.ActualizarGasto;
+using GastoClass.Aplicacion.Gasto.DTOs;
+using GastoClass.Aplicacion.HistorialGasto.DTOs;
+using GastoClass.Aplicacion.Servicios.DTOs;
 using MediatR;
 using System.Collections.ObjectModel;
 

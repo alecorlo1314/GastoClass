@@ -4,9 +4,10 @@ namespace GastoClass.Dominio.Interfaces;
 
 public interface IRepositorioTarjetaCredito
 {
-    Task<List<TarjetaCredito>?> ObtenerTodosAsync();
-    Task AgregarAsync(TarjetaCredito tarjetaCredito);
-    Task ActualizarAsync(TarjetaCredito tarjetaCredito);
-    Task EliminarAsync(int idTarjetaCredito);
-    Task<TarjetaCredito?> ObtenerPorIdAsync(int id);
+    Task<List<TarjetaCreditoDominio>?> ObtenerTodosAsync();
+    Task AgregarAsync(TarjetaCreditoDominio tarjetaCredito);
+    Task ActualizarAsync(TarjetaCreditoDominio tarjetaCredito);
+    Task EliminarPorIdAsync(int idTarjetaCredito);
+    Task<TarjetaCreditoDominio?> ObtenerPorIdAsync(int id);
+    Task<int> EliminarTodasAsync();
 }

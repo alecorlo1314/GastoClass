@@ -1,4 +1,6 @@
-﻿namespace GastoClass.GastoClass.Dominio.ValueObjects.ValuePreferencias;
+﻿using GastoClass.Dominio.Excepciones;
+
+namespace GastoClass.Dominio.ValueObjects.ValuePreferencias;
 
 public class IconoTarjeta
 {
