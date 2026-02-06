@@ -88,10 +88,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="Dominio\Interfacez\IServicioGastos.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="12.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="MediatR" Version="14.0.0" />

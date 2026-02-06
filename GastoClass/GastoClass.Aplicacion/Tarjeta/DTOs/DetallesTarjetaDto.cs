@@ -1,5 +1,4 @@
 ﻿using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.Model;
 
 namespace GastoClass.Aplicacion.DTOs
 {

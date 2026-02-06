@@ -1,6 +1,4 @@
-﻿using GastoClass.Aplicacion.DTOs;
-using GastoClass.Dominio.Interfaces;
-using GastoClass.Dominio.Model;
+﻿using GastoClass.Dominio.Interfaces;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
 using GastoClass.GastoClass.Dominio.Interfaces;

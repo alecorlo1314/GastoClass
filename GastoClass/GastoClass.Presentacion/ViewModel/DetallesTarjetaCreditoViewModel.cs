@@ -1,13 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
-using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace GastoClass.Presentacion.ViewModel
 {
@@ -20,8 +17,6 @@ namespace GastoClass.Presentacion.ViewModel
     public partial class DetallesTarjetaCreditoViewModel : ObservableObject
     {
         #region Servicios e Inyección de Dependencias
-        private readonly ServicioTarjetaCredito _servicioTarjetaCredito;
-
         IMediator _mediator;
 
         #endregion
@@ -166,10 +161,9 @@ namespace GastoClass.Presentacion.ViewModel
         /// Constructor del ViewModel.
         /// </summary>
         /// <param name="servicioTarjetaCredito">Servicio de tarjetas de crédito inyectado.</param>
-        public DetallesTarjetaCreditoViewModel(ServicioTarjetaCredito servicioTarjetaCredito, IMediator mediator)
+        public DetallesTarjetaCreditoViewModel(IMediator mediator)
         {
             _mediator = mediator;
-            _servicioTarjetaCredito = servicioTarjetaCredito;
         }
 
         #endregion

@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using GastoClass.Aplicacion.CasosUso;
-using GastoClass.Aplicacion.Interfaces;
 using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
-using GastoClass.Dominio.Model;
+using GastoClass.GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 using GastoClass.GastoClass.Aplicacion.Servicios.DTOs;
 using MediatR;
 using System.Collections.ObjectModel;
