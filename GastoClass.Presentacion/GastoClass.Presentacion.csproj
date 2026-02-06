@@ -26,9 +26,4 @@
 	  <Folder Include="Views\" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\GastoClass.Aplicacion\GastoClass.Aplicacion.csproj" />
-	  <ProjectReference Include="..\GastoClass.Dominio\GastoClass.Dominio.csproj" />
-	</ItemGroup>
-
 </Project>
