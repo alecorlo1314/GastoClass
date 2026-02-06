@@ -327,10 +327,7 @@ public partial class AgregarGastoViewModel : ObservableObject, IDisposable
     {
         Monto = null;
         Descripcion = null;
-        Comercio = null;
-        Fecha = DateTime.Now;
         CategoriaPredicha = null;
-        TarjetaSeleccionada = null;
         EstadoSeleccionado = "Pendiente";
         ListaCategoriasPredichas?.Clear();
     }

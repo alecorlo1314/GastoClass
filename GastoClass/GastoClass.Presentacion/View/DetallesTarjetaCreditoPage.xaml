@@ -11,533 +11,563 @@
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray900}">
 
-    <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="28">
-            <!--  ZONA SUPERIOR  -->
-            <ScrollView Grid.Row="0" Orientation="Horizontal">
-                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="32">
-                    <!--  BALANCE ACTUAL  -->
-                    <Border
-                        Grid.Column="0"
-                        Padding="24"
-                        Background="{StaticResource FondoBlanco}"
-                        HeightRequest="120"
-                        Stroke="Transparent"
-                        StrokeShape="RoundRectangle 20"
-                        WidthRequest="330">
-                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
-                            <Image
-                                Grid.Column="0"
-                                HeightRequest="70"
-                                Source="balance_actual.png"
-                                VerticalOptions="Center"
-                                WidthRequest="70" />
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Text="Balance Actual"
-                                    TextColor="{StaticResource Gray600}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    FontFamily="PoppinsSemiBold"
-                                    FontSize="20"
-                                    Text="{Binding BalanceDetalles, StringFormat='₡{0:N2}'}"
-                                    TextColor="{StaticResource Gray900}"
-                                    VerticalOptions="Center" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-                    <!--  CREDITO DISPONIBLE  -->
-                    <Border
-                        Grid.Column="1"
-                        Padding="24"
-                        Background="{StaticResource FondoBlanco}"
-                        HeightRequest="120"
-                        Stroke="Transparent"
-                        StrokeShape="RoundRectangle 20"
-                        WidthRequest="330">
-                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
-                            <Image
-                                Grid.Column="0"
-                                HeightRequest="70"
-                                Source="credito_disponible.png"
-                                VerticalOptions="Center"
-                                WidthRequest="70" />
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Text="Credito Disponible"
-                                    TextColor="{StaticResource Gray600}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    FontFamily="PoppinsSemiBold"
-                                    FontSize="20"
-                                    Text="{Binding CreditoDisponibleDetalles, StringFormat='₡{0:N2}'}"
-                                    TextColor="{StaticResource Gray900}"
-                                    VerticalOptions="Center" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-                    <!--  LIMITE DE CREDITO  -->
-                    <Border
-                        Grid.Column="2"
-                        Padding="24"
-                        Background="{StaticResource FondoBlanco}"
-                        HeightRequest="120"
-                        Stroke="Transparent"
-                        StrokeShape="RoundRectangle 20"
-                        WidthRequest="330">
-                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
-                            <Image
-                                Grid.Column="0"
-                                HeightRequest="70"
-                                Source="limite_credito.png"
-                                VerticalOptions="Center"
-                                WidthRequest="70" />
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Text="Limite de Credito"
-                                    TextColor="{StaticResource Gray600}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    FontFamily="PoppinsSemiBold"
-                                    FontSize="20"
-                                    Text="{Binding TarjetaCredito.LimiteCredito, StringFormat='₡{0:N2}'}"
-                                    TextColor="{StaticResource Gray900}"
-                                    VerticalOptions="Center" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-                    <!--  TIPO DE MONEDA  -->
-                    <Border
-                        Grid.Column="3"
-                        Padding="24"
-                        Background="{StaticResource FondoBlanco}"
-                        HeightRequest="120"
-                        Stroke="Transparent"
-                        StrokeShape="RoundRectangle 20"
-                        WidthRequest="330">
-                        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
-                            <Image
-                                Grid.Column="0"
-                                HeightRequest="70"
-                                Source="total_guardado.png"
-                                VerticalOptions="Center"
-                                WidthRequest="70" />
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                <Label
-                                    FontFamily="PoppinsRegular"
-                                    FontSize="16"
-                                    Text="Tipo de moneda"
-                                    TextColor="{StaticResource Gray600}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    FontFamily="PoppinsSemiBold"
-                                    FontSize="20"
-                                    Text="{Binding TarjetaCredito.Moneda}"
-                                    TextColor="{StaticResource Gray900}"
-                                    VerticalOptions="Center" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-                </Grid>
-            </ScrollView>
-            <!--  ZONA CENTRO  -->
-            <HorizontalStackLayout Grid.Row="1" Spacing="28">
-                <!--  FIGURA TARJETA DE CREDITO  -->
-                <StackLayout Spacing="20">
-                    <!--  ESTILO DE LA TARJETA DE CREDITO  -->
-                    <Label
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="20"
-                        Text="Mi  Tarjeta"
-                        TextColor="{StaticResource Gray900}" />
-                    <Border
-                        Padding="24"
-                        HeightRequest="225"
-                        Stroke="{Binding ColorBordeDetalles}"
-                        StrokeShape="RoundRectangle 25"
-                        WidthRequest="350">
-                        <Border.Background>
-                            <LinearGradientBrush EndPoint="0,1">
-                                <GradientStop Offset="0.1" Color="{Binding ColorHex1Detalles}" />
-                                <GradientStop Offset="1.0" Color="{Binding ColorHex2Detalles}" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <Grid RowDefinitions="*,*,*" RowSpacing="16">
-                            <!--  ZONA SUPERIOR  -->
-                            <Grid Grid.Row="0" ColumnDefinitions="*,*">
-                                <!--  BALANCE  -->
-                                <StackLayout
-                                    Grid.Column="0"
-                                    HorizontalOptions="Start"
-                                    Spacing="4"
-                                    VerticalOptions="Center">
-                                    <Label
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="12"
-                                        Text="Balance"
-                                        TextColor="{Binding ColorTextoDetalles}" />
-                                    <Label
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="20"
-                                        Text="{Binding BalanceDetalles, StringFormat='{0:C2}'}"
-                                        TextColor="{Binding ColorTextoDetalles}" />
-                                </StackLayout>
-                                <!--  ICONO CHIP  -->
+    <Grid>
+        <ScrollView>
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="28">
+                <!--  ZONA SUPERIOR  -->
+                <ScrollView Grid.Row="0" Orientation="Horizontal">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="32">
+                        <!--  BALANCE ACTUAL  -->
+                        <Border
+                            Grid.Column="0"
+                            Padding="24"
+                            Background="{StaticResource FondoBlanco}"
+                            HeightRequest="120"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20"
+                            WidthRequest="330">
+                            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
                                 <Image
-                                    Grid.Column="1"
-                                    Aspect="AspectFit"
-                                    HeightRequest="32"
-                                    HorizontalOptions="End"
-                                    Source="{Binding IconoChipDetalles}"
-                                    VerticalOptions="Center"
-                                    WidthRequest="32" />
-                            </Grid>
-                            <!--  ZONA MEDIO  -->
-                            <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                                <!--  NOMBRE DE LA TARJETA  -->
-                                <StackLayout
                                     Grid.Column="0"
-                                    HorizontalOptions="Start"
-                                    Spacing="4"
-                                    VerticalOptions="Center">
+                                    HeightRequest="70"
+                                    Source="balance_actual.png"
+                                    VerticalOptions="Center"
+                                    WidthRequest="70" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
                                     <Label
                                         FontFamily="PoppinsRegular"
-                                        FontSize="12"
-                                        Text="NOMBRE TARJETA"
-                                        TextColor="{Binding ColorTextoDetalles}" />
+                                        FontSize="16"
+                                        Text="Balance Actual"
+                                        TextColor="{StaticResource Gray600}"
+                                        VerticalOptions="Center" />
                                     <Label
                                         FontFamily="PoppinsSemiBold"
-                                        FontSize="14"
-                                        Text="{Binding NombreBancoDetalles}"
-                                        TextColor="{Binding ColorTextoDetalles}" />
-                                </StackLayout>
-                                <!--  FECHA DE VENCIMIENTO  -->
-                                <StackLayout
-                                    Grid.Column="1"
-                                    Margin="16,0,0,0"
-                                    HorizontalOptions="Start"
-                                    Spacing="4"
-                                    VerticalOptions="Center">
-                                    <Label
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="12"
-                                        Text="FECHA VENCIMIENTO"
-                                        TextColor="{Binding ColorTextoDetalles}" />
-                                    <HorizontalStackLayout>
-                                        <Label
-                                            FontFamily="PoppinsSemiBold"
-                                            FontSize="14"
-                                            Text="{Binding MesVencimientoDetalles}"
-                                            TextColor="{Binding ColorTextoDetalles}" />
-                                        <Label
-                                            FontFamily="PoppinsSemiBold"
-                                            FontSize="14"
-                                            Text="/"
-                                            TextColor="{Binding ColorTextoDetalles}" />
-                                        <Label
-                                            FontFamily="PoppinsSemiBold"
-                                            FontSize="14"
-                                            Text="{Binding AnioVencimientoDetalles}"
-                                            TextColor="{Binding ColorTextoDetalles}" />
-                                    </HorizontalStackLayout>
-                                </StackLayout>
+                                        FontSize="20"
+                                        Text="{Binding BalanceDetalles, StringFormat='₡{0:N2}'}"
+                                        TextColor="{StaticResource Gray900}"
+                                        VerticalOptions="Center" />
+                                </VerticalStackLayout>
                             </Grid>
-                            <!--  ZONA INFERIOR  -->
-                            <Grid Grid.Row="2" ColumnDefinitions="7*,3*">
-                                <!--  NUMERO DE TARJETA  -->
-                                <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                    <Border HeightRequest="1" Stroke="{Binding ColorBordeDetalles}" />
-                                    <Label
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="22"
-                                        Text="**** **** **** "
-                                        TextColor="{Binding ColorTextoDetalles}" />
-                                    <Label
-                                        FontFamily="PoppinsRegular"
-                                        FontSize="22"
-                                        Text="{Binding UltimosCuatroDigitos}"
-                                        TextColor="{Binding ColorTextoDetalles}" />
-                                </HorizontalStackLayout>
+                        </Border>
+                        <!--  CREDITO DISPONIBLE  -->
+                        <Border
+                            Grid.Column="1"
+                            Padding="24"
+                            Background="{StaticResource FondoBlanco}"
+                            HeightRequest="120"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20"
+                            WidthRequest="330">
+                            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
                                 <Image
-                                    Grid.Column="1"
-                                    Aspect="AspectFit"
-                                    HeightRequest="30"
-                                    HorizontalOptions="End"
-                                    Source="{Binding IconoTipoTarjetaDetalles}"
+                                    Grid.Column="0"
+                                    HeightRequest="70"
+                                    Source="credito_disponible.png"
                                     VerticalOptions="Center"
-                                    WidthRequest="44" />
+                                    WidthRequest="70" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Text="Credito Disponible"
+                                        TextColor="{StaticResource Gray600}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        FontFamily="PoppinsSemiBold"
+                                        FontSize="20"
+                                        Text="{Binding CreditoDisponibleDetalles, StringFormat='₡{0:N2}'}"
+                                        TextColor="{StaticResource Gray900}"
+                                        VerticalOptions="Center" />
+                                </VerticalStackLayout>
                             </Grid>
-                        </Grid>
-                    </Border>
-                </StackLayout>
-                <!--  LISTA DE ULTIMOS MOVIMIENTOS  -->
-                <StackLayout Spacing="20">
-                    <Label
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="20"
-                        Text="Ultimas Transacciones"
-                        TextColor="{StaticResource Gray900}" />
-                    <Border
-                        Padding="16"
-                        BackgroundColor="{StaticResource FondoBlanco}"
-                        Stroke="Transparent"
-                        StrokeShape="RoundRectangle 20">
-                        <CollectionView ItemsSource="{Binding ListaUltimosTresMovimientos}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid
-                                        Padding="6"
-                                        ColumnDefinitions="1*,2*,2*,1*,2*,2*"
-                                        ColumnSpacing="24"
-                                        WidthRequest="1010">
-
-                                        <Image
-                                            Grid.Column="0"
-                                            Aspect="AspectFill"
-                                            HeightRequest="55"
-                                            HorizontalOptions="Center"
-                                            Source="{Binding Imagen}"
-                                            VerticalOptions="Center"
-                                            WidthRequest="55" />
-
-                                        <StackLayout
-                                            Grid.Column="1"
-                                            HorizontalOptions="Start"
-                                            Spacing="4"
-                                            VerticalOptions="Center">
-                                            <Label
-                                                FontFamily="PoppinsMedium"
-                                                FontSize="16"
-                                                LineBreakMode="WordWrap"
-                                                Text="{Binding Descripcion}"
-                                                TextColor="{StaticResource Gray900}" />
-                                            <Label
-                                                FontFamily="PoppinsRegular"
-                                                FontSize="14"
-                                                Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
-                                                TextColor="{StaticResource Gray500}" />
-                                        </StackLayout>
-
+                        </Border>
+                        <!--  LIMITE DE CREDITO  -->
+                        <Border
+                            Grid.Column="2"
+                            Padding="24"
+                            Background="{StaticResource FondoBlanco}"
+                            HeightRequest="120"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20"
+                            WidthRequest="330">
+                            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
+                                <Image
+                                    Grid.Column="0"
+                                    HeightRequest="70"
+                                    Source="limite_credito.png"
+                                    VerticalOptions="Center"
+                                    WidthRequest="70" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Text="Limite de Credito"
+                                        TextColor="{StaticResource Gray600}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        FontFamily="PoppinsSemiBold"
+                                        FontSize="20"
+                                        Text="{Binding TarjetaCredito.LimiteCredito, StringFormat='₡{0:N2}'}"
+                                        TextColor="{StaticResource Gray900}"
+                                        VerticalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                        <!--  TIPO DE MONEDA  -->
+                        <Border
+                            Grid.Column="3"
+                            Padding="24"
+                            Background="{StaticResource FondoBlanco}"
+                            HeightRequest="120"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20"
+                            WidthRequest="330">
+                            <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="16">
+                                <Image
+                                    Grid.Column="0"
+                                    HeightRequest="70"
+                                    Source="total_guardado.png"
+                                    VerticalOptions="Center"
+                                    WidthRequest="70" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                    <Label
+                                        FontFamily="PoppinsRegular"
+                                        FontSize="16"
+                                        Text="Tipo de moneda"
+                                        TextColor="{StaticResource Gray600}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        FontFamily="PoppinsSemiBold"
+                                        FontSize="20"
+                                        Text="{Binding TarjetaCredito.Moneda}"
+                                        TextColor="{StaticResource Gray900}"
+                                        VerticalOptions="Center" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ScrollView>
+                <!--  ZONA CENTRO  -->
+                <HorizontalStackLayout Grid.Row="1" Spacing="28">
+                    <!--  FIGURA TARJETA DE CREDITO  -->
+                    <StackLayout Spacing="20">
+                        <!--  ESTILO DE LA TARJETA DE CREDITO  -->
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="20"
+                            Text="Mi  Tarjeta"
+                            TextColor="{StaticResource Gray900}" />
+                        <Border
+                            Padding="24"
+                            HeightRequest="225"
+                            Stroke="{Binding ColorBordeDetalles}"
+                            StrokeShape="RoundRectangle 25"
+                            WidthRequest="350">
+                            <Border.Background>
+                                <LinearGradientBrush EndPoint="0,1">
+                                    <GradientStop Offset="0.1" Color="{Binding ColorHex1Detalles}" />
+                                    <GradientStop Offset="1.0" Color="{Binding ColorHex2Detalles}" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Grid RowDefinitions="*,*,*" RowSpacing="16">
+                                <!--  ZONA SUPERIOR  -->
+                                <Grid Grid.Row="0" ColumnDefinitions="*,*">
+                                    <!--  BALANCE  -->
+                                    <StackLayout
+                                        Grid.Column="0"
+                                        HorizontalOptions="Start"
+                                        Spacing="4"
+                                        VerticalOptions="Center">
                                         <Label
-                                            Grid.Column="2"
                                             FontFamily="PoppinsRegular"
-                                            FontSize="16"
-                                            HorizontalOptions="Start"
-                                            Text="{Binding Categoria}"
-                                            TextColor="{StaticResource Gray500}"
-                                            VerticalOptions="Center" />
-
-                                        <HorizontalStackLayout Grid.Column="3">
-                                            <Label
-                                                FontFamily="PoppinsRegular"
-                                                FontSize="16"
-                                                Text="{Binding UltimosCuatroDigitos}"
-                                                TextColor="{StaticResource Gray600}"
-                                                VerticalOptions="Center" />
-                                            <Label
-                                                FontFamily="PoppinsRegular"
-                                                FontSize="16"
-                                                Text=" ****"
-                                                TextColor="{StaticResource Gray600}"
-                                                VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
-
+                                            FontSize="12"
+                                            Text="Balance"
+                                            TextColor="{Binding ColorTextoDetalles}" />
                                         <Label
-                                            Grid.Column="4"
                                             FontFamily="PoppinsRegular"
-                                            FontSize="16"
-                                            HorizontalOptions="Center"
-                                            Text="Completado"
-                                            TextColor="{StaticResource Gray600}"
-                                            VerticalOptions="Center" />
-
+                                            FontSize="20"
+                                            Text="{Binding BalanceDetalles, StringFormat='{0:C2}'}"
+                                            TextColor="{Binding ColorTextoDetalles}" />
+                                    </StackLayout>
+                                    <!--  ICONO CHIP  -->
+                                    <Image
+                                        Grid.Column="1"
+                                        Aspect="AspectFit"
+                                        HeightRequest="32"
+                                        HorizontalOptions="End"
+                                        Source="{Binding IconoChipDetalles}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="32" />
+                                </Grid>
+                                <!--  ZONA MEDIO  -->
+                                <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                    <!--  NOMBRE DE LA TARJETA  -->
+                                    <StackLayout
+                                        Grid.Column="0"
+                                        HorizontalOptions="Start"
+                                        Spacing="4"
+                                        VerticalOptions="Center">
                                         <Label
-                                            Grid.Column="5"
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="12"
+                                            Text="NOMBRE TARJETA"
+                                            TextColor="{Binding ColorTextoDetalles}" />
+                                        <Label
                                             FontFamily="PoppinsSemiBold"
-                                            FontSize="16"
-                                            HorizontalOptions="End"
-                                            Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
-                                            TextColor="{StaticResource RojoMontoGasto}"
-                                            VerticalOptions="Center" />
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                            <!--  MOSTRAR VISTA VACIA  -->
-                            <CollectionView.EmptyView>
-                                <ContentView>
-                                    <HorizontalStackLayout
-                                        Padding="24"
-                                        Spacing="90"
-                                        WidthRequest="1400">
-                                        <Image
-                                            Aspect="AspectFill"
-                                            HeightRequest="150"
-                                            HorizontalOptions="Center"
-                                            Source="no_hay_movimientos.png"
-                                            WidthRequest="134" />
-                                        <StackLayout
-                                            HorizontalOptions="Center"
-                                            Spacing="16"
-                                            VerticalOptions="Center">
+                                            FontSize="14"
+                                            Text="{Binding NombreBancoDetalles}"
+                                            TextColor="{Binding ColorTextoDetalles}" />
+                                    </StackLayout>
+                                    <!--  FECHA DE VENCIMIENTO  -->
+                                    <StackLayout
+                                        Grid.Column="1"
+                                        Margin="16,0,0,0"
+                                        HorizontalOptions="Start"
+                                        Spacing="4"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="12"
+                                            Text="FECHA VENCIMIENTO"
+                                            TextColor="{Binding ColorTextoDetalles}" />
+                                        <HorizontalStackLayout>
                                             <Label
                                                 FontFamily="PoppinsSemiBold"
-                                                FontSize="28"
-                                                HorizontalOptions="Fill"
-                                                HorizontalTextAlignment="Center"
-                                                Text="¡Todo limpio por ahora!"
-                                                TextColor="{StaticResource Gray950}" />
+                                                FontSize="14"
+                                                Text="{Binding MesVencimientoDetalles}"
+                                                TextColor="{Binding ColorTextoDetalles}" />
                                             <Label
+                                                FontFamily="PoppinsSemiBold"
+                                                FontSize="14"
+                                                Text="/"
+                                                TextColor="{Binding ColorTextoDetalles}" />
+                                            <Label
+                                                FontFamily="PoppinsSemiBold"
+                                                FontSize="14"
+                                                Text="{Binding AnioVencimientoDetalles}"
+                                                TextColor="{Binding ColorTextoDetalles}" />
+                                        </HorizontalStackLayout>
+                                    </StackLayout>
+                                </Grid>
+                                <!--  ZONA INFERIOR  -->
+                                <Grid Grid.Row="2" ColumnDefinitions="7*,3*">
+                                    <!--  NUMERO DE TARJETA  -->
+                                    <HorizontalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                        <Border HeightRequest="1" Stroke="{Binding ColorBordeDetalles}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="22"
+                                            Text="**** **** **** "
+                                            TextColor="{Binding ColorTextoDetalles}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="22"
+                                            Text="{Binding UltimosCuatroDigitos}"
+                                            TextColor="{Binding ColorTextoDetalles}" />
+                                    </HorizontalStackLayout>
+                                    <Image
+                                        Grid.Column="1"
+                                        Aspect="AspectFit"
+                                        HeightRequest="30"
+                                        HorizontalOptions="End"
+                                        Source="{Binding IconoTipoTarjetaDetalles}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="44" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </StackLayout>
+                    <!--  LISTA DE ULTIMOS MOVIMIENTOS  -->
+                    <StackLayout Spacing="20">
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="20"
+                            Text="Ultimas Transacciones"
+                            TextColor="{StaticResource Gray900}" />
+                        <Border
+                            Padding="16"
+                            BackgroundColor="{StaticResource FondoBlanco}"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20">
+                            <CollectionView ItemsSource="{Binding ListaUltimosTresMovimientos}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid
+                                            Padding="6"
+                                            ColumnDefinitions="1*,2*,2*,1*,2*,2*"
+                                            ColumnSpacing="24"
+                                            WidthRequest="1010">
+
+                                            <Image
+                                                Grid.Column="0"
+                                                Aspect="AspectFill"
+                                                HeightRequest="55"
+                                                HorizontalOptions="Center"
+                                                Source="{Binding Imagen}"
+                                                VerticalOptions="Center"
+                                                WidthRequest="55" />
+
+                                            <StackLayout
+                                                Grid.Column="1"
+                                                HorizontalOptions="Start"
+                                                Spacing="4"
+                                                VerticalOptions="Center">
+                                                <Label
+                                                    FontFamily="PoppinsMedium"
+                                                    FontSize="16"
+                                                    LineBreakMode="WordWrap"
+                                                    Text="{Binding Descripcion}"
+                                                    TextColor="{StaticResource Gray900}" />
+                                                <Label
+                                                    FontFamily="PoppinsRegular"
+                                                    FontSize="14"
+                                                    Text="{Binding Fecha, StringFormat='{0:dd MMM yyyy}'}"
+                                                    TextColor="{StaticResource Gray500}" />
+                                            </StackLayout>
+
+                                            <Label
+                                                Grid.Column="2"
                                                 FontFamily="PoppinsRegular"
                                                 FontSize="16"
-                                                HorizontalOptions="Fill"
-                                                HorizontalTextAlignment="Center"
-                                                Text="No hay gastos asociados a esta tarjeta."
-                                                TextColor="{StaticResource Gray500}" />
-                                        </StackLayout>
-                                    </HorizontalStackLayout>
-                                </ContentView>
-                            </CollectionView.EmptyView>
-                        </CollectionView>
-                    </Border>
-                </StackLayout>
-            </HorizontalStackLayout>
-            <!--  ZONA INFERIOR  -->
-            <Grid Grid.Row="2" ColumnDefinitions="*,*">
-                <StackLayout Grid.Column="0" Spacing="20">
-                    <Label
-                        FontFamily="PoppinsSemiBold"
-                        FontSize="20"
-                        HorizontalOptions="Start"
-                        Text="Gastos por categoría últimos 7 días"
-                        TextColor="{StaticResource Gray900}" />
-                    <Border
-                        Padding="28"
-                        BackgroundColor="{StaticResource FondoBlanco}"
-                        HeightRequest="364"
-                        HorizontalOptions="Fill"
-                        Stroke="Transparent"
-                        StrokeShape="RoundRectangle 20"
-                        VerticalOptions="Start">
-                        <chart:SfCartesianChart HeightRequest="292">
-                            <chart:SfCartesianChart.XAxes>
-                                <chart:CategoryAxis />
-                            </chart:SfCartesianChart.XAxes>
-                            <chart:SfCartesianChart.YAxes>
-                                <chart:NumericalAxis />
-                            </chart:SfCartesianChart.YAxes>
+                                                HorizontalOptions="Start"
+                                                Text="{Binding Categoria}"
+                                                TextColor="{StaticResource Gray500}"
+                                                VerticalOptions="Center" />
 
-                            <!--  Leyenda  -->
-                            <chart:SfCartesianChart.Legend>
-                                <chart:ChartLegend IsVisible="True" Placement="Bottom" />
-                            </chart:SfCartesianChart.Legend>
+                                            <HorizontalStackLayout Grid.Column="3">
+                                                <Label
+                                                    FontFamily="PoppinsRegular"
+                                                    FontSize="16"
+                                                    Text="{Binding UltimosCuatroDigitos}"
+                                                    TextColor="{StaticResource Gray600}"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    FontFamily="PoppinsRegular"
+                                                    FontSize="16"
+                                                    Text=" ****"
+                                                    TextColor="{StaticResource Gray600}"
+                                                    VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
 
-                            <!--  Serie Supermercado  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosAlimentacion}"
-                                Label="Supermercado"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                            <Label
+                                                Grid.Column="4"
+                                                FontFamily="PoppinsRegular"
+                                                FontSize="16"
+                                                HorizontalOptions="Center"
+                                                Text="Completado"
+                                                TextColor="{StaticResource Gray600}"
+                                                VerticalOptions="Center" />
 
-                            <!--  Serie Transporte  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosTransporte}"
-                                Label="Gasolina"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                            <Label
+                                                Grid.Column="5"
+                                                FontFamily="PoppinsSemiBold"
+                                                FontSize="16"
+                                                HorizontalOptions="End"
+                                                Text="{Binding Monto, StringFormat='- ₡{0:N2}'}"
+                                                TextColor="{StaticResource RojoMontoGasto}"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                                <!--  MOSTRAR VISTA VACIA  -->
+                                <CollectionView.EmptyView>
+                                    <ContentView>
+                                        <HorizontalStackLayout
+                                            Padding="24"
+                                            Spacing="90"
+                                            WidthRequest="1400">
+                                            <Image
+                                                Aspect="AspectFill"
+                                                HeightRequest="150"
+                                                HorizontalOptions="Center"
+                                                Source="no_hay_movimientos.png"
+                                                WidthRequest="134" />
+                                            <StackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="16"
+                                                VerticalOptions="Center">
+                                                <Label
+                                                    FontFamily="PoppinsSemiBold"
+                                                    FontSize="28"
+                                                    HorizontalOptions="Fill"
+                                                    HorizontalTextAlignment="Center"
+                                                    Text="¡Todo limpio por ahora!"
+                                                    TextColor="{StaticResource Gray950}" />
+                                                <Label
+                                                    FontFamily="PoppinsRegular"
+                                                    FontSize="16"
+                                                    HorizontalOptions="Fill"
+                                                    HorizontalTextAlignment="Center"
+                                                    Text="No hay gastos asociados a esta tarjeta."
+                                                    TextColor="{StaticResource Gray500}" />
+                                            </StackLayout>
+                                        </HorizontalStackLayout>
+                                    </ContentView>
+                                </CollectionView.EmptyView>
+                            </CollectionView>
+                        </Border>
+                    </StackLayout>
+                </HorizontalStackLayout>
+                <!--  ZONA INFERIOR  -->
+                <Grid Grid.Row="2" ColumnDefinitions="*,*">
+                    <StackLayout Grid.Column="0" Spacing="20">
+                        <Label
+                            FontFamily="PoppinsSemiBold"
+                            FontSize="20"
+                            HorizontalOptions="Start"
+                            Text="Gastos por categoría últimos 7 días"
+                            TextColor="{StaticResource Gray900}" />
+                        <Border
+                            Padding="28"
+                            BackgroundColor="{StaticResource FondoBlanco}"
+                            HeightRequest="364"
+                            HorizontalOptions="Fill"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 20"
+                            VerticalOptions="Start">
+                            <chart:SfCartesianChart HeightRequest="292">
+                                <chart:SfCartesianChart.XAxes>
+                                    <chart:CategoryAxis />
+                                </chart:SfCartesianChart.XAxes>
+                                <chart:SfCartesianChart.YAxes>
+                                    <chart:NumericalAxis />
+                                </chart:SfCartesianChart.YAxes>
 
-                            <!--  Serie Entretenimiento  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosEntretenimiento}"
-                                Label="Entretenimiento"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Leyenda  -->
+                                <chart:SfCartesianChart.Legend>
+                                    <chart:ChartLegend IsVisible="True" Placement="Bottom" />
+                                </chart:SfCartesianChart.Legend>
 
-                            <!--  Serie Servicios  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosServicios}"
-                                Label="Servicios"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Supermercado  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Supermercado"
+                                    ItemsSource="{Binding DatosAlimentacion}"
+                                    Label="Supermercado"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Serie Ropa  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosRopa}"
-                                Label="Ropa"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Transporte  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Gasolina"
+                                    ItemsSource="{Binding DatosTransporte}"
+                                    Label="Gasolina"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Serie Deporte  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosDeportes}"
-                                Label="Deporte"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Entretenimiento  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Entretenimiento"
+                                    ItemsSource="{Binding DatosEntretenimiento}"
+                                    Label="Entretenimiento"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Serie Viajes  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosViajes}"
-                                Label="Viajes"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Servicios  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Servicios"
+                                    ItemsSource="{Binding DatosServicios}"
+                                    Label="Servicios"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Series Tecnologia  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosTecnologia}"
-                                Label="Tecnologia"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Ropa  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Ropa"
+                                    ItemsSource="{Binding DatosRopa}"
+                                    Label="Ropa"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Series Educacion  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosEducacion}"
-                                Label="Educacion"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Deporte  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Deporte"
+                                    ItemsSource="{Binding DatosDeportes}"
+                                    Label="Deporte"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Serie Salud  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosSalud}"
-                                Label="Salud"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Serie Viajes  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Viajes"
+                                    ItemsSource="{Binding DatosViajes}"
+                                    Label="Viajes"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Series Mascotas  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosMascotas}"
-                                Label="Mascotas"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Series Tecnologia  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Tecnologia"
+                                    ItemsSource="{Binding DatosTecnologia}"
+                                    Label="Tecnologia"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                            <!--  Series Hogar  -->
-                            <chart:StackingColumnSeries
-                                Width="0.3"
-                                ItemsSource="{Binding DatosHogar}"
-                                Label="Hogar"
-                                XBindingPath="Dia"
-                                YBindingPath="TotalMonto" />
+                                <!--  Series Educacion  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Educacion"
+                                    ItemsSource="{Binding DatosEducacion}"
+                                    Label="Educacion"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
-                        </chart:SfCartesianChart>
-                    </Border>
-                </StackLayout>
+                                <!--  Serie Salud  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Salud"
+                                    ItemsSource="{Binding DatosSalud}"
+                                    Label="Salud"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
 
+                                <!--  Series Mascotas  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Mascotas"
+                                    ItemsSource="{Binding DatosMascotas}"
+                                    Label="Mascotas"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
+
+                                <!--  Series Hogar  -->
+                                <chart:StackingColumnSeries
+                                    GroupingLabel="Hogar"
+                                    ItemsSource="{Binding DatosHogar}"
+                                    Label="Hogar"
+                                    XBindingPath="Dia"
+                                    YBindingPath="TotalMonto" />
+
+                            </chart:SfCartesianChart>
+                        </Border>
+                    </StackLayout>
+
+                </Grid>
             </Grid>
+        </ScrollView>
+
+        <!--  INDICADOR DE CARGA  -->
+        <Grid BackgroundColor="Transparent" IsVisible="{Binding EstaCargando}">
+
+            <Border
+                Padding="40"
+                BackgroundColor="{StaticResource FondoBlanco}"
+                HorizontalOptions="Center"
+                Stroke="Transparent"
+                StrokeShape="RoundRectangle 20"
+                VerticalOptions="Center">
+
+                <VerticalStackLayout Spacing="20">
+                    <ActivityIndicator
+                        HeightRequest="50"
+                        IsRunning="{Binding EstaCargando}"
+                        WidthRequest="50"
+                        Color="{StaticResource Primary}" />
+
+                    <Label
+                        FontFamily="PoppinsMedium"
+                        FontSize="16"
+                        HorizontalOptions="Center"
+                        Text="Cargando detalles..."
+                        TextColor="{StaticResource Gray900}" />
+                </VerticalStackLayout>
+            </Border>
         </Grid>
-    </ScrollView>
+    </Grid>
 </ContentPage>

@@ -3,7 +3,6 @@ using GastoClass.Dominio.Entidades;
 using GastoClass.Dominio.Interfaces;
 using GastoClass.GastoClass.Dominio.Excepciones;
 using GastoClass.GastoClass.Dominio.Interfaces;
-using GastoClass.Infraestructura.Excepciones;
 using MediatR;
 
 namespace GastoClass.GastoClass.Aplicacion.Gasto.Commands.AgregarGasto;
