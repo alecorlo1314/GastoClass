@@ -1,5 +1,4 @@
 ﻿using GastoClass.Dominio.Entidades;
-using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 using Infraestructura.Mapper;
 using Infraestructura.Persistencia.Entidades;
 
@@ -73,8 +72,10 @@ public static class TarjetaCreditoMapper
             nombreBanco: entidad.NombreBanco!,
             preferencia: entidad.PreferenciaTarjeta!
         );
+
         tarjeta.SetId(entidad.Id);
         tarjeta.SetBalance(entidad.Balance!.Value);
+        tarjeta.SetCreditoDisponible(entidad.CreditoDisponible!.Value);
 
         return tarjeta;
     }
@@ -100,6 +101,8 @@ public static class TarjetaCreditoMapper
         );
 
         tarjeta.SetId(entidad.Id);
+        tarjeta.SetBalance(entidad.Balance!.Value);
+        tarjeta.SetCreditoDisponible(entidad.CreditoDisponible!.Value);
 
         return tarjeta;
     }
@@ -114,7 +117,6 @@ public static class TarjetaCreditoMapper
 
         return entidad.ToDominio(preferenciaDominio);
     }
-
     public static List<TarjetaCreditoDominio> ToDominio(this IEnumerable<TarjetaCreditoEntidad> entidades,
         Func<int, PreferenciaTarjetaDominio> obtenerPreferencia)
     {

@@ -195,6 +195,9 @@ namespace GastoClass.Presentacion.ViewModel
         [ObservableProperty]
         private string? colorTextoDetalles;
 
+        [ObservableProperty]
+        private decimal creditoDisponibleDetalles;
+
         #endregion
 
         #region Constructor
@@ -285,6 +288,7 @@ namespace GastoClass.Presentacion.ViewModel
             ColorHex2Detalles = value.ColorHex2;
             ColorBordeDetalles = value.ColorBorde;
             ColorTextoDetalles = value.ColorTexto;
+            CreditoDisponibleDetalles = value.CreditoDisponible;
         }
 
         /// <summary>

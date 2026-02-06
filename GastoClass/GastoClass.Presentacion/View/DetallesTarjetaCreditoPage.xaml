@@ -42,7 +42,7 @@
                                 <Label
                                     FontFamily="PoppinsSemiBold"
                                     FontSize="20"
-                                    Text="{Binding TarjetaCredito.Balance, StringFormat='₡{0:N2}'}"
+                                    Text="{Binding BalanceDetalles, StringFormat='₡{0:N2}'}"
                                     TextColor="{StaticResource Gray900}"
                                     VerticalOptions="Center" />
                             </VerticalStackLayout>
@@ -74,7 +74,7 @@
                                 <Label
                                     FontFamily="PoppinsSemiBold"
                                     FontSize="20"
-                                    Text="{Binding TarjetaCredito.CreditoDisponible, StringFormat='₡{0:N2}'}"
+                                    Text="{Binding CreditoDisponibleDetalles, StringFormat='₡{0:N2}'}"
                                     TextColor="{StaticResource Gray900}"
                                     VerticalOptions="Center" />
                             </VerticalStackLayout>
