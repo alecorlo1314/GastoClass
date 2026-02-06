@@ -57,6 +57,8 @@ public class TarjetaCreditoDominio
         CreditoDisponible = limiteCredito.Valor;
     }
 
+    public void SetCreditoDisponible(decimal creditoDisponible) => CreditoDisponible = creditoDisponible;
+
     #region Crear 
     public static TarjetaCreditoDominio Crear(
            string tipo,

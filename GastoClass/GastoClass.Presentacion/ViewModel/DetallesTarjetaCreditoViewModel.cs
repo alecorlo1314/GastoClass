@@ -3,9 +3,11 @@ using GastoClass.Aplicacion.CasosUso;
 using GastoClass.Aplicacion.DTOs;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
+using GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 using MediatR;
 using Syncfusion.Maui.DataSource.Extensions;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace GastoClass.Presentacion.ViewModel
 {
@@ -40,6 +42,12 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
+        #region Propiedades de carga
+        [ObservableProperty]
+        private bool estaCargando;
+
+        #endregion
+
         #region Colecciones de Movimientos
 
         /// <summary>
@@ -52,76 +60,28 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Colecciones de Gastos por Categoría (Últimos 7 Días)
-
-        /// <summary>
-        /// Gastos de la categoría "Alimentación" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosAlimentacion = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Transporte" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosTransporte = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Entretenimiento" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosEntretenimiento = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Servicios" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosServicios = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Ropa" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosRopa = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Deportes" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosDeportes = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Viajes" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosViajes = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Tecnología" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosTecnologia = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Educación" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosEducacion = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Salud" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosSalud = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Mascotas" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosMascotas = new();
-
-        /// <summary>
-        /// Gastos de la categoría "Hogar" en los últimos 7 días.
-        /// </summary>
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosHogar = new();
 
@@ -195,6 +155,9 @@ namespace GastoClass.Presentacion.ViewModel
         [ObservableProperty]
         private string? colorTextoDetalles;
 
+        [ObservableProperty]
+        private decimal creditoDisponibleDetalles;
+
         #endregion
 
         #region Constructor
@@ -211,7 +174,7 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
-        #region Métodos de Carga de Datos
+        #region Cargar Ultimos Tres Movimientos
 
         /// <summary>
         /// Carga los últimos 3 movimientos/gastos de la tarjeta de crédito actual.
@@ -238,8 +201,9 @@ namespace GastoClass.Presentacion.ViewModel
                     "OK");
             }
         }
+        #endregion
 
-        #region Métodos de Cambio de Propiedades (Property Changed)
+        #region On TarjetaCredito Changed
 
         /// <summary>
         /// Se ejecuta automáticamente cuando la propiedad TarjetaCredito cambia.
@@ -251,18 +215,32 @@ namespace GastoClass.Presentacion.ViewModel
         /// <param name="value">Nueva tarjeta de crédito seleccionada.</param>
         partial void OnTarjetaCreditoChanged(DetallesTarjetaDto? value)
         {
-            if (value == null) return;
+            try
+            {
+                EstaCargando = true;
 
-            IdTarjetaCredito = value.IdTarjeta;
+                if (value == null) return;
 
-            // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
-            _ = CargarUltimosTresMovimientosAsync();
-            _ = InicializarPropiedadesVisualesAsync(value);
-            _ = CargarGastosPorCategoriaAsync(value.IdTarjeta);
+                IdTarjetaCredito = value.IdTarjeta;
+
+                // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
+                _ = CargarUltimosTresMovimientosAsync();
+                _ = InicializarPropiedadesVisualesAsync(value);
+                _ = CargarGastosPorCategoriaAsync(value.IdTarjeta);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                EstaCargando = false;
+            }
         }
 
         #endregion
 
+        #region Inicializar Propiedades Visuales
         /// <summary>
         /// Inicializa las propiedades visuales de la tarjeta a partir del objeto TarjetaCredito.
         /// Estas propiedades se usan para renderizar la representación visual de la tarjeta.
@@ -285,8 +263,12 @@ namespace GastoClass.Presentacion.ViewModel
             ColorHex2Detalles = value.ColorHex2;
             ColorBordeDetalles = value.ColorBorde;
             ColorTextoDetalles = value.ColorTexto;
+            CreditoDisponibleDetalles = value.CreditoDisponible;
         }
 
+        #endregion
+
+        #region Cargar Gastos por Categoría
         /// <summary>
         /// Carga y categoriza los gastos de los últimos 7 días por categoría.
         /// Cada categoría se almacena en su colección observable correspondiente
@@ -324,7 +306,6 @@ namespace GastoClass.Presentacion.ViewModel
                     "OK");
             }
         }
-
         #endregion
 
         #region Métodos Auxiliares
