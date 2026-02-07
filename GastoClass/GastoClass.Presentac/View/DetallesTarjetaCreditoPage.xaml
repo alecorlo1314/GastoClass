@@ -12,6 +12,7 @@
     Shell.TitleColor="{StaticResource Gray900}">
 
     <Grid>
+        <!--  CONTENIDO PRINCIPAL  -->
         <ScrollView>
             <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="28">
                 <!--  ZONA SUPERIOR  -->
@@ -542,7 +543,7 @@
                         </Border>
                     </StackLayout>
                     <!--  GRAFICO POLAR  -->
-                    <StackLayout Spacing="20">
+                    <StackLayout Spacing="20" Grid.Column="1">
                         <Label
                             FontFamily="PoppinsSemiBold"
                             FontSize="20"
