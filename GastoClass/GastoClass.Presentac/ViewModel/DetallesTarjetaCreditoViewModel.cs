@@ -302,6 +302,43 @@ namespace GastoClass.Presentacion.ViewModel
         }
         #endregion
 
+        #region Metodo Cargar Gastos por Dia Semana
+        private async Task CargarGastosPorDiaSemanaAsync()
+        {
+            try
+            {
+                // Llamar al Handler que hace toda la lógica
+                var datos = await _obtenerGastosPorDiaSemanaHandler
+                    .ExecuteAsync(TarjetaCredito.Id, diasAtras: 30);
+
+                // Solo asignar y calcular estadísticas para la vista
+                GastosPorDiaSemana = new ObservableCollection<GastoPorDiaSemanaDto>(datos);
+
+                CalcularEstadisticas();
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.CurrentPage.DisplayAlertAsync(
+                    "Error",
+                    $"No se pudieron cargar los gastos: {ex.Message}",
+                    "OK"
+                );
+            }
+        }
+
+        private void CalcularEstadisticas()
+        {
+            if (!GastosPorDiaSemana.Any()) return;
+
+            DiaMayorGasto = GastosPorDiaSemana
+                .OrderByDescending(g => g.Total)
+                .FirstOrDefault()?.DiaSemana ?? "N/A";
+
+            PromedioGastoDiario = GastosPorDiaSemana.Average(g => g.Total);
+
+            TotalGastosSemana = GastosPorDiaSemana.Sum(g => g.Total);
+        }
+
         #region Métodos Auxiliares
 
         /// <summary>
