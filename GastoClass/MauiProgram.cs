@@ -10,12 +10,12 @@ using GastoClass.Aplicacion.HistorialGasto.Consultas;
 using GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.Presentacion.View;
 using GastoClass.Presentacion.ViewModel;
-using Infraestructura.Persistencia.ContextoDB;
-using Infraestructura.Persistencia.Repositorios;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using System.Globalization;
+using GastoClass.Infraestructura.Persistencia.Repositorios;
+using GastoClass.Infraestructura.Persistencia.ContextoDB;
 
 namespace GastoClass
 {

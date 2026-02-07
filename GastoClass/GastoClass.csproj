@@ -131,6 +131,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\GastoClass.Aplicacion\GastoClass.Aplicacion.csproj" />
 	  <ProjectReference Include="..\GastoClass.Dominio\GastoClass.Dominio.csproj" />
+	  <ProjectReference Include="..\GastoClass.Infraestructura\GastoClass.Infraestructura.csproj" />
 	</ItemGroup>
 
 </Project>
