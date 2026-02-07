@@ -2,6 +2,7 @@
   <Project Path="GastoClass.Aplicacion/GastoClass.Aplicacion.csproj" Id="9109343b-0cb3-4bd5-98f5-26c3522688ff" />
   <Project Path="GastoClass.Dominio/GastoClass.Dominio.csproj" Id="14307d20-d8f1-49c2-9683-fff26d04557b" />
   <Project Path="GastoClass.Infraestructura/GastoClass.Infraestructura.csproj" Id="39564c82-9bda-4ee0-8357-7be28e733c12" />
+  <Project Path="GastoClass.Presentacion/GastoClass.Presentacion.csproj" Id="99002b54-87bc-46b6-bc34-e7be99e7512a" />
   <Project Path="GastoClass/GastoClass.csproj" />
   <Project Path="MLCategorias_WebApi1/MLCategorias_WebApi.csproj" />
 </Solution>

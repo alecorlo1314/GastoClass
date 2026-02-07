@@ -102,28 +102,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="GastoClass.Presentacion\View\ConfiguracionesPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentac\View\ConfiguracionesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="GastoClass.Presentacion\View\DashboardPag.xaml">
+	  <MauiXaml Update="GastoClass.Presentac\View\DashboardPag.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="GastoClass.Presentacion\View\DetallesTarjetaCreditoPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentac\View\DetallesTarjetaCreditoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="GastoClass.Presentacion\View\HistorialGastosPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentac\View\HistorialGastosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="GastoClass.Presentacion\View\MLDetallesPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentac\View\MLDetallesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="GastoClass.Presentacion\View\TargetaCreditoPage.xaml">
+	  <MauiXaml Update="GastoClass.Presentac\View\TargetaCreditoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="GastoClass.Presentacion\View\DashboardPag.xaml.cs">
+	  <Compile Update="GastoClass.Presentac\View\DashboardPag.xaml.cs">
 	    <DependentUpon>DashboardPag.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
