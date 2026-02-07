@@ -445,7 +445,6 @@
 
                                 <!--  Serie Supermercado  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Supermercado"
                                     ItemsSource="{Binding DatosAlimentacion}"
                                     Label="Supermercado"
                                     XBindingPath="Dia"
@@ -453,7 +452,6 @@
 
                                 <!--  Serie Transporte  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Gasolina"
                                     ItemsSource="{Binding DatosTransporte}"
                                     Label="Gasolina"
                                     XBindingPath="Dia"
@@ -461,7 +459,6 @@
 
                                 <!--  Serie Entretenimiento  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Entretenimiento"
                                     ItemsSource="{Binding DatosEntretenimiento}"
                                     Label="Entretenimiento"
                                     XBindingPath="Dia"
@@ -469,7 +466,6 @@
 
                                 <!--  Serie Servicios  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Servicios"
                                     ItemsSource="{Binding DatosServicios}"
                                     Label="Servicios"
                                     XBindingPath="Dia"
@@ -477,7 +473,6 @@
 
                                 <!--  Serie Ropa  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Ropa"
                                     ItemsSource="{Binding DatosRopa}"
                                     Label="Ropa"
                                     XBindingPath="Dia"
@@ -485,7 +480,6 @@
 
                                 <!--  Serie Deporte  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Deporte"
                                     ItemsSource="{Binding DatosDeportes}"
                                     Label="Deporte"
                                     XBindingPath="Dia"
@@ -493,7 +487,6 @@
 
                                 <!--  Serie Viajes  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Viajes"
                                     ItemsSource="{Binding DatosViajes}"
                                     Label="Viajes"
                                     XBindingPath="Dia"
@@ -501,7 +494,6 @@
 
                                 <!--  Series Tecnologia  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Tecnologia"
                                     ItemsSource="{Binding DatosTecnologia}"
                                     Label="Tecnologia"
                                     XBindingPath="Dia"
@@ -509,7 +501,6 @@
 
                                 <!--  Series Educacion  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Educacion"
                                     ItemsSource="{Binding DatosEducacion}"
                                     Label="Educacion"
                                     XBindingPath="Dia"
@@ -517,7 +508,6 @@
 
                                 <!--  Serie Salud  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Salud"
                                     ItemsSource="{Binding DatosSalud}"
                                     Label="Salud"
                                     XBindingPath="Dia"
@@ -525,7 +515,6 @@
 
                                 <!--  Series Mascotas  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Mascotas"
                                     ItemsSource="{Binding DatosMascotas}"
                                     Label="Mascotas"
                                     XBindingPath="Dia"
@@ -533,7 +522,6 @@
 
                                 <!--  Series Hogar  -->
                                 <chart:StackingColumnSeries
-                                    GroupingLabel="Hogar"
                                     ItemsSource="{Binding DatosHogar}"
                                     Label="Hogar"
                                     XBindingPath="Dia"
