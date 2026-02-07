@@ -543,7 +543,7 @@
                         </Border>
                     </StackLayout>
                     <!--  GRAFICO POLAR  -->
-                    <StackLayout Spacing="20" Grid.Column="1">
+                    <StackLayout Grid.Column="1" Spacing="20">
                         <Label
                             FontFamily="PoppinsSemiBold"
                             FontSize="20"
@@ -553,7 +553,7 @@
                         <Border
                             Padding="28"
                             BackgroundColor="{StaticResource FondoBlanco}"
-                            HeightRequest="400"
+                            HeightRequest="364"
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 20">
 
