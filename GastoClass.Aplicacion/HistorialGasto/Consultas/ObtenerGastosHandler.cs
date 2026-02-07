@@ -1,8 +1,8 @@
-﻿using GastoClass.GastoClass.Aplicacion.HistorialGasto.DTOs;
-using GastoClass.GastoClass.Dominio.Interfaces;
+﻿using GastoClass.Dominio.Interfaces;
+using GastoClass.Aplicacion.HistorialGasto.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.HistorialGasto.Consultas;
+namespace GastoClass.Aplicacion.HistorialGasto.Consultas;
 
 public class ObtenerGastosHandler(IRepositorioGasto repositorioGastos)
     : IRequestHandler<ObtenerGastosConsulta, List<GastoHistorialDto>?>

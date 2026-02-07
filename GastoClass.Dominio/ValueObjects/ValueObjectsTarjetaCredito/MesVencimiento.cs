@@ -1,4 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
+﻿using GastoClass.Dominio.Excepciones;
 
 namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
@@ -8,16 +8,14 @@ namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 /// </summary>
 public readonly record struct MesVencimiento
 {
-    public int Mes { get;}
+    public int Mes { get; }
 
-    public MesVencimiento(int mesVencimiento)
+    public MesVencimiento(int mes)
     {
-        if (string.IsNullOrWhiteSpace(mesVencimiento.ToString()))
-            throw new ExcepcionMesVencimientoInvalido(nameof(mesVencimiento), "Mes es requerido");
-        if(mesVencimiento < 1) 
-            throw new ExcepcionMesVencimientoInvalido(nameof(mesVencimiento), "No puede ser menor a 1");
-        if(mesVencimiento > 12) 
-            throw new ExcepcionMesVencimientoInvalido(nameof(mesVencimiento), "No puede ser mayor a 12");
-        Mes = mesVencimiento;
+        if (mes < 1 || mes > 12)
+            throw new ExcepcionDominio(nameof(Mes), "El mes de vencimiento debe estar entre 1 y 12");
+
+        Mes = mes;
     }
 }
+

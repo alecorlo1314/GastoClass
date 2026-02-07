@@ -1,7 +1,7 @@
-﻿using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+﻿using GastoClass.Aplicacion.Dashboard.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+namespace GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 
 public record ObtenerTarjetasCreditoComboBoxConsulta
     : IRequest<IEnumerable<TarjetaCreditoComboBoxDto>> { }

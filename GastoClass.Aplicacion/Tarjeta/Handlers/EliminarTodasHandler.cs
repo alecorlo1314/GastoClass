@@ -1,5 +1,5 @@
 ﻿using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Commands;
+using GastoClass.Aplicacion.Tarjeta.Commands;
 using MediatR;
 
 namespace GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;

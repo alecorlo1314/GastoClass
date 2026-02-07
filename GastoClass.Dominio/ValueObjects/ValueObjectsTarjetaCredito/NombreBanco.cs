@@ -1,4 +1,4 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
+﻿using GastoClass.Dominio.Excepciones;
 
 namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
 
@@ -6,12 +6,15 @@ public readonly record struct NombreBanco
 {
     public string Valor { get; }
 
-    public NombreBanco(string nombreBanco)
+    public NombreBanco(string valor)
     {
-        if (string.IsNullOrWhiteSpace(nombreBanco) || string.IsNullOrEmpty(nombreBanco))
-            throw new ExcepcionNumeroTarjetaInvalida(nameof(nombreBanco), "Banco es requerido");
-        if(nombreBanco.Length < 2) 
-            throw new ExcepcionBancoLongitudInvalida(nameof(nombreBanco), "No puede ser menor a 2");
-        Valor = nombreBanco;
+        if (string.IsNullOrWhiteSpace(valor))
+            throw new ExcepcionDominio(nameof(Valor), "El nombre del banco es requerido");
+
+        if (valor.Trim().Length < 2)
+            throw new ExcepcionDominio(nameof(Valor), "El nombre del banco debe tener al menos 2 caracteres");
+
+        Valor = valor.Trim();
     }
 }
+

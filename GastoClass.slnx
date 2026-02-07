@@ -1,8 +1,7 @@
 <Solution>
-  <Project Path="GastoClass.Aplicacion/GastoClass.Aplicacion.csproj" Id="e2b6fb1b-7fd3-4aa7-8c36-ee62684cd9fe" />
-  <Project Path="GastoClass.Dominio/GastoClass.Dominio.csproj" Id="fa68626c-7de3-4931-bdf9-7f6142cc8852" />
-  <Project Path="GastoClass.Presentacion/GastoClass.Presentacion.csproj" Id="a4b0a0c7-cfbf-48a0-b6f7-d41f024d662b" />
-  <Project Path="GastoClass/GastoClass.csproj" />
-  <Project Path="Infraestructura/Infraestructura.csproj" Id="2e3a3c5d-9da9-4f7e-ac11-5081b25b861f" />
+  <Project Path="GastoClass.Aplicacion/GastoClass.Aplicacion.csproj" Id="9109343b-0cb3-4bd5-98f5-26c3522688ff" />
+  <Project Path="GastoClass.Dominio/GastoClass.Dominio.csproj" Id="14307d20-d8f1-49c2-9683-fff26d04557b" />
+  <Project Path="GastoClass.Infraestructura/GastoClass.Infraestructura.csproj" Id="39564c82-9bda-4ee0-8357-7be28e733c12" />
+  <Project Path="GastoClass/GastoClass.Presentacion.csproj" />
   <Project Path="MLCategorias_WebApi1/MLCategorias_WebApi.csproj" />
 </Solution>

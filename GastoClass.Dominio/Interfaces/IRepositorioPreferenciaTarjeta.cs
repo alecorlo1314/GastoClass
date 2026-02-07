@@ -4,7 +4,9 @@ namespace GastoClass.Dominio.Interfaces;
 
 public interface IRepositorioPreferenciaTarjeta
 {
-    Task AgregarAsync(PreferenciaTarjeta preferenciaTarjeta);
-    Task<PreferenciaTarjeta?> ObtenerPorIdTarjeta(int idPreferencia);
-    Task EliminarAsync(PreferenciaTarjeta preferencia);
+    Task AgregarAsync(PreferenciaTarjetaDominio preferenciaTarjeta);
+    Task<PreferenciaTarjetaDominio?> ObtenerPorIdTarjeta(int idPreferencia);
+    Task<List<PreferenciaTarjetaDominio>?> ObtenerTodosAsync();
+    Task<int> EliminarAsync(PreferenciaTarjetaDominio preferencia);
+    Task<int> EliminarTodasAsync();
 }

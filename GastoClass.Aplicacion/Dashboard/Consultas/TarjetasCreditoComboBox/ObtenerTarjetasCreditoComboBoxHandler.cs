@@ -1,8 +1,8 @@
 ﻿using GastoClass.Dominio.Interfaces;
-using GastoClass.GastoClass.Aplicacion.Dashboard.DTOs;
+using GastoClass.Aplicacion.Dashboard.DTOs;
 using MediatR;
 
-namespace GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+namespace GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
 
 public class ObtenerTarjetasCreditoComboBoxHandler(IRepositorioTarjetaCredito repositorioTarjetaCredito)
     : IRequestHandler<ObtenerTarjetasCreditoComboBoxConsulta, IEnumerable<TarjetaCreditoComboBoxDto>>

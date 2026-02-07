@@ -1,19 +1,17 @@
-﻿using GastoClass.Dominio.Excepciones.ExcepcionesTarjetaCredito;
+﻿using GastoClass.Dominio.Excepciones;
 
 namespace GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+
 public readonly record struct AnioVencimiento
 {
     public int Anio { get; }
 
-    public AnioVencimiento(int anioVencimiento)
+    public AnioVencimiento(int anio)
     {
-        if (anioVencimiento < 0 || 
-            anioVencimiento > DateTime.Now.Year || 
-            string.IsNullOrWhiteSpace(anioVencimiento.ToString()) || 
-            string.IsNullOrEmpty(anioVencimiento.ToString()))
-        {
-            throw new ExcepcionAnioVencimientoInvalido(nameof(anioVencimiento), "Anio invalido");
-        }
-        Anio = anioVencimiento;
+        if (anio < DateTime.Now.Year)
+            throw new ExcepcionDominio(nameof(Anio), "El año de vencimiento no puede ser menor al actual");
+
+        Anio = anio;
     }
 }
+

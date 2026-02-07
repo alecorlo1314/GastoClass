@@ -1,4 +1,6 @@
-﻿namespace GastoClass.GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
+﻿using GastoClass.Dominio.Excepciones;
+
+namespace GastoClass.Dominio.ValueObjects.ValueObjectsGasto;
 
 public readonly record struct Tarjeta
 {

@@ -1,4 +1,4 @@
-﻿namespace GastoClass.GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
+﻿namespace GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 
 public class SolicitudPrediccion
 {

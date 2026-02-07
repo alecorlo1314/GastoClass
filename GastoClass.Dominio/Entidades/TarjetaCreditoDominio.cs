@@ -1,4 +1,6 @@
-﻿using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+﻿using GastoClass.Dominio.Excepciones;
+using GastoClass.Dominio.ValueObjects.ValueObjectsTarjetaCredito;
+using GastoClass.Dominio.ValueObjects.ValuePreferencias;
 
 namespace GastoClass.Dominio.Entidades;
 /// <summary>

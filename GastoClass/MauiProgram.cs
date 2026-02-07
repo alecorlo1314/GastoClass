@@ -1,25 +1,21 @@
 ﻿using CommunityToolkit.Maui;
-using GastoClass.Aplicacion.CasosUso;
+using GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
 using GastoClass.Aplicacion.Interfaces;
 using GastoClass.Aplicacion.Servicios.Consultas.CategoriaPredicha;
 using GastoClass.Dominio.Interfaces;
-using GastoClass.Dominio.Interfacez;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.GastosPorCategoria;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
-using GastoClass.GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
-using GastoClass.GastoClass.Aplicacion.HistorialGasto.Consultas;
-using GastoClass.GastoClass.Aplicacion.Tarjeta.Consultas;
-using GastoClass.GastoClass.Dominio.Interfaces;
-using GastoClass.Infraestructura.Repositorios;
+using GastoClass.Aplicacion.Dashboard.Consultas.ResumenMes;
+using GastoClass.Aplicacion.Dashboard.Consultas.TarjetasCreditoComboBox;
+using GastoClass.Aplicacion.Dashboard.Consultas.UltimosCincoGastos;
+using GastoClass.Aplicacion.HistorialGasto.Consultas;
+using GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.Presentacion.View;
 using GastoClass.Presentacion.ViewModel;
-using Infraestructura.Persistencia.ContextoDB;
-using Infraestructura.Persistencia.Repositorios;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Core.Hosting;
 using Syncfusion.Maui.Toolkit.Hosting;
 using System.Globalization;
+using GastoClass.Infraestructura.Persistencia.Repositorios;
+using GastoClass.Infraestructura.Persistencia.ContextoDB;
 
 namespace GastoClass
 {
@@ -71,18 +67,12 @@ namespace GastoClass
             builder.Services.AddTransient<DetallesTarjetaCreditoViewModel>();
 
             //Repositorios y servicios
-            builder.Services.AddSingleton<IServicioGastos, DatosGastos>();
-            builder.Services.AddSingleton<IServicioTarjetaCredito, DatosTarjetasCredito>();
-
             builder.Services.AddSingleton<IRepositorioGasto, RepositorioGasto>();
             builder.Services.AddSingleton<IPrediccionCategoriaServicio, PrediccionCategoriaServicio>();
             builder.Services.AddSingleton<IRepositorioTarjetaCredito, RepositorioTarjetaCredito>();
             builder.Services.AddSingleton<IRepositorioPreferenciaTarjeta, RepositorioPreferenciasTarjetaCredito>();
             builder.Services.AddSingleton<PrediccionCategoriaServicio>();
             builder.Services.AddSingleton<AppContextoDatos>();
-            builder.Services.AddSingleton<ServicioGastos>();
-            builder.Services.AddSingleton<ServicioTarjetaCredito>();
-            builder.Services.AddSingleton<AppDbContext>();
 
             // Registrar MediatR indicando el assembly donde están tus Handlers
             builder.Services.AddMediatR(cfg =>
@@ -104,7 +94,6 @@ namespace GastoClass
                     BaseAddress = new Uri("https://localhost:56288")
                 };
             });
-            builder.Services.AddSingleton<PredictionApiService>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

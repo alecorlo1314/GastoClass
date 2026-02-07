@@ -1,4 +1,4 @@
-﻿namespace GastoClass.GastoClass.Aplicacion.Tarjeta.DTOs;
+﻿namespace GastoClass.Aplicacion.Tarjeta.DTOs;
 
 public class GastoCategoriaUltimosSieteDiasTarjetaDto
 {
