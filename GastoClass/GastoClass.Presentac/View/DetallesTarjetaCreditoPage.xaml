@@ -447,84 +447,84 @@
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosAlimentacion}"
                                     Label="Supermercado"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Transporte  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosTransporte}"
                                     Label="Gasolina"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Entretenimiento  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosEntretenimiento}"
                                     Label="Entretenimiento"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Servicios  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosServicios}"
                                     Label="Servicios"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Ropa  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosRopa}"
                                     Label="Ropa"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Deporte  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosDeportes}"
                                     Label="Deporte"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Viajes  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosViajes}"
                                     Label="Viajes"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Series Tecnologia  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosTecnologia}"
                                     Label="Tecnologia"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Series Educacion  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosEducacion}"
                                     Label="Educacion"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Serie Salud  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosSalud}"
                                     Label="Salud"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Series Mascotas  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosMascotas}"
                                     Label="Mascotas"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                                 <!--  Series Hogar  -->
                                 <chart:StackingColumnSeries
                                     ItemsSource="{Binding DatosHogar}"
                                     Label="Hogar"
-                                    XBindingPath="Dia"
+                                    XBindingPath="DiaSemana"
                                     YBindingPath="TotalMonto" />
 
                             </chart:SfCartesianChart>
