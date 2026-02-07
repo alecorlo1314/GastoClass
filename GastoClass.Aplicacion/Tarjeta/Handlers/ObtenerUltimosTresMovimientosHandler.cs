@@ -27,7 +27,7 @@ class ObtenerUltimosTresMovimientosHandler(IRepositorioGasto repositorioGasto, I
                               UltimosCuatroDigitos = tarjeta.UltimosCuatroDigitos.Valor,
                               Estado = gasto.Estado.Valor,
                               Monto = gasto.Monto.Valor
-                          }).Take(3).ToList();
-        return resultados;
+                          }).OrderByDescending(g =>g.Fecha);
+        return resultados.Take(3).ToList();
     }
 }

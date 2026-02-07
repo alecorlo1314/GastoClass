@@ -359,22 +359,21 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Métodos Auxiliares
-
         /// <summary>
         /// Actualiza una colección de categoría específica filtrando los resultados por nombre de categoría.
         /// Limpia la colección existente y la repuebla con los datos filtrados.
         /// </summary>
-        /// <param name="coleccion">valor a la colección observable a actualizar.</param>
-        /// <param name="resultados">Lista completa de gastos categorizados.</param>
-        /// <param name="nombreCategoria">Nombre de la categoría a filtrar.</param>
+        /// <param name="coleccion"></param>
+        /// <param name="resultados"></param>
+        /// <param name="nombreCategoria"></param>
         private void ActualizarCategoria(
             ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? coleccion,
             IEnumerable<GastoCategoriaUltimosSieteDiasTarjetaDto> resultados,
             string nombreCategoria)
         {
-            if (coleccion == null) return;
+            if (resultados.Count() == 0) return;
 
-            coleccion.Clear();
+            coleccion!.Clear();
             foreach (var item in resultados.Where(g => g.Categoria == nombreCategoria))
             {
                 coleccion.Add(item);
