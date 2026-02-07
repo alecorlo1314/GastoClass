@@ -556,40 +556,71 @@
                             HeightRequest="364"
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 20">
+                            <Grid>
+                                <!-- GRAFICO VISIBLE -->
+                                <chart:SfPolarChart IsVisible="{Binding GraficoGastosPorDiaSemanaVisible}">
+                                    <!--  Eje primario (días de la semana)  -->
+                                    <chart:SfPolarChart.PrimaryAxis>
+                                        <chart:CategoryAxis LabelStyle="{StaticResource LabelStyleAxis}" ShowMajorGridLines="True" />
+                                    </chart:SfPolarChart.PrimaryAxis>
 
-                            <chart:SfPolarChart>
-                                <!--  Eje primario (días de la semana)  -->
-                                <chart:SfPolarChart.PrimaryAxis>
-                                    <chart:CategoryAxis LabelStyle="{StaticResource LabelStyleAxis}" ShowMajorGridLines="True" />
-                                </chart:SfPolarChart.PrimaryAxis>
+                                    <!--  Eje secundario (montos)  -->
+                                    <chart:SfPolarChart.SecondaryAxis>
+                                        <chart:NumericalAxis LabelStyle="{StaticResource LabelStyleAxis}" ShowMajorGridLines="True" />
+                                    </chart:SfPolarChart.SecondaryAxis>
 
-                                <!--  Eje secundario (montos)  -->
-                                <chart:SfPolarChart.SecondaryAxis>
-                                    <chart:NumericalAxis LabelStyle="{StaticResource LabelStyleAxis}" ShowMajorGridLines="True" />
-                                </chart:SfPolarChart.SecondaryAxis>
+                                    <!--  Leyenda  -->
+                                    <chart:SfPolarChart.Legend>
+                                        <chart:ChartLegend IsVisible="False" />
+                                    </chart:SfPolarChart.Legend>
 
-                                <!--  Leyenda  -->
-                                <chart:SfPolarChart.Legend>
-                                    <chart:ChartLegend IsVisible="False" />
-                                </chart:SfPolarChart.Legend>
+                                    <!--  Serie del gráfico polar  -->
+                                    <chart:PolarAreaSeries
+                                        Fill="#4A90E2"
+                                        ItemsSource="{Binding GastosPorDiaSemana}"
+                                        Label="Gastos semanales"
+                                        Opacity="0.7"
+                                        Stroke="#2E5C8A"
+                                        StrokeWidth="2"
+                                        XBindingPath="DiaSemana"
+                                        YBindingPath="Total">
 
-                                <!--  Serie del gráfico polar  -->
-                                <chart:PolarAreaSeries
-                                    Fill="#4A90E2"
-                                    ItemsSource="{Binding GastosPorDiaSemana}"
-                                    Label="Gastos semanales"
-                                    Opacity="0.7"
-                                    Stroke="#2E5C8A"
-                                    StrokeWidth="2"
-                                    XBindingPath="DiaSemana"
-                                    YBindingPath="Total">
+                                        <!--  Etiquetas de datos  -->
+                                        <chart:PolarAreaSeries.DataLabelSettings>
+                                            <chart:PolarDataLabelSettings LabelStyle="{StaticResource DataLabelStyle}" />
+                                        </chart:PolarAreaSeries.DataLabelSettings>
+                                    </chart:PolarAreaSeries>
+                                </chart:SfPolarChart>
+                                <!--  VISTA VACIA SIN DATOS EN EL GRAFICO  -->
+                                <VerticalStackLayout IsVisible="{Binding GraficoGastosPorDiaSemanaVacio}">
+                                    <Image
+                                        Aspect="AspectFill"
+                                        HeightRequest="150"
+                                        HorizontalOptions="Center"
+                                        Source="caja_vacia.png"
+                                        WidthRequest="134" />
+                                    <StackLayout
+                                        HorizontalOptions="Center"
+                                        Spacing="16"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            FontFamily="PoppinsSemiBold"
+                                            FontSize="28"
+                                            HorizontalOptions="Fill"
+                                            HorizontalTextAlignment="Center"
+                                            Text="¡Todo limpio por ahora!"
+                                            TextColor="{StaticResource Gray950}" />
+                                        <Label
+                                            FontFamily="PoppinsRegular"
+                                            FontSize="16"
+                                            HorizontalOptions="Fill"
+                                            HorizontalTextAlignment="Center"
+                                            Text="Todavia no tienes gastos esta semana"
+                                            TextColor="{StaticResource Gray500}" />
+                                    </StackLayout>
 
-                                    <!--  Etiquetas de datos  -->
-                                    <chart:PolarAreaSeries.DataLabelSettings>
-                                        <chart:PolarDataLabelSettings LabelStyle="{StaticResource DataLabelStyle}" />
-                                    </chart:PolarAreaSeries.DataLabelSettings>
-                                </chart:PolarAreaSeries>
-                            </chart:SfPolarChart>
+                                </VerticalStackLayout>
+                            </Grid>
                         </Border>
                     </StackLayout>
                 </Grid>

@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using GastoClass.Aplicacion.DTOs;
+using GastoClass.Aplicacion.Gasto.Consultas.ObtenerGastosPorDiaSemana;
+using GastoClass.Aplicacion.Gasto.DTOs;
 using GastoClass.Aplicacion.Tarjeta.Consultas;
 using GastoClass.Aplicacion.Tarjeta.DTOs;
 using MediatR;
@@ -43,14 +45,23 @@ namespace GastoClass.Presentacion.ViewModel
 
         #endregion
 
-        #region Colecciones de Movimientos
-
-        /// <summary>
-        /// Colección de los últimos 3 movimientos/gastos de la tarjeta de crédito.
-        /// Se actualiza automáticamente cuando cambia la tarjeta seleccionada.
-        /// </summary>
+        #region Colecciones
         [ObservableProperty]
         private ObservableCollection<UltimosTresMovimientosDto>? listaUltimosTresMovimientos = new();
+        [ObservableProperty]
+        private ObservableCollection<GastoPorDiaSemanaDto> gastosPorDiaSemana = new();
+
+        #endregion
+
+        #region Propiedades calculadas para mostrar estadísticas
+        [ObservableProperty]
+        private string diaMayorGasto = "N/A";
+
+        [ObservableProperty]
+        private decimal promedioGastoDiario;
+
+        [ObservableProperty]
+        private decimal totalGastosSemana;
 
         #endregion
 
@@ -79,6 +90,12 @@ namespace GastoClass.Presentacion.ViewModel
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosMascotas = new();
         [ObservableProperty]
         private ObservableCollection<GastoCategoriaUltimosSieteDiasTarjetaDto>? datosHogar = new();
+
+        #endregion
+
+        #region Propiedades booleanas
+        [ObservableProperty] private bool graficoGastosPorDiaSemanaVacio;
+        [ObservableProperty] private bool graficoGastosPorDiaSemanaVisible;
 
         #endregion
 
@@ -221,6 +238,7 @@ namespace GastoClass.Presentacion.ViewModel
                 _ = CargarUltimosTresMovimientosAsync();
                 _ = InicializarPropiedadesVisualesAsync(value);
                 _ = CargarGastosPorCategoriaAsync(value.IdTarjeta);
+                _ = CargarGastosPorDiaSemanaAsync();
             }
             catch (Exception)
             {
@@ -308,11 +326,23 @@ namespace GastoClass.Presentacion.ViewModel
             try
             {
                 // Llamar al Handler que hace toda la lógica
-                var datos = await _obtenerGastosPorDiaSemanaHandler
-                    .ExecuteAsync(TarjetaCredito.Id, diasAtras: 30);
+                var resultados = await _mediator.Send(new ObtenerGastosPorDiaSemanaConsulta(IdTarjetaCredito!.Value));
 
+                //Verificar si hay resultado
+                if(resultados == null)
+                {
+                    //No hay resultados
+                    //Logica
+                    GraficoGastosPorDiaSemanaVacio = true;
+                    GraficoGastosPorDiaSemanaVisible = false;
+                    return;
+                }
+                GraficoGastosPorDiaSemanaVacio = false;
+                GraficoGastosPorDiaSemanaVisible = true;
+                //Limpiar lista GastosPorDiaSemana
+                GastosPorDiaSemana.Clear();
                 // Solo asignar y calcular estadísticas para la vista
-                GastosPorDiaSemana = new ObservableCollection<GastoPorDiaSemanaDto>(datos);
+                GastosPorDiaSemana = new ObservableCollection<GastoPorDiaSemanaDto>(resultados!);
 
                 CalcularEstadisticas();
             }
@@ -326,6 +356,10 @@ namespace GastoClass.Presentacion.ViewModel
             }
         }
 
+        #endregion
+
+        #region Metodo Calcular Estadisticas 
+
         private void CalcularEstadisticas()
         {
             if (!GastosPorDiaSemana.Any()) return;
@@ -338,6 +372,8 @@ namespace GastoClass.Presentacion.ViewModel
 
             TotalGastosSemana = GastosPorDiaSemana.Sum(g => g.Total);
         }
+
+        #endregion
 
         #region Métodos Auxiliares
 
