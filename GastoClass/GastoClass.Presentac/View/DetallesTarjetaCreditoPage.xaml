@@ -557,7 +557,7 @@
                             Stroke="Transparent"
                             StrokeShape="RoundRectangle 20">
                             <Grid>
-                                <!-- GRAFICO VISIBLE -->
+                                <!--  GRAFICO VISIBLE  -->
                                 <chart:SfPolarChart IsVisible="{Binding GraficoGastosPorDiaSemanaVisible}">
                                     <!--  Eje primario (días de la semana)  -->
                                     <chart:SfPolarChart.PrimaryAxis>
