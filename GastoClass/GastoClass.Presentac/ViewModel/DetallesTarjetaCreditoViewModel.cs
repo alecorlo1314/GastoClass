@@ -237,7 +237,7 @@ namespace GastoClass.Presentacion.ViewModel
                 // Ejecutar carga de datos de forma asíncrona (fire and forget pattern)
                 _ = CargarUltimosTresMovimientosAsync();
                 _ = InicializarPropiedadesVisualesAsync(value);
-                _ = CargarGastosPorCategoriaAsync(value.IdTarjeta);
+                _ = CargarGastosPorCategoriaAsync();
                 _ = CargarGastosPorDiaSemanaAsync();
             }
             catch (Exception)
@@ -281,42 +281,25 @@ namespace GastoClass.Presentacion.ViewModel
         #endregion
 
         #region Cargar Gastos por Categoría
-        /// <summary>
-        /// Carga y categoriza los gastos de los últimos 7 días por categoría.
-        /// Cada categoría se almacena en su colección observable correspondiente
-        /// para ser mostrada en gráficos o listas categorizadas.
-        /// </summary>
-        /// <param name="idTarjeta">ID de la tarjeta de la cual cargar los gastos.</param>
-        /// <returns>Tarea asíncrona.</returns>
-        private async Task CargarGastosPorCategoriaAsync(int idTarjeta)
+        private async Task CargarGastosPorCategoriaAsync()
         {
-            try
-            {
-                var resultados = await _mediator.Send(new ObtenerGastosPorCategoriaSemanaConsulta(idTarjeta));
+            var resultados = await _mediator.Send(new ObtenerGastosPorCategoriaSemanaConsulta(IdTarjetaCredito!.Value));
 
-                if (resultados == null) return;
+            if (resultados == null) return;
 
-                // Limpiar y cargar cada categoría
-                ActualizarCategoria(DatosAlimentacion, resultados, "Alimentacion");
-                ActualizarCategoria(DatosTransporte, resultados, "Transporte");
-                ActualizarCategoria(DatosEntretenimiento, resultados, "Entretenimiento");
-                ActualizarCategoria(DatosServicios, resultados, "Servicios");
-                ActualizarCategoria(DatosRopa, resultados, "Ropa");
-                ActualizarCategoria(DatosDeportes, resultados, "Deportes");
-                ActualizarCategoria(DatosViajes, resultados, "Viajes");
-                ActualizarCategoria(DatosTecnologia, resultados, "Tecnologia");
-                ActualizarCategoria(DatosEducacion, resultados, "Educacion");
-                ActualizarCategoria(DatosSalud, resultados, "Salud");
-                ActualizarCategoria(DatosMascotas, resultados, "Mascotas");
-                ActualizarCategoria(DatosHogar, resultados, "Hogar");
-            }
-            catch (Exception ex)
-            {
-                await Shell.Current.CurrentPage.DisplayAlertAsync(
-                    "Error",
-                    $"No se pudieron cargar los gastos por categoría: {ex.Message}",
-                    "OK");
-            }
+            // Limpiar y cargar cada categoría
+            ActualizarCategoria(DatosAlimentacion, resultados, "Alimentacion");
+            ActualizarCategoria(DatosTransporte, resultados, "Transporte");
+            ActualizarCategoria(DatosEntretenimiento, resultados, "Entretenimiento");
+            ActualizarCategoria(DatosServicios, resultados, "Servicios");
+            ActualizarCategoria(DatosRopa, resultados, "Ropa");
+            ActualizarCategoria(DatosDeportes, resultados, "Deportes");
+            ActualizarCategoria(DatosViajes, resultados, "Viajes");
+            ActualizarCategoria(DatosTecnologia, resultados, "Tecnologia");
+            ActualizarCategoria(DatosEducacion, resultados, "Educacion");
+            ActualizarCategoria(DatosSalud, resultados, "Salud");
+            ActualizarCategoria(DatosMascotas, resultados, "Mascotas");
+            ActualizarCategoria(DatosHogar, resultados, "Hogar");
         }
         #endregion
 
