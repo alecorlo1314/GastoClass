@@ -1,4 +1,4 @@
-namespace GastoClass.GastoClass.Presentac.View;
+namespace GastoClass.Presentacion.View;
 
 public partial class TarjetaDebitoPage : ContentPage
 {

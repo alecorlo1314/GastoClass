@@ -106,6 +106,12 @@
         <ShellContent ContentTemplate="{DataTemplate views:TargetaCreditoPage}" />
     </FlyoutItem>
     <FlyoutItem
+        Title="Tarjeta Debito"
+        Icon="credit_card_menu_blanco.png"
+        Style="{StaticResource TarjetaDebitoFlyout}">
+        <ShellContent ContentTemplate="{DataTemplate views:TarjetaDebitoPage}" />
+    </FlyoutItem>
+    <FlyoutItem
         Title="Configuraciones"
         Icon="configuracion_menu_negro.png"
         Style="{StaticResource ConfiguracionFlyout}">

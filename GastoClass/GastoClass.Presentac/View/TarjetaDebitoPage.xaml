@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="GastoClass.GastoClass.Presentac.View.TarjetaDebitoPage"
+    x:Class="GastoClass.Presentacion.View.TarjetaDebitoPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="Targetas de Credito"
@@ -8,7 +8,7 @@
     BackgroundColor="{StaticResource FondoMenosBlanco}"
     Shell.BackgroundColor="{StaticResource FondoBlanco}"
     Shell.TitleColor="{StaticResource Gray900}">
-    <VerticalStackLayout HorizontalOptions="Center">
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
         <Label
             FontFamily="PoppinsSemiBold"
             FontSize="32"

@@ -16,7 +16,6 @@ using Syncfusion.Maui.Toolkit.Hosting;
 using System.Globalization;
 using GastoClass.Infraestructura.Persistencia.Repositorios;
 using GastoClass.Infraestructura.Persistencia.ContextoDB;
-using GastoClass.GastoClass.Presentac.View;
 
 namespace GastoClass
 {
