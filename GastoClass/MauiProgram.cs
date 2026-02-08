@@ -16,6 +16,7 @@ using Syncfusion.Maui.Toolkit.Hosting;
 using System.Globalization;
 using GastoClass.Infraestructura.Persistencia.Repositorios;
 using GastoClass.Infraestructura.Persistencia.ContextoDB;
+using GastoClass.GastoClass.Presentac.View;
 
 namespace GastoClass
 {
@@ -55,6 +56,7 @@ namespace GastoClass
             builder.Services.AddTransient<ConfiguracionesPage>();
             builder.Services.AddTransient<TargetaCreditoPage>();
             builder.Services.AddTransient<DetallesTarjetaCreditoPage>();
+            builder.Services.AddTransient<TarjetaDebitoPage>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ActualizarGastoViewModel>();
