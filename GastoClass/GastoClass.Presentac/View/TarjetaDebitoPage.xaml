@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="GastoClass.GastoClass.Presentac.View.TarjetaDebitoPage"
-             Title="TarjetaDebitoPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+<ContentPage
+    x:Class="GastoClass.GastoClass.Presentac.View.TarjetaDebitoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Targetas de Credito"
+    Padding="48,24"
+    BackgroundColor="{StaticResource FondoMenosBlanco}"
+    Shell.BackgroundColor="{StaticResource FondoBlanco}"
+    Shell.TitleColor="{StaticResource Gray900}">
+    <VerticalStackLayout HorizontalOptions="Center">
+        <Label
+            FontFamily="PoppinsSemiBold"
+            FontSize="32"
+            Text="Pagina Prondo se Creara!"
+            TextColor="{StaticResource Gray950}" />
+        <Label
+            FontFamily="PoppinsRegular"
+            FontSize="16"
+            Text="Solo espera la sorpresa que te tenemos"
+            TextColor="{StaticResource Gray600}" />
     </VerticalStackLayout>
 </ContentPage>
