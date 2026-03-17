@@ -55,6 +55,7 @@ namespace GastoClass
             builder.Services.AddTransient<ConfiguracionesPage>();
             builder.Services.AddTransient<TargetaCreditoPage>();
             builder.Services.AddTransient<DetallesTarjetaCreditoPage>();
+            builder.Services.AddTransient<TarjetaDebitoPage>();
             //ViewModels
             builder.Services.AddTransient<AgregarGastoViewModel>();
             builder.Services.AddTransient<ActualizarGastoViewModel>();

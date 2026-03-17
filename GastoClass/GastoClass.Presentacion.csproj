@@ -121,6 +121,9 @@
 	  <MauiXaml Update="GastoClass.Presentac\View\TargetaCreditoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="GastoClass.Presentac\View\TarjetaDebitoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>

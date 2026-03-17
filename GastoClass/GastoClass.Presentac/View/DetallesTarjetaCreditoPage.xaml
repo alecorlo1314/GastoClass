@@ -216,7 +216,7 @@
                                         <Label
                                             FontFamily="PoppinsSemiBold"
                                             FontSize="14"
-                                            Text="{Binding NombreBancoDetalles}"
+                                            Text="{Binding NombreTarjetaDetalles}"
                                             TextColor="{Binding ColorTextoDetalles}" />
                                     </StackLayout>
                                     <!--  FECHA DE VENCIMIENTO  -->

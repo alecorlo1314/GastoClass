@@ -74,6 +74,17 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <!--  CAMBIO DE ESTADOS PARA EL TARJETA DE DEBITO  -->
+            <Style x:Key="TarjetaDebitoFlyout" TargetType="FlyoutItem">
+                <Style.Triggers>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="False">
+                        <Setter Property="FlyoutIcon" Value="credit_card_menu_negro.png" />
+                    </Trigger>
+                    <Trigger TargetType="FlyoutItem" Property="IsChecked" Value="True">
+                        <Setter Property="FlyoutIcon" Value="credit_card_men_blanco.png" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <!--  CAMBIO DE ESTADOS PARA EL CONFIGURACION  -->
             <Style x:Key="ConfiguracionFlyout" TargetType="FlyoutItem">
                 <Style.Triggers>

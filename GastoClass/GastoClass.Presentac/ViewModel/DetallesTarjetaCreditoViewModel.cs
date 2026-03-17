@@ -117,7 +117,7 @@ namespace GastoClass.Presentacion.ViewModel
         /// Nombre del banco emisor de la tarjeta.
         /// </summary>
         [ObservableProperty]
-        private string? nombreBancoDetalles;
+        private string? nombreTarjetaDetalles;
 
         /// <summary>
         /// Mes de vencimiento de la tarjeta (1-12).
@@ -266,7 +266,7 @@ namespace GastoClass.Presentacion.ViewModel
 
             BalanceDetalles = value.Balance;
             IconoChipDetalles = value.IconoChip;
-            NombreBancoDetalles = value.NombreBanco;
+            NombreTarjetaDetalles = value.NombreTarjeta;
             MesVencimientoDetalles = value.MesVencimiento;
             AnioVencimientoDetalles = value.AnioVencimiento;
             UltimosCuatroDigitos = value.UltimosCuatroDigitos;
