@@ -19,6 +19,7 @@
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="14.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.24.3" />
 	</ItemGroup>
 
 	<ItemGroup>
